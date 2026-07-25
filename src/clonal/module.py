@@ -11,8 +11,8 @@ class ClonalModule(nn.Module):
             nn.ReLU(),
             nn.Linear(hidden_dim, input_dim),
         )
-        self.age = 0
-        self.last_used = 0
+        self.use_count = 1
+        self.birth = 0
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.net(x)
@@ -25,14 +25,21 @@ class ClonalModule(nn.Module):
     def clone(self, receptor: torch.Tensor, mutation_strength: float = 0.01) -> "ClonalModule":
         child = ClonalModule(receptor, self.net[0].in_features, self.net[0].out_features)
         child.load_state_dict(self.state_dict())
+        child.use_count = 1
+        child.birth = 0
         with torch.no_grad():
             for p in child.net.parameters():
                 p += mutation_strength * torch.randn_like(p)
         return child
 
-    def local_update(self, x: torch.Tensor, lr: float = 0.01):
+    def local_update(self, x: torch.Tensor, lr: float = 0.01,
+                     exemplar: torch.Tensor | None = None,
+                     replay_weight: float = 0.1):
         pred = self.forward(x)
         loss = torch.nn.functional.mse_loss(pred, x)
+        if exemplar is not None:
+            pred_ex = self.forward(exemplar)
+            loss = loss + replay_weight * torch.nn.functional.mse_loss(pred_ex, exemplar)
         loss.backward()
         with torch.no_grad():
             for p in self.net.parameters():

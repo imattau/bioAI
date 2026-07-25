@@ -32,12 +32,16 @@ class TestFullPipeline:
 
     def test_immune_monitors_vsa_activations(self):
         vsa = VSA(dim=32, device="cpu")
-        monitor = SelfMonitor(activation_dim=32, n_detectors=2)
-        normal = [vsa.make_vector() for _ in range(20)]
+        hop = HopfieldNet(dim=32)
+        patterns = [vsa.make_vector() for _ in range(5)]
+        for p in patterns:
+            hop.store(p)
+        monitor = SelfMonitor(hop, energy_threshold=3.0)
+        normal = [hop.recall(p + 0.1 * torch.randn(32), steps=10) for p in patterns]
         monitor.calibrate(normal)
-        normal_result = monitor.score(vsa.make_vector())
-        assert "anomaly_score" in normal_result
-        assert "drift" in normal_result
+        normal_result = monitor.score(hop.recall(patterns[0] + 0.1 * torch.randn(32), steps=10))
+        assert "energy" in normal_result
+        assert "energy_z" in normal_result
 
     def test_actor_critic_selects_memory(self):
         vsa = VSA(dim=16, device="cpu")
@@ -73,13 +77,16 @@ class TestFullPipeline:
 
     def test_clonal_with_self_monitor(self):
         vsa = VSA(dim=32, device="cpu")
+        hop = HopfieldNet(dim=32)
         pool = ClonalPool(input_dim=32)
-        monitor = SelfMonitor(activation_dim=32, n_detectors=2)
+        monitor = SelfMonitor(hop, energy_threshold=3.0)
         activations = []
         for _ in range(15):
             v = vsa.make_vector()
             out, _ = pool.process(v)
             activations.append(out.detach())
+        for a in activations:
+            hop.store(a)
         monitor.calibrate(activations)
         novel = torch.randn(32)
         result = monitor.score(novel)

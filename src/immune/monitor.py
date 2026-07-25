@@ -1,27 +1,25 @@
 import torch
-from .detector import DetectorEnsemble
 
 
 class SelfMonitor:
-    def __init__(self, activation_dim: int, n_detectors: int = 5, nu: float = 0.05):
-        self.activation_dim = activation_dim
-        self.ensemble = DetectorEnsemble(n_detectors=n_detectors, nu=nu)
+    def __init__(self, hopfield_net, energy_threshold: float = 3.0):
+        self.hopfield = hopfield_net
+        self.energy_threshold = energy_threshold
         self.calibrated = False
-        self.baseline_mean: torch.Tensor | None = None
-        self.baseline_std: torch.Tensor | None = None
+        self.energy_mean: float = 0.0
+        self.energy_std: float = 1.0
 
     def calibrate(self, activations: list[torch.Tensor]):
-        stacked = torch.stack(activations)
-        self.baseline_mean = stacked.mean(dim=0)
-        self.baseline_std = stacked.std(dim=0).clamp(min=1e-8)
-        self.ensemble.fit([stacked for _ in self.ensemble.detectors])
+        energies = [self.hopfield.energy(a.flatten()).item() for a in activations]
+        self.energy_mean = sum(energies) / len(energies)
+        self.energy_std = (sum((e - self.energy_mean) ** 2 for e in energies) / len(energies)) ** 0.5
+        self.energy_std = max(self.energy_std, 1e-8)
         self.calibrated = True
 
     def score(self, activation: torch.Tensor) -> dict:
+        energy = self.hopfield.energy(activation.flatten()).item()
         if not self.calibrated:
-            return {"anomaly_score": 0.0, "drift": 0.0, "is_anomaly": False}
-        z = (activation - self.baseline_mean) / self.baseline_std
-        drift = z.square().mean().sqrt().item()
-        ano_score = self.ensemble.ensemble_score(activation.unsqueeze(0)).item()
-        return {"anomaly_score": ano_score, "drift": drift,
-                "is_anomaly": ano_score < -0.5 or drift > 2.0}
+            return {"energy": energy, "energy_z": 0.0, "is_anomaly": False}
+        energy_z = (energy - self.energy_mean) / self.energy_std
+        return {"energy": energy, "energy_z": energy_z,
+                "is_anomaly": energy_z > self.energy_threshold}

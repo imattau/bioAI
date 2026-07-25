@@ -6,13 +6,15 @@ class ClonalPool:
     def __init__(self, input_dim: int, hidden_dim: int = 64,
                  affinity_threshold: float = 0.6,
                  clone_margin: float = 0.2,
-                 max_modules: int = 50, lr: float = 0.01):
+                 max_modules: int = 50, lr: float = 0.01,
+                 replay_weight: float = 0.1):
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
         self.affinity_threshold = affinity_threshold
         self.clone_margin = clone_margin
         self.max_modules = max_modules
         self.default_lr = lr
+        self.replay_weight = replay_weight
         self.modules: list[ClonalModule] = []
         self.age = 0
 
@@ -23,8 +25,8 @@ class ClonalPool:
 
         if not self.modules:
             module = ClonalModule(x, self.input_dim, self.hidden_dim)
+            module.birth = self.age
             module.local_update(x, lr * 0.5)
-            module.last_used = self.age
             self.modules.append(module)
             return module(x), True
 
@@ -33,22 +35,29 @@ class ClonalPool:
         best_aff = affs[best_idx]
 
         if best_aff > self.affinity_threshold + self.clone_margin:
-            child = self.modules[best_idx].clone(x, mutation_strength)
-            child.local_update(x, lr * 0.5)
-            child.last_used = self.age
+            parent = self.modules[best_idx]
+            child = parent.clone(x, mutation_strength)
+            child.birth = self.age
+            child.local_update(x, lr * 0.5,
+                               exemplar=child.receptor,
+                               replay_weight=self.replay_weight)
             self.modules.append(child)
             self._prune()
             return child(x), True
 
         elif best_aff > self.affinity_threshold:
             module = self.modules[best_idx]
-            module.local_update(x, lr * 0.1)
-            module.last_used = self.age
+            module.local_update(x, lr * 0.1,
+                                exemplar=module.receptor,
+                                replay_weight=self.replay_weight)
+            module.use_count += 1
             return module(x), False
         else:
             module = ClonalModule(x, self.input_dim, self.hidden_dim)
-            module.local_update(x, lr * 0.5)
-            module.last_used = self.age
+            module.birth = self.age
+            module.local_update(x, lr * 0.5,
+                                 exemplar=module.receptor,
+                                 replay_weight=self.replay_weight)
             self.modules.append(module)
             self._prune()
             return module(x), True
@@ -56,8 +65,10 @@ class ClonalPool:
     def _prune(self):
         if len(self.modules) <= self.max_modules:
             return
-        self.modules.sort(key=lambda m: m.last_used)
-        self.modules = self.modules[-(self.max_modules * 3 // 4):]
+        def _score(m):
+            return m.use_count * (self.age - m.birth)
+        self.modules.sort(key=_score, reverse=True)
+        self.modules = self.modules[:self.max_modules]
 
     def __len__(self) -> int:
         return len(self.modules)
