@@ -1,0 +1,51 @@
+[
+  {
+    "scenario": "The cat sleeps now.",
+    "pipeline_stage": "store-retrieve",
+    "passed": true,
+    "details": "sim=1.0000",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "The cat sleeps now.",
+    "pipeline_stage": "store-lookup",
+    "passed": true,
+    "details": "found=1",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "Dog chase cat vs Cat chase dog",
+    "pipeline_stage": "order-discrimination",
+    "passed": true,
+    "details": "sim=0.4888 (expected < 0.8 for different order)",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "The grass is green.",
+    "pipeline_stage": "novelty-detection",
+    "passed": true,
+    "details": "novel=True (expected True for novel)",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "Chemical reactions occur within the laboratory.",
+    "pipeline_stage": "ood-detection",
+    "passed": true,
+    "details": "energy_z=414117.53 (expected anomalous)",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "The sun shines bright|Birds fly very high|Cats love to nap|Trees grow tall now|Water feels very cold",
+    "pipeline_stage": "decoder-data-gen",
+    "passed": true,
+    "details": "sentences=5, unique_words=19",
+    "llm_evaluation": ""
+  },
+  {
+    "scenario": "The fish swims fast.",
+    "pipeline_stage": "full-pipeline",
+    "passed": true,
+    "details": "sim=1.0000",
+    "llm_evaluation": ""
+  }
+]
