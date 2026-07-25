@@ -21,7 +21,7 @@ class SelfMonitor:
         if not self.calibrated:
             return {"anomaly_score": 0.0, "drift": 0.0, "is_anomaly": False}
         z = (activation - self.baseline_mean) / self.baseline_std
-        drift = z.norm().item()
+        drift = z.square().mean().sqrt().item()
         ano_score = self.ensemble.ensemble_score(activation.unsqueeze(0)).item()
         return {"anomaly_score": ano_score, "drift": drift,
-                "is_anomaly": ano_score < -0.5 or drift > 3.0}
+                "is_anomaly": ano_score < -0.5 or drift > 2.0}
