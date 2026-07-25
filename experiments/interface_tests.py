@@ -1,4 +1,5 @@
 import torch
+import torchhd
 import sys
 sys.path.insert(0, "src")
 
@@ -220,9 +221,77 @@ def run_experiment_4_action_selection():
 
 
 def run_experiment_5_decoder_adaln():
-    """Placeholder: Decoder with adaLN conditioning. Not yet implemented."""
+    """Test decoder with adaLN VSA conditioning."""
     section("Experiment 5: Decoder with adaLN Conditioning")
-    print("  [SKIP] Requires adaLN implementation — not yet built.")
+
+    from decoder import VSAConditionedDiT, DiscreteDiffusion, iterative_unmasking_sample
+    import torch.nn.functional as F
+
+    vocab = ["dog", "cat", "man", "bite", "chase", "see"]
+    vocab_size = len(vocab)
+    hd_dim = 1000
+    model = VSAConditionedDiT(
+        vocab_size=vocab_size, hidden_size=256, num_heads=4,
+        num_layers=4, cond_dim=256, vsa_dim=hd_dim, max_seq_len=8,
+    )
+
+    tokens = torch.randint(0, vocab_size, (2, 6))
+    vsa = torch.randn(2, hd_dim)
+    logits = model(tokens, vsa)
+    test("forward produces valid logits", logits.shape[-1] == vocab_size + 2,
+         f"shape={logits.shape}")
+
+    v1 = torch.randn(1, hd_dim)
+    v2 = torch.randn(1, hd_dim)
+    tok = torch.randint(0, vocab_size, (1, 6))
+    opt = torch.optim.SGD(model.parameters(), lr=0.01)
+    l1 = model(tok, v1)
+    l1.sum().backward()
+    opt.step()
+    l1b = model(tok, v1)
+    l2 = model(tok, v2)
+    diff = (l1b - l2).abs().mean().item()
+    test("VSA conditioning affects output after 1 step", diff > 0.001,
+         f"diff={diff:.6f}")
+
+    # Build small VSA-encoded training set
+    word_table = torchhd.random(vocab_size, hd_dim, device="cpu")
+    pos_table = torchhd.random(8, hd_dim, device="cpu")
+    templates = [(0, 3, 1), (1, 3, 0), (0, 4, 1), (1, 5, 0)]
+    train_pairs = []
+    for triple in templates:
+        ids = list(triple)
+        word_hvs = word_table[ids]
+        bound = torchhd.bind(word_hvs, pos_table[:len(ids)])
+        bundle = torchhd.multiset(bound)
+        padded = torch.tensor(ids + [vocab_size + 1] * (8 - len(ids)), dtype=torch.long)
+        train_pairs.append((bundle, padded))
+
+    opt = torch.optim.AdamW(model.parameters(), lr=1e-3)
+    diffusion = DiscreteDiffusion(mask_token_id=vocab_size, num_steps=100)
+    losses = []
+    for _ in range(30):
+        total = 0.0
+        for v, t in train_pairs:
+            v, t = v.unsqueeze(0), t.unsqueeze(0)
+            corr = diffusion.corrupt(t, torch.randint(0, 100, (1,)))
+            log = model(corr, v)
+            loss = F.cross_entropy(log.reshape(-1, log.size(-1)),
+                                    t.reshape(-1), ignore_index=-100)
+            opt.zero_grad(); loss.backward(); opt.step()
+            total += loss.item()
+        losses.append(total / len(train_pairs))
+    test("training loss decreases", losses[-1] < losses[0],
+         f"{losses[0]:.4f} → {losses[-1]:.4f}")
+
+    for v, t in train_pairs[:1]:
+        sampled = iterative_unmasking_sample(
+            model, v.unsqueeze(0), mask_token_id=vocab_size,
+            max_len=8, num_steps=20, temp=0.5)
+        valid = all(0 <= x.item() < vocab_size + 1 for x in sampled[0])
+        test("sampled tokens are valid IDs", valid,
+             f"sample={sampled[0].tolist()}")
+        break
 
 
 def run_experiment_6_full_pipeline():
