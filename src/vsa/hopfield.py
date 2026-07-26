@@ -38,11 +38,16 @@ class HopfieldNet(nn.Module):
         return -0.5 * (s @ self.weights @ s)
 
     def get_state(self) -> dict:
-        return {"patterns": self.patterns, "weights": self.weights}
+        return {"patterns": self.patterns}
 
-    def set_state(self, patterns: list[torch.Tensor], weights: torch.Tensor | None):
+    def set_state(self, patterns: list[torch.Tensor]):
         self.patterns = patterns
-        self.weights = weights
+        self.weights = None
+        for p in patterns:
+            if self.weights is None:
+                self.weights = torch.zeros(self.dim, self.dim, device=p.device)
+            self.weights += torch.outer(p, p)
+            self.weights.fill_diagonal_(0)
 
     def __len__(self) -> int:
         return len(self.patterns)

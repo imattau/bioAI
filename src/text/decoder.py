@@ -75,8 +75,8 @@ class VSADecoder:
     def set_state(self, state: dict):
         self.hopfield_steps = state["hopfield_steps"]
         self._texts = state["texts"]
-        self.store.set_state(state["store"]["keys"], state["store"]["values"])
-        self.hopfield.set_state(state["hopfield"]["patterns"], state["hopfield"]["weights"])
+        self.store.set_state(state["store"]["keys"])
+        self.hopfield.set_state(state["hopfield"]["patterns"])
 
     def __len__(self) -> int:
         return len(self._texts)

@@ -103,7 +103,11 @@ class BioAIDialogueAgent:
         results = self.decoder.decode(stored, k=1)
         return results[0][0] if results else ""
 
-    def save(self, path: str | Path):
+    def save(self, path: str | Path, max_history: int = 1000):
+        import copy
+        history = self.history[-max_history:] if len(self.history) > max_history else self.history
+        word_cache = {w: v.to(torch.float16) for w, v in self.encoder._word_cache.items()}
+        pos_vectors = self.encoder._pos_vectors.to(torch.float16)
         state = {
             "vsa_dim": self.vsa.dim,
             "turn_count": self.turn_count,
@@ -111,13 +115,13 @@ class BioAIDialogueAgent:
             "_monitor_calibrated": self._monitor_calibrated,
             "monitor_energy_mean": self.monitor.energy_mean,
             "monitor_energy_std": self.monitor.energy_std,
-            "word_cache": self.encoder._word_cache,
-            "pos_vectors": self.encoder._pos_vectors,
+            "word_cache": word_cache,
+            "pos_vectors": pos_vectors,
             "hash_store": self.hash_store.get_state(),
             "agent_hopfield": self.hopfield.get_state(),
             "clonal": self.clonal.get_state(),
             "decoder": self.decoder.get_state(),
-            "history": self.history,
+            "history": history,
             "text_index_keys": list(self._text_index.keys()),
             "text_index_values": list(self._text_index.values()),
         }
@@ -130,8 +134,8 @@ class BioAIDialogueAgent:
         state = torch.load(path)
         vsa = VSA(dim=state["vsa_dim"], device="cpu")
         encoder = VSAEncoder(vsa=vsa)
-        encoder._word_cache = state["word_cache"]
-        encoder._pos_vectors = state["pos_vectors"]
+        encoder._word_cache = {w: v.to(torch.float32) for w, v in state["word_cache"].items()}
+        encoder._pos_vectors = state["pos_vectors"].to(torch.float32)
         decoder = VSADecoder(vsa=vsa, encoder=encoder)
         decoder.set_state(state["decoder"])
         agent = cls.__new__(cls)
@@ -141,8 +145,7 @@ class BioAIDialogueAgent:
         agent.hash_store = VSAHashStore(vsa)
         agent.hash_store.set_state(state["hash_store"])
         agent.hopfield = HopfieldNet(dim=vsa.dim)
-        agent.hopfield.set_state(state["agent_hopfield"]["patterns"],
-                                   state["agent_hopfield"]["weights"])
+        agent.hopfield.set_state(state["agent_hopfield"]["patterns"])
         agent.monitor = SelfMonitor(agent.hopfield,
                                      energy_threshold=state["energy_threshold"])
         agent.clonal = ClonalPool(input_dim=vsa.dim)

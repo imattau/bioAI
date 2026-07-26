@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 from src.text import BioAIDialogueAgent
+from src.vsa import VSA, HopfieldNet, AssociativeStore, VSAHashStore
 
 
 class TestSaveLoad:
@@ -120,3 +121,19 @@ class TestSaveLoad:
         rec_dst = loaded.hopfield.recall(hv_dst, steps=5)
         sim = self.agent.vsa.similarity(rec_src, rec_dst).item()
         assert sim > 0.99, f"Hopfield patterns diverged: sim={sim}"
+
+    def test_save_size_is_reasonable(self):
+        import os
+        n_facts = 500
+        agent = BioAIDialogueAgent(vsa_dim=1000)
+        common_prefix = "the value of something is uniquely determined by"
+        for i in range(n_facts):
+            agent.process_turn(f"{common_prefix} its specific fact number {i}")
+        path = Path(tempfile.mktemp(suffix=".pt"))
+        agent.save(path)
+        mb = path.stat().st_size / 1_000_000
+        print(f"\n  {n_facts} facts (shared words): {mb:.1f}MB")
+        assert mb < 20, f"Save file too large: {mb:.1f}MB for {n_facts} facts (expected < 20MB)"
+        path.unlink()
+
+

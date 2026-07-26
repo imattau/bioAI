@@ -32,10 +32,13 @@ class VSAHashStore:
         return None
 
     def get_state(self) -> dict:
-        return {"num_buckets": self.num_buckets, "data": self._data}
+        keys = [k for bucket in self._data.values() for k, _ in bucket]
+        return {"num_buckets": self.num_buckets, "all_keys": keys}
 
     def set_state(self, state: dict):
-        self._data = state["data"]
+        self._data = {}
+        for k in state["all_keys"]:
+            self.insert(k, k)
 
     def __len__(self) -> int:
         return sum(len(v) for v in self._data.values())
