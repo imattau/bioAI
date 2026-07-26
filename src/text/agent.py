@@ -1,4 +1,5 @@
 import torch
+from pathlib import Path
 
 from src.vsa import VSA, VSAHashStore, HopfieldNet
 from src.clonal import ClonalPool
@@ -101,3 +102,59 @@ class BioAIDialogueAgent:
             return self._text_index[key]
         results = self.decoder.decode(stored, k=1)
         return results[0][0] if results else ""
+
+    def save(self, path: str | Path):
+        state = {
+            "vsa_dim": self.vsa.dim,
+            "turn_count": self.turn_count,
+            "energy_threshold": self.monitor.energy_threshold,
+            "_monitor_calibrated": self._monitor_calibrated,
+            "monitor_energy_mean": self.monitor.energy_mean,
+            "monitor_energy_std": self.monitor.energy_std,
+            "word_cache": self.encoder._word_cache,
+            "pos_vectors": self.encoder._pos_vectors,
+            "hash_store": self.hash_store.get_state(),
+            "agent_hopfield": self.hopfield.get_state(),
+            "clonal": self.clonal.get_state(),
+            "decoder": self.decoder.get_state(),
+            "history": self.history,
+            "text_index_keys": list(self._text_index.keys()),
+            "text_index_values": list(self._text_index.values()),
+        }
+        torch.save(state, path)
+
+    @classmethod
+    def load(cls, path: str | Path) -> "BioAIDialogueAgent":
+        import torchhd
+        torch.serialization.add_safe_globals([torchhd.tensors.map.MAPTensor])
+        state = torch.load(path)
+        vsa = VSA(dim=state["vsa_dim"], device="cpu")
+        encoder = VSAEncoder(vsa=vsa)
+        encoder._word_cache = state["word_cache"]
+        encoder._pos_vectors = state["pos_vectors"]
+        decoder = VSADecoder(vsa=vsa, encoder=encoder)
+        decoder.set_state(state["decoder"])
+        agent = cls.__new__(cls)
+        agent.vsa = vsa
+        agent.encoder = encoder
+        agent.decoder = decoder
+        agent.hash_store = VSAHashStore(vsa)
+        agent.hash_store.set_state(state["hash_store"])
+        agent.hopfield = HopfieldNet(dim=vsa.dim)
+        agent.hopfield.set_state(state["agent_hopfield"]["patterns"],
+                                   state["agent_hopfield"]["weights"])
+        agent.monitor = SelfMonitor(agent.hopfield,
+                                     energy_threshold=state["energy_threshold"])
+        agent.clonal = ClonalPool(input_dim=vsa.dim)
+        agent.clonal.set_state(state["clonal"])
+        agent.gonogo = GoNoGoActorCritic(input_dim=vsa.dim, n_actions=4)
+        agent.history = state["history"]
+        agent._text_index = dict(zip(state["text_index_keys"],
+                                      state["text_index_values"]))
+        agent._monitor_calibrated = state["_monitor_calibrated"]
+        agent.turn_count = state["turn_count"]
+        if agent._monitor_calibrated:
+            agent.monitor.calibrated = True
+            agent.monitor.energy_mean = state["monitor_energy_mean"]
+            agent.monitor.energy_std = state["monitor_energy_std"]
+        return agent

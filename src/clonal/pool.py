@@ -70,5 +70,34 @@ class ClonalPool:
         self.modules.sort(key=_score, reverse=True)
         self.modules = self.modules[:self.max_modules]
 
+    def get_state(self) -> dict:
+        return {
+            "input_dim": self.input_dim,
+            "hidden_dim": self.hidden_dim,
+            "affinity_threshold": self.affinity_threshold,
+            "clone_margin": self.clone_margin,
+            "max_modules": self.max_modules,
+            "default_lr": self.default_lr,
+            "replay_weight": self.replay_weight,
+            "age": self.age,
+            "modules": [
+                {"receptor": m.receptor,
+                 "net_state": m.net.state_dict(),
+                 "use_count": m.use_count,
+                 "birth": m.birth}
+                for m in self.modules
+            ],
+        }
+
+    def set_state(self, state: dict):
+        self.age = state["age"]
+        self.modules.clear()
+        for ms in state["modules"]:
+            m = ClonalModule(ms["receptor"], state["input_dim"], state["hidden_dim"])
+            m.net.load_state_dict(ms["net_state"])
+            m.use_count = ms["use_count"]
+            m.birth = ms["birth"]
+            self.modules.append(m)
+
     def __len__(self) -> int:
         return len(self.modules)

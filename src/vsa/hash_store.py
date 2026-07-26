@@ -31,5 +31,11 @@ class VSAHashStore:
                 return torchhd.bind(bound, key)
         return None
 
+    def get_state(self) -> dict:
+        return {"num_buckets": self.num_buckets, "data": self._data}
+
+    def set_state(self, state: dict):
+        self._data = state["data"]
+
     def __len__(self) -> int:
         return sum(len(v) for v in self._data.values())

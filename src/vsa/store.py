@@ -40,5 +40,14 @@ class AssociativeStore:
         stack = self.key_stack()
         return (query.unsqueeze(0) @ stack.T).squeeze(0) / self.dim
 
+    def get_state(self) -> dict:
+        return {"dim": self.dim, "capacity": self.capacity,
+                "keys": self.keys, "values": self.values}
+
+    def set_state(self, keys: list[torch.Tensor], values: list[torch.Tensor]):
+        self.keys = keys
+        self.values = values
+        self._dirty = True
+
     def __len__(self) -> int:
         return len(self.keys)

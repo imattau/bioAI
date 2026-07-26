@@ -64,5 +64,19 @@ class VSADecoder:
         hv = self.encode(text)
         return self.decode(hv, k=k)
 
+    def get_state(self) -> dict:
+        return {
+            "hopfield_steps": self.hopfield_steps,
+            "texts": self._texts,
+            "store": self.store.get_state(),
+            "hopfield": self.hopfield.get_state(),
+        }
+
+    def set_state(self, state: dict):
+        self.hopfield_steps = state["hopfield_steps"]
+        self._texts = state["texts"]
+        self.store.set_state(state["store"]["keys"], state["store"]["values"])
+        self.hopfield.set_state(state["hopfield"]["patterns"], state["hopfield"]["weights"])
+
     def __len__(self) -> int:
         return len(self._texts)
