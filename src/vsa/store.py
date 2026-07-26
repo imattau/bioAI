@@ -1,5 +1,4 @@
 import torch
-import torchhd
 
 
 class AssociativeStore:
@@ -8,6 +7,8 @@ class AssociativeStore:
         self.capacity = capacity
         self.keys: list[torch.Tensor] = []
         self.values: list[torch.Tensor] = []
+        self._key_stack: torch.Tensor | None = None
+        self._dirty = True
 
     def insert(self, key: torch.Tensor, value: torch.Tensor | None = None):
         if value is None:
@@ -17,20 +18,27 @@ class AssociativeStore:
             self.values.pop(0)
         self.keys.append(key.detach().clone())
         self.values.append(value.detach().clone())
+        self._dirty = True
+
+    def key_stack(self) -> torch.Tensor:
+        if self._dirty or self._key_stack is None:
+            self._key_stack = torch.stack(self.keys, dim=0) if self.keys else torch.empty(0, self.dim)
+            self._dirty = False
+        return self._key_stack
 
     def lookup(self, query: torch.Tensor, k: int = 1) -> list[tuple[torch.Tensor, float]]:
         if not self.keys:
             return []
-        stack = torch.stack(self.keys, dim=0)
-        sims = torchhd.cosine_similarity(query.unsqueeze(0), stack).squeeze(0)
+        stack = self.key_stack()
+        sims = (query.unsqueeze(0) @ stack.T).squeeze(0) / self.dim
         vals, idxs = sims.topk(min(k, len(sims)))
         return [(self.values[i.item()], vals[j].item()) for j, i in enumerate(idxs)]
 
     def similarity_to_all(self, query: torch.Tensor) -> torch.Tensor:
         if not self.keys:
             return torch.tensor([])
-        stack = torch.stack(self.keys, dim=0)
-        return torchhd.cosine_similarity(query.unsqueeze(0), stack).squeeze(0)
+        stack = self.key_stack()
+        return (query.unsqueeze(0) @ stack.T).squeeze(0) / self.dim
 
     def __len__(self) -> int:
         return len(self.keys)

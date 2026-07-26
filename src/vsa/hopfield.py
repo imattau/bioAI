@@ -10,20 +10,21 @@ class HopfieldNet(nn.Module):
         self.weights: torch.Tensor | None = None
 
     def store(self, pattern: torch.Tensor):
-        self.patterns.append(pattern.detach().clone().flatten())
-        self._update_weights()
+        p = pattern.detach().clone().flatten()
+        self.patterns.append(p)
+        if self.weights is None:
+            self.weights = torch.zeros(self.dim, self.dim, device=p.device)
+        self.weights += torch.outer(p, p)
+        self.weights.fill_diagonal_(0)
 
     def store_batch(self, patterns: list[torch.Tensor]):
         for p in patterns:
             self.store(p)
 
-    def _update_weights(self):
-        stacked = torch.stack(self.patterns)
-        self.weights = stacked.T @ stacked
-        self.weights.fill_diagonal_(0)
-
     def recall(self, cue: torch.Tensor, steps: int = 10,
                beta: float = 1.0) -> torch.Tensor:
+        if self.weights is None or len(self.patterns) == 0:
+            return cue.detach().clone()
         state = cue.detach().clone().flatten()
         for _ in range(steps):
             logits = self.weights @ state
@@ -31,8 +32,10 @@ class HopfieldNet(nn.Module):
         return state.reshape(cue.shape)
 
     def energy(self, state: torch.Tensor) -> torch.Tensor:
+        if self.weights is None:
+            return torch.tensor(0.0)
         s = state.flatten()
-        return -0.5 * (s @ self.weights @ s) if self.weights is not None else torch.tensor(0.0)
+        return -0.5 * (s @ self.weights @ s)
 
     def __len__(self) -> int:
         return len(self.patterns)
