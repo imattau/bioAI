@@ -1,0 +1,1620 @@
+{
+  "config": {
+    "num_turns": 200,
+    "llm_model": "qwen2.5-coder:1.5b",
+    "vsa_dim": 1000,
+    "store_capacity": 2000,
+    "report_interval": 50
+  },
+  "summary": {
+    "total_turns": 200,
+    "exact_recall": 200,
+    "accuracy_pct": 100.0,
+    "first_half_correct": 100,
+    "second_half_correct": 100,
+    "decoder_size": 200,
+    "clonal_size": 7
+  },
+  "records": [
+    {
+      "turn": 1,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 11.047840933315456
+    },
+    {
+      "turn": 2,
+      "fact": "Mars is the fourth planet from the Sun and is the most dista",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and is the most dista",
+      "exact_recall": true,
+      "latency_ms": 17.4744320102036
+    },
+    {
+      "turn": 3,
+      "fact": "The deepest point in the ocean is Challenger Deep, located i",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located i",
+      "exact_recall": true,
+      "latency_ms": 8.382622036151588
+    },
+    {
+      "turn": 4,
+      "fact": "Dinosaurs were the dominant terrestrial vertebrates on Earth",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial vertebrates on Earth",
+      "exact_recall": true,
+      "latency_ms": 5.810337024740875
+    },
+    {
+      "turn": 5,
+      "fact": "The piano is a stringed musical instrument with 88 keys arra",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys arra",
+      "exact_recall": true,
+      "latency_ms": 4.819215042516589
+    },
+    {
+      "turn": 6,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 5.319871008396149
+    },
+    {
+      "turn": 7,
+      "fact": "Shakespeare wrote over 38 plays and numerous sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote over 38 plays and numerous sonnets",
+      "exact_recall": true,
+      "latency_ms": 5.708746029995382
+    },
+    {
+      "turn": 8,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 4.381317994557321
+    },
+    {
+      "turn": 9,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.022533074021339
+    },
+    {
+      "turn": 10,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 3.814015071839094
+    },
+    {
+      "turn": 11,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 3.400926012545824
+    },
+    {
+      "turn": 12,
+      "fact": "The Sun is the central star in our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the central star in our solar system",
+      "exact_recall": true,
+      "latency_ms": 4.0100869955495
+    },
+    {
+      "turn": 13,
+      "fact": "The Amazon River is the largest river in the world by volume",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the largest river in the world by volume",
+      "exact_recall": true,
+      "latency_ms": 8.642029017210007
+    },
+    {
+      "turn": 14,
+      "fact": "In 1947, the first electronic computer was built at Harvard ",
+      "query": "exact recall",
+      "retrieved": "In 1947, the first electronic computer was built at Harvard ",
+      "exact_recall": true,
+      "latency_ms": 5.611918051727116
+    },
+    {
+      "turn": 15,
+      "fact": "Bacteria are single-celled organisms that can be found almos",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that can be found almos",
+      "exact_recall": true,
+      "latency_ms": 3.918919013813138
+    },
+    {
+      "turn": 16,
+      "fact": "Germany is the largest country in Europe with an area of app",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe with an area of app",
+      "exact_recall": true,
+      "latency_ms": 3.52077791467309
+    },
+    {
+      "turn": 17,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 4.044772009365261
+    },
+    {
+      "turn": 18,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 3.5785739310085773
+    },
+    {
+      "turn": 19,
+      "fact": "Dinosaurs were the dominant terrestrial vertebrates during t",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial vertebrates during t",
+      "exact_recall": true,
+      "latency_ms": 4.109421977773309
+    },
+    {
+      "turn": 20,
+      "fact": "The piano has 88 keys, including the white and black keys",
+      "query": "exact recall",
+      "retrieved": "The piano has 88 keys, including the white and black keys",
+      "exact_recall": true,
+      "latency_ms": 3.837655996903777
+    },
+    {
+      "turn": 21,
+      "fact": "Rainforests are home to over 40% of the world's animal speci",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to over 40% of the world's animal speci",
+      "exact_recall": true,
+      "latency_ms": 5.595308030024171
+    },
+    {
+      "turn": 22,
+      "fact": "Shakespeare wrote over 38 plays and 154 sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote over 38 plays and 154 sonnets",
+      "exact_recall": true,
+      "latency_ms": 5.402888054959476
+    },
+    {
+      "turn": 23,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 3.3087299671024084
+    },
+    {
+      "turn": 24,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.0826799813658
+    },
+    {
+      "turn": 25,
+      "fact": "Ancient Rome was founded in 753 BCE and lasted until 476 CE",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was founded in 753 BCE and lasted until 476 CE",
+      "exact_recall": true,
+      "latency_ms": 6.046345108188689
+    },
+    {
+      "turn": 26,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 3.9630959508940578
+    },
+    {
+      "turn": 27,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 7.326869992539287
+    },
+    {
+      "turn": 28,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 5.493115051649511
+    },
+    {
+      "turn": 29,
+      "fact": "The first electronic computer was invented in 1946 by Konrad",
+      "query": "exact recall",
+      "retrieved": "The first electronic computer was invented in 1946 by Konrad",
+      "exact_recall": true,
+      "latency_ms": 5.9687059838324785
+    },
+    {
+      "turn": 30,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 5.463233916088939
+    },
+    {
+      "turn": 31,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 4.914270946756005
+    },
+    {
+      "turn": 32,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 5.489417933858931
+    },
+    {
+      "turn": 33,
+      "fact": "The deepest point in the ocean is Challenger Deep, located i",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located i",
+      "exact_recall": true,
+      "latency_ms": 5.07219391874969
+    },
+    {
+      "turn": 34,
+      "fact": "Dinosaurs were the largest land animals to ever exist on Ear",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the largest land animals to ever exist on Ear",
+      "exact_recall": true,
+      "latency_ms": 6.002744077704847
+    },
+    {
+      "turn": 35,
+      "fact": "The piano is a stringed musical instrument with 88 keys on t",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys on t",
+      "exact_recall": true,
+      "latency_ms": 2.912368974648416
+    },
+    {
+      "turn": 36,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 4.377486067824066
+    },
+    {
+      "turn": 37,
+      "fact": "Shakespeare wrote over 38 plays and numerous sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote over 38 plays and numerous sonnets",
+      "exact_recall": true,
+      "latency_ms": 4.8132570227608085
+    },
+    {
+      "turn": 38,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 4.092601942829788
+    },
+    {
+      "turn": 39,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 2.5418699951842427
+    },
+    {
+      "turn": 40,
+      "fact": "Ancient Rome was the largest empire in history, spanning ove",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest empire in history, spanning ove",
+      "exact_recall": true,
+      "latency_ms": 5.4173130774870515
+    },
+    {
+      "turn": 41,
+      "fact": "The human body is made up of approximately 60% water",
+      "query": "exact recall",
+      "retrieved": "The human body is made up of approximately 60% water",
+      "exact_recall": true,
+      "latency_ms": 5.411147023551166
+    },
+    {
+      "turn": 42,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 2.9622940346598625
+    },
+    {
+      "turn": 43,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 3.4376269904896617
+    },
+    {
+      "turn": 44,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 6.088186986744404
+    },
+    {
+      "turn": 45,
+      "fact": "Bacteria are single-celled organisms that can be found in al",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that can be found in al",
+      "exact_recall": true,
+      "latency_ms": 4.433925962075591
+    },
+    {
+      "turn": 46,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 3.8848581025376916
+    },
+    {
+      "turn": 47,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 3.9810299640521407
+    },
+    {
+      "turn": 48,
+      "fact": "The deepest part of the ocean is the Mariana Trench, which r",
+      "query": "exact recall",
+      "retrieved": "The deepest part of the ocean is the Mariana Trench, which r",
+      "exact_recall": true,
+      "latency_ms": 3.6747020203620195
+    },
+    {
+      "turn": 49,
+      "fact": "Dinosaurs were the dominant land animals on Earth for over 1",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant land animals on Earth for over 1",
+      "exact_recall": true,
+      "latency_ms": 4.040122032165527
+    },
+    {
+      "turn": 50,
+      "fact": "The piano is a keyboard instrument with 88 keys, each tuned ",
+      "query": "exact recall",
+      "retrieved": "The piano is a keyboard instrument with 88 keys, each tuned ",
+      "exact_recall": true,
+      "latency_ms": 3.9163129404187202
+    },
+    {
+      "turn": 51,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 5.376491928473115
+    },
+    {
+      "turn": 52,
+      "fact": "Shakespeare's plays are considered some of the greatest work",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays are considered some of the greatest work",
+      "exact_recall": true,
+      "latency_ms": 3.479309962131083
+    },
+    {
+      "turn": 53,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 2.8237419901415706
+    },
+    {
+      "turn": 54,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 2.9701419407501817
+    },
+    {
+      "turn": 55,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 5.579854012466967
+    },
+    {
+      "turn": 56,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 3.880309988744557
+    },
+    {
+      "turn": 57,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 3.995478036813438
+    },
+    {
+      "turn": 58,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 4.061198094859719
+    },
+    {
+      "turn": 59,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 4.108895896933973
+    },
+    {
+      "turn": 60,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 4.267778946086764
+    },
+    {
+      "turn": 61,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 3.3111560624092817
+    },
+    {
+      "turn": 62,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 4.098542965948582
+    },
+    {
+      "turn": 63,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 2.9552970081567764
+    },
+    {
+      "turn": 64,
+      "fact": "Dinosaurs were the dominant land animals during the Mesozoic",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant land animals during the Mesozoic",
+      "exact_recall": true,
+      "latency_ms": 6.128275999799371
+    },
+    {
+      "turn": 65,
+      "fact": "The piano is a stringed musical instrument with 88 keys, use",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys, use",
+      "exact_recall": true,
+      "latency_ms": 3.7652839673683047
+    },
+    {
+      "turn": 66,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 3.9971399819478393
+    },
+    {
+      "turn": 67,
+      "fact": "Shakespeare wrote more than 38 plays and 154 sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote more than 38 plays and 154 sonnets",
+      "exact_recall": true,
+      "latency_ms": 3.848596941679716
+    },
+    {
+      "turn": 68,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 7.165351998992264
+    },
+    {
+      "turn": 69,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.3927570804953575
+    },
+    {
+      "turn": 70,
+      "fact": "Ancient Rome was the largest and most powerful city-state in",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful city-state in",
+      "exact_recall": true,
+      "latency_ms": 4.318907973356545
+    },
+    {
+      "turn": 71,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 4.094172036275268
+    },
+    {
+      "turn": 72,
+      "fact": "The Sun is the central star in our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the central star in our solar system",
+      "exact_recall": true,
+      "latency_ms": 2.5354688987135887
+    },
+    {
+      "turn": 73,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 2.6009309804067016
+    },
+    {
+      "turn": 74,
+      "fact": "In 1946, the first electronic digital computer was built at ",
+      "query": "exact recall",
+      "retrieved": "In 1946, the first electronic digital computer was built at ",
+      "exact_recall": true,
+      "latency_ms": 5.782329943031073
+    },
+    {
+      "turn": 75,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 4.393189097754657
+    },
+    {
+      "turn": 76,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 4.150026012212038
+    },
+    {
+      "turn": 77,
+      "fact": "Mars is the fourth planet from the Sun and is known for its ",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and is known for its ",
+      "exact_recall": true,
+      "latency_ms": 4.198065027594566
+    },
+    {
+      "turn": 78,
+      "fact": "The deepest point in the ocean is called the Mariana Trench,",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is called the Mariana Trench,",
+      "exact_recall": true,
+      "latency_ms": 5.511648952960968
+    },
+    {
+      "turn": 79,
+      "fact": "Dinosaurs were the largest reptiles to ever exist on Earth, ",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the largest reptiles to ever exist on Earth, ",
+      "exact_recall": true,
+      "latency_ms": 5.866631981916726
+    },
+    {
+      "turn": 80,
+      "fact": "The piano is an acoustic musical instrument that produces so",
+      "query": "exact recall",
+      "retrieved": "The piano is an acoustic musical instrument that produces so",
+      "exact_recall": true,
+      "latency_ms": 4.217569949105382
+    },
+    {
+      "turn": 81,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 3.0969269573688507
+    },
+    {
+      "turn": 82,
+      "fact": "Shakespeare wrote over 38 plays and 15 sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote over 38 plays and 15 sonnets",
+      "exact_recall": true,
+      "latency_ms": 3.2079030061140656
+    },
+    {
+      "turn": 83,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 4.232957027852535
+    },
+    {
+      "turn": 84,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 3.2241150038316846
+    },
+    {
+      "turn": 85,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 2.825906965881586
+    },
+    {
+      "turn": 86,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 4.241255926899612
+    },
+    {
+      "turn": 87,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 3.1250840984284878
+    },
+    {
+      "turn": 88,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 3.0619309982284904
+    },
+    {
+      "turn": 89,
+      "fact": "The first electronic computer was invented in 1946 by John v",
+      "query": "exact recall",
+      "retrieved": "The first electronic computer was invented in 1946 by John v",
+      "exact_recall": true,
+      "latency_ms": 2.7385299326851964
+    },
+    {
+      "turn": 90,
+      "fact": "Bacteria are single-celled organisms that play crucial roles",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that play crucial roles",
+      "exact_recall": true,
+      "latency_ms": 3.1771170906722546
+    },
+    {
+      "turn": 91,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 3.1281779520213604
+    },
+    {
+      "turn": 92,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 4.631079034879804
+    },
+    {
+      "turn": 93,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 3.35714197717607
+    },
+    {
+      "turn": 94,
+      "fact": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "exact_recall": true,
+      "latency_ms": 4.359748912975192
+    },
+    {
+      "turn": 95,
+      "fact": "The piano is the world's most popular keyboard instrument",
+      "query": "exact recall",
+      "retrieved": "The piano is the world's most popular keyboard instrument",
+      "exact_recall": true,
+      "latency_ms": 5.546080996282399
+    },
+    {
+      "turn": 96,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 4.523286013863981
+    },
+    {
+      "turn": 97,
+      "fact": "Shakespeare's plays often explore themes of love, power, and",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays often explore themes of love, power, and",
+      "exact_recall": true,
+      "latency_ms": 5.90274203568697
+    },
+    {
+      "turn": 98,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 4.350363044068217
+    },
+    {
+      "turn": 99,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.533188068307936
+    },
+    {
+      "turn": 100,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 4.6028620563447475
+    },
+    {
+      "turn": 101,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 3.275057068094611
+    },
+    {
+      "turn": 102,
+      "fact": "The Sun is the central star in our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the central star in our solar system",
+      "exact_recall": true,
+      "latency_ms": 2.8921919874846935
+    },
+    {
+      "turn": 103,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 3.081484930589795
+    },
+    {
+      "turn": 104,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 3.0832530464977026
+    },
+    {
+      "turn": 105,
+      "fact": "Bacteria are single-celled organisms that can be found almos",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that can be found almos",
+      "exact_recall": true,
+      "latency_ms": 2.956649987027049
+    },
+    {
+      "turn": 106,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 3.6121279699727893
+    },
+    {
+      "turn": 107,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 3.3924049930647016
+    },
+    {
+      "turn": 108,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 4.670158959925175
+    },
+    {
+      "turn": 109,
+      "fact": "Dinosaurs were the largest land animals that ever lived on E",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the largest land animals that ever lived on E",
+      "exact_recall": true,
+      "latency_ms": 5.88117993902415
+    },
+    {
+      "turn": 110,
+      "fact": "The piano is a stringed musical instrument with 88 keys arra",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys arra",
+      "exact_recall": true,
+      "latency_ms": 3.3195680007338524
+    },
+    {
+      "turn": 111,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 3.0860640108585358
+    },
+    {
+      "turn": 112,
+      "fact": "Shakespeare's plays often explore themes of love, power, and",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays often explore themes of love, power, and",
+      "exact_recall": true,
+      "latency_ms": 3.414007951505482
+    },
+    {
+      "turn": 113,
+      "fact": "Mathematics is the study of numbers and their properties",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers and their properties",
+      "exact_recall": true,
+      "latency_ms": 5.885727936401963
+    },
+    {
+      "turn": 114,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 2.9833250446245074
+    },
+    {
+      "turn": 115,
+      "fact": "Rome was founded in 753 BC by Romulus and Remus",
+      "query": "exact recall",
+      "retrieved": "Rome was founded in 753 BC by Romulus and Remus",
+      "exact_recall": true,
+      "latency_ms": 6.046773982234299
+    },
+    {
+      "turn": 116,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 3.4766739699989557
+    },
+    {
+      "turn": 117,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 4.832734004594386
+    },
+    {
+      "turn": 118,
+      "fact": "The Amazon River is the longest river in the world, flowing ",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, flowing ",
+      "exact_recall": true,
+      "latency_ms": 6.094270967878401
+    },
+    {
+      "turn": 119,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 4.865832976065576
+    },
+    {
+      "turn": 120,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 3.4685430582612753
+    },
+    {
+      "turn": 121,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 59.04733296483755
+    },
+    {
+      "turn": 122,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 4.814963089302182
+    },
+    {
+      "turn": 123,
+      "fact": "The deepest point in the world's oceans is Challenger Deep, ",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the world's oceans is Challenger Deep, ",
+      "exact_recall": true,
+      "latency_ms": 6.235440028831363
+    },
+    {
+      "turn": 124,
+      "fact": "Dinosaurs were the largest land animals of their time period",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the largest land animals of their time period",
+      "exact_recall": true,
+      "latency_ms": 6.060573039576411
+    },
+    {
+      "turn": 125,
+      "fact": "The piano is a keyboard instrument with 88 keys, allowing fo",
+      "query": "exact recall",
+      "retrieved": "The piano is a keyboard instrument with 88 keys, allowing fo",
+      "exact_recall": true,
+      "latency_ms": 6.290483986958861
+    },
+    {
+      "turn": 126,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 5.591104971244931
+    },
+    {
+      "turn": 127,
+      "fact": "Shakespeare's plays often explore themes of love, power, and",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays often explore themes of love, power, and",
+      "exact_recall": true,
+      "latency_ms": 4.0389730129390955
+    },
+    {
+      "turn": 128,
+      "fact": "Mathematics is the study of numbers and their properties",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers and their properties",
+      "exact_recall": true,
+      "latency_ms": 5.447955918498337
+    },
+    {
+      "turn": 129,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 5.736658000387251
+    },
+    {
+      "turn": 130,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 5.851969006471336
+    },
+    {
+      "turn": 131,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 5.435840925201774
+    },
+    {
+      "turn": 132,
+      "fact": "The Sun is the central star in our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the central star in our solar system",
+      "exact_recall": true,
+      "latency_ms": 4.109293106012046
+    },
+    {
+      "turn": 133,
+      "fact": "The Amazon River is the longest river in the world at over 4",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world at over 4",
+      "exact_recall": true,
+      "latency_ms": 6.160232005640864
+    },
+    {
+      "turn": 134,
+      "fact": "The first electronic computer was invented in 1945 by Konrad",
+      "query": "exact recall",
+      "retrieved": "The first electronic computer was invented in 1945 by Konrad",
+      "exact_recall": true,
+      "latency_ms": 4.853622056543827
+    },
+    {
+      "turn": 135,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 5.811334005557001
+    },
+    {
+      "turn": 136,
+      "fact": "Germany is the largest country in Europe and borders Poland ",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and borders Poland ",
+      "exact_recall": true,
+      "latency_ms": 5.063873948529363
+    },
+    {
+      "turn": 137,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 5.040811956860125
+    },
+    {
+      "turn": 138,
+      "fact": "The deepest point in the ocean is the Mariana Trench, locate",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is the Mariana Trench, locate",
+      "exact_recall": true,
+      "latency_ms": 7.189381984062493
+    },
+    {
+      "turn": 139,
+      "fact": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "exact_recall": true,
+      "latency_ms": 4.264210932888091
+    },
+    {
+      "turn": 140,
+      "fact": "The piano is a keyboard musical instrument with 88 keys, eac",
+      "query": "exact recall",
+      "retrieved": "The piano is a keyboard musical instrument with 88 keys, eac",
+      "exact_recall": true,
+      "latency_ms": 5.3885700181126595
+    },
+    {
+      "turn": 141,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 5.712523008696735
+    },
+    {
+      "turn": 142,
+      "fact": "Shakespeare's plays often explore themes of love, power, and",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays often explore themes of love, power, and",
+      "exact_recall": true,
+      "latency_ms": 4.871296929195523
+    },
+    {
+      "turn": 143,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 4.802519921213388
+    },
+    {
+      "turn": 144,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 6.1063660541549325
+    },
+    {
+      "turn": 145,
+      "fact": "Rome was the first capital city of the Roman Empire and serv",
+      "query": "exact recall",
+      "retrieved": "Rome was the first capital city of the Roman Empire and serv",
+      "exact_recall": true,
+      "latency_ms": 6.693022092804313
+    },
+    {
+      "turn": 146,
+      "fact": "The human body contains approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body contains approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 4.497001995332539
+    },
+    {
+      "turn": 147,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 5.788354086689651
+    },
+    {
+      "turn": 148,
+      "fact": "The Amazon River is the longest river in the world, flowing ",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, flowing ",
+      "exact_recall": true,
+      "latency_ms": 5.599010037258267
+    },
+    {
+      "turn": 149,
+      "fact": "The first electronic computer was built in 1946 by Konrad Zu",
+      "query": "exact recall",
+      "retrieved": "The first electronic computer was built in 1946 by Konrad Zu",
+      "exact_recall": true,
+      "latency_ms": 4.67589299660176
+    },
+    {
+      "turn": 150,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 21.293206023983657
+    },
+    {
+      "turn": 151,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 5.897508934140205
+    },
+    {
+      "turn": 152,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 5.8480240404605865
+    },
+    {
+      "turn": 153,
+      "fact": "The deepest point in the ocean is Challenger Deep, located i",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located i",
+      "exact_recall": true,
+      "latency_ms": 5.045318976044655
+    },
+    {
+      "turn": 154,
+      "fact": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "exact_recall": true,
+      "latency_ms": 5.835767020471394
+    },
+    {
+      "turn": 155,
+      "fact": "The piano is an acoustic keyboard musical instrument that pr",
+      "query": "exact recall",
+      "retrieved": "The piano is an acoustic keyboard musical instrument that pr",
+      "exact_recall": true,
+      "latency_ms": 4.6269920421764255
+    },
+    {
+      "turn": 156,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 4.244558978825808
+    },
+    {
+      "turn": 157,
+      "fact": "Shakespeare wrote over 38 plays and 15 sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote over 38 plays and 15 sonnets",
+      "exact_recall": true,
+      "latency_ms": 5.82096294965595
+    },
+    {
+      "turn": 158,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 5.911189946345985
+    },
+    {
+      "turn": 159,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.652020055800676
+    },
+    {
+      "turn": 160,
+      "fact": "Ancient Rome was the largest and most powerful city-state in",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful city-state in",
+      "exact_recall": true,
+      "latency_ms": 6.375227007083595
+    },
+    {
+      "turn": 161,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 4.515506909228861
+    },
+    {
+      "turn": 162,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 5.3831469267606735
+    },
+    {
+      "turn": 163,
+      "fact": "The Amazon River is the longest river in the world at over 4",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world at over 4",
+      "exact_recall": true,
+      "latency_ms": 4.338228027336299
+    },
+    {
+      "turn": 164,
+      "fact": "In 1946, the first electronic digital computer was built at ",
+      "query": "exact recall",
+      "retrieved": "In 1946, the first electronic digital computer was built at ",
+      "exact_recall": true,
+      "latency_ms": 5.635628011077642
+    },
+    {
+      "turn": 165,
+      "fact": "Bacteria are single-celled microorganisms that play crucial ",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled microorganisms that play crucial ",
+      "exact_recall": true,
+      "latency_ms": 7.068214938044548
+    },
+    {
+      "turn": 166,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 4.541318980045617
+    },
+    {
+      "turn": 167,
+      "fact": "Mars has two moons and is the fourth largest planet in our s",
+      "query": "exact recall",
+      "retrieved": "Mars has two moons and is the fourth largest planet in our s",
+      "exact_recall": true,
+      "latency_ms": 7.1798330172896385
+    },
+    {
+      "turn": 168,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 6.428866996429861
+    },
+    {
+      "turn": 169,
+      "fact": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial reptiles on Earth fo",
+      "exact_recall": true,
+      "latency_ms": 5.778973107226193
+    },
+    {
+      "turn": 170,
+      "fact": "The piano is a stringed musical instrument with 88 keys and ",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys and ",
+      "exact_recall": true,
+      "latency_ms": 5.237626959569752
+    },
+    {
+      "turn": 171,
+      "fact": "Rainforests are home to many unique and fascinating species ",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating species ",
+      "exact_recall": true,
+      "latency_ms": 7.596240029670298
+    },
+    {
+      "turn": 172,
+      "fact": "Shakespeare's plays were written in the early 16th century a",
+      "query": "exact recall",
+      "retrieved": "Shakespeare's plays were written in the early 16th century a",
+      "exact_recall": true,
+      "latency_ms": 7.000284036621451
+    },
+    {
+      "turn": 173,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 5.9972458984702826
+    },
+    {
+      "turn": 174,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.891340970061719
+    },
+    {
+      "turn": 175,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 5.780515959486365
+    },
+    {
+      "turn": 176,
+      "fact": "The human body is composed of approximately 60% water",
+      "query": "exact recall",
+      "retrieved": "The human body is composed of approximately 60% water",
+      "exact_recall": true,
+      "latency_ms": 6.693224073387682
+    },
+    {
+      "turn": 177,
+      "fact": "The Sun is the center of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the center of our solar system",
+      "exact_recall": true,
+      "latency_ms": 6.7886169999837875
+    },
+    {
+      "turn": 178,
+      "fact": "The Amazon River is the longest river in the world, flowing ",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, flowing ",
+      "exact_recall": true,
+      "latency_ms": 6.684189080260694
+    },
+    {
+      "turn": 179,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 4.294471931643784
+    },
+    {
+      "turn": 180,
+      "fact": "Bacteria are single-celled organisms that can be found almos",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that can be found almos",
+      "exact_recall": true,
+      "latency_ms": 4.231903003528714
+    },
+    {
+      "turn": 181,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 5.428271950222552
+    },
+    {
+      "turn": 182,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 6.2030579429119825
+    },
+    {
+      "turn": 183,
+      "fact": "The deepest point in the world is Mount Everest, which is 8,",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the world is Mount Everest, which is 8,",
+      "exact_recall": true,
+      "latency_ms": 5.60474197845906
+    },
+    {
+      "turn": 184,
+      "fact": "Dinosaurs were the largest land animals that ever lived on E",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the largest land animals that ever lived on E",
+      "exact_recall": true,
+      "latency_ms": 4.8735609743744135
+    },
+    {
+      "turn": 185,
+      "fact": "The piano is a stringed musical instrument with 88 keys arra",
+      "query": "exact recall",
+      "retrieved": "The piano is a stringed musical instrument with 88 keys arra",
+      "exact_recall": true,
+      "latency_ms": 5.253694020211697
+    },
+    {
+      "turn": 186,
+      "fact": "Rainforests are home to many unique and fascinating animal s",
+      "query": "exact recall",
+      "retrieved": "Rainforests are home to many unique and fascinating animal s",
+      "exact_recall": true,
+      "latency_ms": 5.751643911935389
+    },
+    {
+      "turn": 187,
+      "fact": "Shakespeare wrote more than 38 plays and 154 sonnets",
+      "query": "exact recall",
+      "retrieved": "Shakespeare wrote more than 38 plays and 154 sonnets",
+      "exact_recall": true,
+      "latency_ms": 5.2610409911721945
+    },
+    {
+      "turn": 188,
+      "fact": "Mathematics is the study of numbers, shapes, and patterns",
+      "query": "exact recall",
+      "retrieved": "Mathematics is the study of numbers, shapes, and patterns",
+      "exact_recall": true,
+      "latency_ms": 5.778683931566775
+    },
+    {
+      "turn": 189,
+      "fact": "Gravity is the force that attracts objects towards each othe",
+      "query": "exact recall",
+      "retrieved": "Gravity is the force that attracts objects towards each othe",
+      "exact_recall": true,
+      "latency_ms": 4.593435092829168
+    },
+    {
+      "turn": 190,
+      "fact": "Ancient Rome was the largest and most powerful empire in his",
+      "query": "exact recall",
+      "retrieved": "Ancient Rome was the largest and most powerful empire in his",
+      "exact_recall": true,
+      "latency_ms": 6.360211991705
+    },
+    {
+      "turn": 191,
+      "fact": "The human body has approximately 206 bones",
+      "query": "exact recall",
+      "retrieved": "The human body has approximately 206 bones",
+      "exact_recall": true,
+      "latency_ms": 4.116220050491393
+    },
+    {
+      "turn": 192,
+      "fact": "The Sun is the central star of our solar system",
+      "query": "exact recall",
+      "retrieved": "The Sun is the central star of our solar system",
+      "exact_recall": true,
+      "latency_ms": 6.431913003325462
+    },
+    {
+      "turn": 193,
+      "fact": "The Amazon River is the longest river in the world, spanning",
+      "query": "exact recall",
+      "retrieved": "The Amazon River is the longest river in the world, spanning",
+      "exact_recall": true,
+      "latency_ms": 5.290825967676938
+    },
+    {
+      "turn": 194,
+      "fact": "The first personal computer was invented in 1946 by John von",
+      "query": "exact recall",
+      "retrieved": "The first personal computer was invented in 1946 by John von",
+      "exact_recall": true,
+      "latency_ms": 4.963157931342721
+    },
+    {
+      "turn": 195,
+      "fact": "Bacteria are single-celled organisms that can be found almos",
+      "query": "exact recall",
+      "retrieved": "Bacteria are single-celled organisms that can be found almos",
+      "exact_recall": true,
+      "latency_ms": 5.5288709700107574
+    },
+    {
+      "turn": 196,
+      "fact": "Germany is the largest country in Europe and has a diverse l",
+      "query": "exact recall",
+      "retrieved": "Germany is the largest country in Europe and has a diverse l",
+      "exact_recall": true,
+      "latency_ms": 4.616004996933043
+    },
+    {
+      "turn": 197,
+      "fact": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "query": "exact recall",
+      "retrieved": "Mars is the fourth planet from the Sun and has a thin atmosp",
+      "exact_recall": true,
+      "latency_ms": 7.123251096345484
+    },
+    {
+      "turn": 198,
+      "fact": "The deepest point in the ocean is Challenger Deep, located a",
+      "query": "exact recall",
+      "retrieved": "The deepest point in the ocean is Challenger Deep, located a",
+      "exact_recall": true,
+      "latency_ms": 5.709962919354439
+    },
+    {
+      "turn": 199,
+      "fact": "Dinosaurs were the dominant terrestrial reptiles of the Meso",
+      "query": "exact recall",
+      "retrieved": "Dinosaurs were the dominant terrestrial reptiles of the Meso",
+      "exact_recall": true,
+      "latency_ms": 6.0306929517537355
+    },
+    {
+      "turn": 200,
+      "fact": "The piano is a keyboard musical instrument with 88 keys and ",
+      "query": "exact recall",
+      "retrieved": "The piano is a keyboard musical instrument with 88 keys and ",
+      "exact_recall": true,
+      "latency_ms": 5.307756015099585
+    }
+  ]
+}

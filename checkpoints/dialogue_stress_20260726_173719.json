@@ -1,0 +1,78 @@
+{
+  "config": {
+    "num_turns": 5,
+    "llm_model": "qwen2.5-coder:1.5b",
+    "vsa_dim": 1000,
+    "store_capacity": 2000,
+    "clonal_max": 100,
+    "report_interval": 5
+  },
+  "summary": {
+    "total_turns": 5,
+    "correct": 1,
+    "accuracy_pct": 20.0,
+    "first_half_correct": 1,
+    "second_half_correct": 0,
+    "improvement": -1,
+    "drift_events": 0,
+    "decoder_size": 14,
+    "clonal_size": 0
+  },
+  "records": [
+    {
+      "turn": 1,
+      "phase": "learn",
+      "question": "What is a fact about Germany geography?",
+      "agent_answer": "Germany has a diverse landscape with mountains, forests, plains, and rivers",
+      "expected_answer": "Germany has a diverse landscape with mountains, forests, plains, and rivers",
+      "correct": true,
+      "agent_drift": false,
+      "energy_z": -270000000000.0,
+      "latency_ms": 5.975859938189387
+    },
+    {
+      "turn": 2,
+      "phase": "learn",
+      "question": "What is a fact about Mars planet?",
+      "agent_answer": "What is a fact about Germany geography?",
+      "expected_answer": "Mars has a thin atmosphere composed primarily of carbon dioxide and nitrogen, wi",
+      "correct": false,
+      "agent_drift": false,
+      "energy_z": -12311400000000.0,
+      "latency_ms": 6.620475091040134
+    },
+    {
+      "turn": 3,
+      "phase": "learn",
+      "question": "What is a fact about ocean depth?",
+      "agent_answer": "What is a fact about Germany geography?",
+      "expected_answer": "The deepest point in the ocean is called the Mariana Trench, located in the Paci",
+      "correct": false,
+      "agent_drift": false,
+      "energy_z": -25324000000000.0,
+      "latency_ms": 9.471505996771157
+    },
+    {
+      "turn": 4,
+      "phase": "learn",
+      "question": "What is a fact about dinosaurs?",
+      "agent_answer": "What is a fact about Germany geography?",
+      "expected_answer": "Dinosaurs were a group of reptiles that lived on Earth from the late Triassic pe",
+      "correct": false,
+      "agent_drift": false,
+      "energy_z": -46335000000000.0,
+      "latency_ms": 10.534423985518515
+    },
+    {
+      "turn": 5,
+      "phase": "learn",
+      "question": "What is a fact about piano instrument?",
+      "agent_answer": "What is a fact about dinosaurs?",
+      "expected_answer": "The piano is an acoustic musical instrument with a keyboard that produces sound ",
+      "correct": false,
+      "agent_drift": false,
+      "energy_z": -61771900000000.0,
+      "latency_ms": 9.726318996399641
+    }
+  ]
+}

@@ -10,18 +10,26 @@ class VSADecoder:
                  hopfield_steps: int = 10,
                  encoder: VSAEncoder | None = None):
         self.vsa = vsa or VSA()
+        self.store_capacity = store_capacity
         self.hopfield_steps = hopfield_steps
         self.encoder = encoder or VSAEncoder(vsa=self.vsa)
-        self.hopfield = HopfieldNet(dim=self.vsa.dim)
+        self.hopfield = HopfieldNet(dim=self.vsa.dim, retrieval_mode="modern")
         self.store = AssociativeStore(dim=self.vsa.dim, capacity=store_capacity)
         self._texts: list[str] = []
         torch.set_num_threads(os.cpu_count() or 1)
 
     def ingest(self, text: str):
         hv = self.encode(text)
-        self.hopfield.store(hv)
+        evicting = len(self._texts) >= self.store_capacity
         self.store.insert(hv, hv)
+        if evicting:
+            self._texts.pop(0)
         self._texts.append(text)
+        if evicting:
+            # Keep the denoising memory aligned with the bounded vector store.
+            self.hopfield.set_state(list(self.store.keys))
+        else:
+            self.hopfield.store(hv)
 
     def ingest_batch(self, texts: list[str]):
         for t in texts:
@@ -66,6 +74,7 @@ class VSADecoder:
 
     def get_state(self) -> dict:
         return {
+            "store_capacity": self.store_capacity,
             "hopfield_steps": self.hopfield_steps,
             "texts": self._texts,
             "store": self.store.get_state(),
@@ -73,6 +82,7 @@ class VSADecoder:
         }
 
     def set_state(self, state: dict):
+        self.store_capacity = state.get("store_capacity", self.store_capacity)
         self.hopfield_steps = state["hopfield_steps"]
         self._texts = state["texts"]
         self.store.set_state(state["store"]["keys"])

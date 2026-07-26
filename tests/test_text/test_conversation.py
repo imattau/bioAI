@@ -18,6 +18,67 @@ class TestDialogueWithAgent:
         self.agent.process_turn("the capital of France is Paris")
         result = self.agent.process_turn("what is the capital of France")
         assert "Paris" in result["response"] or "capital" in result["response"]
+        assert result["retrieval_accepted"]
+        assert result["intent"] == "question"
+
+    def test_unrelated_statement_does_not_repeat_previous_memory(self):
+        fact = "the capital of France is Paris"
+        self.agent.process_turn(fact)
+        result = self.agent.process_turn(
+            "Mars has seasons that change its climate"
+        )
+        assert result["response"] == "I'll remember that."
+        assert fact not in result["response"]
+        assert result["intent"] == "statement"
+
+    def test_unrelated_question_is_rejected(self):
+        self.agent.process_turn("the capital of France is Paris")
+        result = self.agent.process_turn("what causes tides on the moon?")
+        assert not result["retrieval_accepted"]
+        assert "relevant memory" in result["response"]
+
+    def test_ambiguous_candidates_are_rejected_by_margin(self):
+        self.agent.process_turn("Mars is a red planet")
+        self.agent.process_turn("Mars is a cold planet")
+        result = self.agent.process_turn("what kind of planet is Mars?")
+        assert len(result["retrieval_candidates"]) >= 2
+        assert not result["retrieval_accepted"]
+
+    def test_semantic_paraphrase_retrieves_fact(self):
+        self.agent.process_turn("Paris is the capital of France")
+        result = self.agent.process_turn(
+            "Which city is France's administrative centre?"
+        )
+        assert result["retrieval_accepted"]
+        assert "Paris" in result["response"]
+
+    def test_questions_remain_history_but_not_long_term_facts(self):
+        self.agent.process_turn("Paris is the capital of France")
+        self.agent.process_turn("What is the capital of France?")
+        assert len(self.agent.history) == 2
+        assert len(self.agent.library) == 1
+        assert self.agent.library.exact_lookup(
+            "What is the capital of France?"
+        ) is None
+
+    def test_grounded_generator_receives_accepted_memory_and_exposes_source(self):
+        calls = []
+
+        def generator(question, memories):
+            calls.append((question, memories))
+            return f"Paris is the answer [memory:{memories[0]['id']}]"
+
+        self.agent.response_generator = generator
+        self.agent.process_turn("Paris is the capital of France")
+        result = self.agent.process_turn("What is the capital of France?")
+        assert result["response_generated"]
+        assert result["response"] == "Paris is the answer [memory:0]"
+        assert result["sources"] == [{
+            "id": 0,
+            "text": "Paris is the capital of France",
+            "score": result["retrieval_score"],
+        }]
+        assert calls[0][0] == "What is the capital of France?"
 
     def test_memory_across_turns(self):
         fact = "The capital of France is Paris"

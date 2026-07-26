@@ -18,6 +18,12 @@ from nca import NCACell, NCA
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 HD_DIM = 1000
+SEED = 42
+
+
+def seed_everything(seed: int = SEED):
+    torch.manual_seed(seed)
+    np.random.seed(seed)
 
 
 @dataclass
@@ -78,23 +84,30 @@ def validate_encoder():
     def encode_bag(word_ids: list[int]) -> torch.Tensor:
         return torchhd.multiset(word_table[word_ids]).sign()
 
-    # Collision test: encode 10000 random 3-word sentences, check similarity distribution
+    # Collision test: sample pairs instead of materialising a 10000x10000 matrix.
     sentences_ids = []
     for _ in range(10000):
         ids = [torch.randint(0, 500, ()).item() for _ in range(3)]
         sentences_ids.append(ids)
     hvs_list = torch.stack([encode_sentence(s) for s in sentences_ids])
-    dots = hvs_list @ hvs_list.T
-    diag_mask = torch.eye(10000, dtype=torch.bool, device="cpu")
-    off_diag = dots[~diag_mask]
+    pair_gen = torch.Generator().manual_seed(SEED)
+    left = torch.randint(0, len(hvs_list), (100_000,), generator=pair_gen)
+    right = torch.randint(0, len(hvs_list) - 1, (100_000,), generator=pair_gen)
+    right += (right >= left).long()
+    distinct_inputs = torch.tensor([
+        sentences_ids[i] != sentences_ids[j]
+        for i, j in zip(left.tolist(), right.tolist())
+    ])
+    sampled_dots = (hvs_list[left] * hvs_list[right]).sum(dim=1)
+    off_diag = sampled_dots[distinct_inputs]
     max_off = off_diag.max().item()
     mean_off = off_diag.float().mean().item()
     # Random MAP vectors have dot ~0 (concentration of measure); collisions would be >900
     collision_count = int((off_diag > 990).sum().item())
     rep.test("deterministic encoding (no VSA-level collisions beyond word-ID birthday bound)",
              collision_count < 10,
-             f"near-identical pairs={collision_count}/50M (max_dot={max_off}, mean={mean_off:.2f}, "
-             f"birthday bound ~0.4 for 500^3 word combos)")
+             f"near-identical pairs={collision_count}/{len(off_diag)} sampled distinct inputs "
+             f"(max_dot={max_off}, mean={mean_off:.2f})")
 
     # Compositionality: order-swapped pair
     a = encode_sentence([0, 1, 2])  # A B C
@@ -268,7 +281,15 @@ def validate_clonal():
     rep.test("forgetting: originals retrievable after 30 new patterns",
              final_aff > 0.3, f"affinity trajectory={[f'{x:.2f}' for x in record]}")
 
-    rep.test("clone quality (inherent in pool design)", True, "built-in via pool.process")
+    probe_pool = ClonalPool(input_dim=HD_DIM, max_modules=2)
+    probe = vsa.make_vector()
+    _, created = probe_pool.process(probe, lr=0.01)
+    receptor_affinity = max(
+        (m.affinity(probe).item() for m in probe_pool.modules), default=-1.0
+    )
+    rep.test("new clone preserves its triggering receptor",
+             created and receptor_affinity > 0.99,
+             f"created={created}, receptor_affinity={receptor_affinity:.3f}")
 
     # Pruning fairness
     pool2 = ClonalPool(input_dim=HD_DIM, affinity_threshold=0.3, max_modules=10)
@@ -433,11 +454,12 @@ def validate_action_selection():
         test_rewards.append(total)
     test_avg = float(np.mean(test_rewards))
     rep.test("generalises to unseen queries",
-             True,
+             test_avg > random_avg,
              f"test={test_avg:.2f}, random={random_avg:.2f} "
              f"(limited by linear policy; would need deeper network for full generalisation)")
 
     # Memory load sensitivity
+    load_scores = {}
     for n in [5, 10, 20]:
         store_n = AssociativeStore(dim=64, capacity=n)
         qs = [vsa_local.make_vector() for _ in range(n)]
@@ -462,11 +484,23 @@ def validate_action_selection():
                 loss.backward()
                 optim_n.step()
                 s = ns
-        trained_n = float(np.mean([sum(
-            r for _ in range(env_n.n)) for env_n.n in [20]]) or 0)
-    # Simpler: just verify that training on larger store is possible
-    rep.test("memory load training is possible",
-             True, "tested with n=5,10,20")
+        eval_rewards = []
+        for _ in range(20):
+            s, _ = env_n.reset()
+            total = 0.0
+            done = False
+            while not done:
+                action, _ = agent_n.act(
+                    torch.from_numpy(s).float().to(DEVICE), deterministic=True
+                )
+                s, reward, term, trunc, _ = env_n.step(action)
+                total += reward
+                done = term or trunc
+            eval_rewards.append(total)
+        load_scores[n] = float(np.mean(eval_rewards))
+    rep.test("memory load training beats random at each tested size",
+             all(score > random_avg for score in load_scores.values()),
+             f"scores={load_scores}, random={random_avg:.2f}")
 
 
 # =============================================================================
@@ -505,8 +539,9 @@ def validate_nca():
         state = cell(state)
     corrupt_region_after = state[:, :, 4:8, 4:8]
     region_change = (corrupt_region_after - corrupt_region_before).abs().mean().item()
-    rep.test("self-repair after corruption (region changes toward coherent state)",
-             True, f"region change={region_change:.6f}")
+    rep.test("corrupted region continues evolving",
+             region_change > 0.01, f"region change={region_change:.6f}; "
+             "self-repair requires a trained NCA and a target-distance metric")
 
     # Generate with target (coarse conditioning)
     seed = torch.randn(1, 1, 16, 16)
@@ -589,6 +624,7 @@ def validate_integration():
 # Main
 # =============================================================================
 if __name__ == "__main__":
+    seed_everything()
     print(f"Device: {DEVICE}, HD dim: {HD_DIM}")
     # Run no-grad validations under torch.no_grad()
     with torch.no_grad():

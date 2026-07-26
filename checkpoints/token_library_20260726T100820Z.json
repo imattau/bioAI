@@ -1,0 +1,16 @@
+{
+  "sentences": 500000,
+  "tokens": 4500000,
+  "vocabulary": 1000006,
+  "token_storage_bytes": 18000000,
+  "offset_storage_bytes": 4000008,
+  "ingestion_seconds": 3.1464830649783835,
+  "ingestion_sentences_per_second": 158907.57702312153,
+  "queries": 100,
+  "correct": 100,
+  "accuracy": 1.0,
+  "exact_latency_p50_ms": 0.004862,
+  "exact_latency_p95_ms": 0.021788,
+  "candidate_latency_p50_ms": 0.002685,
+  "candidate_latency_p95_ms": 0.01997
+}

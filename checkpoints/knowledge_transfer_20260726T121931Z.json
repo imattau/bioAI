@@ -1,0 +1,192 @@
+{
+  "benchmark": "real_fact_multi_hop_transfer",
+  "facts": 24,
+  "questions": 12,
+  "correct": 12,
+  "accuracy_pct": 100.0,
+  "complete_evidence_paths": 12,
+  "evidence_completeness_pct": 100.0,
+  "latency_p50_ms": 0.245197,
+  "records": [
+    {
+      "question": "What continent is Canberra in?",
+      "expected": "Oceania",
+      "response": "canberra is in oceania.",
+      "path": [
+        "canberra",
+        "australia",
+        "oceania"
+      ],
+      "source_texts": [
+        "Canberra is the capital of Australia.",
+        "Australia is located in Oceania."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Paris?",
+      "expected": "Europe",
+      "response": "paris is in europe.",
+      "path": [
+        "paris",
+        "france",
+        "europe"
+      ],
+      "source_texts": [
+        "The capital of France is Paris.",
+        "France lies within Europe."
+      ],
+      "correct": true
+    },
+    {
+      "question": "What continent is Tokyo in?",
+      "expected": "Asia",
+      "response": "tokyo is in asia.",
+      "path": [
+        "tokyo",
+        "japan",
+        "asia"
+      ],
+      "source_texts": [
+        "Tokyo is the capital of Japan.",
+        "Japan sits in Asia."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Ottawa?",
+      "expected": "North America",
+      "response": "ottawa is in north america.",
+      "path": [
+        "ottawa",
+        "canada",
+        "north america"
+      ],
+      "source_texts": [
+        "The capital of Canada is Ottawa.",
+        "Canada is located in North America."
+      ],
+      "correct": true
+    },
+    {
+      "question": "What continent is Brasilia in?",
+      "expected": "South America",
+      "response": "brasilia is in south america.",
+      "path": [
+        "brasilia",
+        "brazil",
+        "south america"
+      ],
+      "source_texts": [
+        "Brasilia is the capital of Brazil.",
+        "Brazil lies within South America."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Nairobi?",
+      "expected": "Africa",
+      "response": "nairobi is in africa.",
+      "path": [
+        "nairobi",
+        "kenya",
+        "africa"
+      ],
+      "source_texts": [
+        "The capital of Kenya is Nairobi.",
+        "Kenya sits in Africa."
+      ],
+      "correct": true
+    },
+    {
+      "question": "What continent is Cairo in?",
+      "expected": "Africa",
+      "response": "cairo is in africa.",
+      "path": [
+        "cairo",
+        "egypt",
+        "africa"
+      ],
+      "source_texts": [
+        "Cairo is the capital of Egypt.",
+        "Egypt is located in Africa."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Wellington?",
+      "expected": "Oceania",
+      "response": "wellington is in oceania.",
+      "path": [
+        "wellington",
+        "new zealand",
+        "oceania"
+      ],
+      "source_texts": [
+        "The capital of New Zealand is Wellington.",
+        "New Zealand lies within Oceania."
+      ],
+      "correct": true
+    },
+    {
+      "question": "What continent is Madrid in?",
+      "expected": "Europe",
+      "response": "madrid is in europe.",
+      "path": [
+        "madrid",
+        "spain",
+        "europe"
+      ],
+      "source_texts": [
+        "Madrid is the capital of Spain.",
+        "Spain sits in Europe."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Seoul?",
+      "expected": "Asia",
+      "response": "seoul is in asia.",
+      "path": [
+        "seoul",
+        "south korea",
+        "asia"
+      ],
+      "source_texts": [
+        "The capital of South Korea is Seoul.",
+        "South Korea is located in Asia."
+      ],
+      "correct": true
+    },
+    {
+      "question": "What continent is Buenos Aires in?",
+      "expected": "South America",
+      "response": "buenos aires is in south america.",
+      "path": [
+        "buenos aires",
+        "argentina",
+        "south america"
+      ],
+      "source_texts": [
+        "Buenos Aires is the capital of Argentina.",
+        "Argentina lies within South America."
+      ],
+      "correct": true
+    },
+    {
+      "question": "Which continent contains Mexico City?",
+      "expected": "North America",
+      "response": "mexico city is in north america.",
+      "path": [
+        "mexico city",
+        "mexico",
+        "north america"
+      ],
+      "source_texts": [
+        "The capital of Mexico is Mexico City.",
+        "Mexico sits in North America."
+      ],
+      "correct": true
+    }
+  ]
+}

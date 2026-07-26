@@ -1,0 +1,31 @@
+{
+  "benchmark": "real_conversation_library_response_scaling",
+  "dataset": "OpenAssistant/oasst1",
+  "generator": "none",
+  "retrieval": "TokenLibrary lexical/semantic-term index",
+  "composition": "top-retrieved source sentence splicing",
+  "available_training_pairs": 9326,
+  "available_held_out_pairs": 501,
+  "unreached_checkpoints": [
+    500000,
+    1000000
+  ],
+  "results": [
+    {
+      "library_tokens": 100003,
+      "library_pairs": 4380,
+      "held_out_pairs": 200,
+      "acceptance_pct": 100.0,
+      "nearest_token_f1_pct": 15.611446785472385,
+      "composed_token_f1_pct": 16.27945634713164,
+      "nearest_tfidf_similarity_pct": 5.535930113561493,
+      "composed_tfidf_similarity_pct": 6.113510385661053,
+      "nearest_exact_match_pct": 0,
+      "query_p50_ms": 0.087779,
+      "query_p95_ms": 0.368821,
+      "composition_is_source_extractive": true,
+      "target_checkpoint_tokens": 100000,
+      "elapsed_seconds": 0.2785142989596352
+    }
+  ]
+}

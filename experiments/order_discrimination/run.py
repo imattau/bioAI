@@ -249,8 +249,12 @@ def evaluate_order_discrimination(model, pairs: list[tuple[str, str]],
         ids2 = tokenize(s2, vocab)
         hv1 = encoder.encode(ids1).unsqueeze(0).to(device)
         hv2 = encoder.encode(ids2).unsqueeze(0).to(device)
-        pred1 = model.generate(hv1, max_len=max_len, num_steps=50)[0]
-        pred2 = model.generate(hv2, max_len=max_len, num_steps=50)[0]
+        pred1 = model.generate(
+            hv1, max_len=max_len, num_steps=50, mask_token_id=len(vocab)
+        )[0]
+        pred2 = model.generate(
+            hv2, max_len=max_len, num_steps=50, mask_token_id=len(vocab)
+        )[0]
         target1 = torch.tensor(ids1, device=device)
         target2 = torch.tensor(ids2, device=device)
         c1 = torch.equal(pred1[:len(ids1)], target1)

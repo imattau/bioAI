@@ -32,8 +32,15 @@ class TurnRecord:
     turn: int
     fact: str
     query: str
+    agent_response: str
+    intent: str
+    retrieval_accepted: bool
+    retrieval_score: float
+    retrieval_margin: float
     retrieved: str
     exact_recall: bool
+    drift_detected: bool
+    energy_z: float
     latency_ms: float
 
 
@@ -44,6 +51,7 @@ class ExperimentConfig:
     vsa_dim: int = 1000
     store_capacity: int = 2000
     report_interval: int = 50
+    use_llm_facts: bool = True
 
 
 class FactGenerator:
@@ -108,7 +116,10 @@ class MemoryStressTest:
             store_capacity=config.store_capacity,
             encoder=self.agent.encoder,
         )
-        self.gen = FactGenerator(config.llm_model)
+        self.gen = FactGenerator(
+            config.llm_model,
+            num_diverse=config.num_turns if config.use_llm_facts else 0,
+        )
         self.records: list[TurnRecord] = []
 
     def run(self):
@@ -125,7 +136,7 @@ class MemoryStressTest:
             fact = self.gen.next_fact()
             t0 = time.perf_counter()
 
-            self.agent.process_turn(fact)
+            conversation_turn = self.agent.process_turn(fact)
             recalled = self.agent.recall(fact)
             exact = (recalled == fact)
             if exact:
@@ -135,10 +146,17 @@ class MemoryStressTest:
 
             self.records.append(TurnRecord(
                 turn=turn,
-                fact=fact[:60],
+                fact=fact,
                 query="exact recall",
-                retrieved=recalled[:60],
+                agent_response=conversation_turn["response"],
+                intent=conversation_turn["intent"],
+                retrieval_accepted=conversation_turn["retrieval_accepted"],
+                retrieval_score=conversation_turn["retrieval_score"],
+                retrieval_margin=conversation_turn["retrieval_margin"],
+                retrieved=recalled,
                 exact_recall=exact,
+                drift_detected=conversation_turn["drift_detected"],
+                energy_z=conversation_turn["energy_z"],
                 latency_ms=latency,
             ))
 
@@ -152,7 +170,8 @@ class MemoryStressTest:
                     f"total={exact_recalls}/{turn} "
                     f"({100*exact_recalls/turn:.0f}%) "
                     f"latency={statistics.median([r.latency_ms for r in window]):.0f}ms "
-                    f"store={len(self.agent.decoder)} "
+                    f"library={len(self.agent.library)} "
+                    f"hot={len(self.agent.decoder)} "
                     f"clonal={len(self.agent.clonal)}"
                 )
 
@@ -173,6 +192,7 @@ class MemoryStressTest:
         print(f"  First half:            {first_half}/{half} ({100*first_half/half:.1f}%)")
         print(f"  Second half:           {second_half}/{half} ({100*second_half/half:.1f}%)")
         print(f"  Decoder store size:    {len(self.agent.decoder)}")
+        print(f"  Token library size:    {len(self.agent.library)}")
         print(f"  Clonal pool size:      {len(self.agent.clonal)}")
         print(f"  Median latency:        {statistics.median([r.latency_ms for r in self.records]):.0f}ms")
 
@@ -185,7 +205,15 @@ class MemoryStressTest:
                 "first_half_correct": first_half,
                 "second_half_correct": second_half,
                 "decoder_size": len(self.agent.decoder),
+                "token_library_size": len(self.agent.library),
+                "token_storage_bytes": self.agent.library.token_storage_bytes,
                 "clonal_size": len(self.agent.clonal),
+                "latency_p50_ms": statistics.median(
+                    [r.latency_ms for r in self.records]
+                ),
+                "latency_p95_ms": sorted(
+                    r.latency_ms for r in self.records
+                )[int(0.95 * (total - 1))],
             },
             "records": [asdict(r) for r in self.records],
         }
@@ -201,6 +229,11 @@ def main():
     parser.add_argument("--model", type=str, default="qwen2.5-coder:1.5b")
     parser.add_argument("--vsa-dim", type=int, default=1000)
     parser.add_argument("--report-interval", type=int, default=50)
+    parser.add_argument(
+        "--synthetic-facts",
+        action="store_true",
+        help="Use deterministic fact_N inputs instead of generating facts with the LLM.",
+    )
     args = parser.parse_args()
 
     config = ExperimentConfig(
@@ -208,6 +241,7 @@ def main():
         llm_model=args.model,
         vsa_dim=args.vsa_dim,
         report_interval=args.report_interval,
+        use_llm_facts=not args.synthetic_facts,
     )
     test = MemoryStressTest(config)
     test.run()

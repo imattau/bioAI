@@ -1,0 +1,193 @@
+{
+  "benchmark": "wildchat_real_conversation_library_scaling",
+  "dataset": "allenai/WildChat-1M",
+  "held_out_dataset": "OpenAssistant/oasst1:validation",
+  "filters": "English, non-toxic, non-redacted",
+  "generator": "none",
+  "retrieval": "TokenLibrary lexical/semantic-term index",
+  "composition": "top-retrieved source sentence splicing",
+  "unreached_checkpoints": [],
+  "encoded_training_preferences": 4368,
+  "vsa_training_curve_validation": [
+    {
+      "examples_presented": 2000,
+      "mean_pairwise_loss": 0.6855975724756718,
+      "token_f1_pct": 10.948562182202263,
+      "tfidf_similarity_pct": 4.41244327196132
+    },
+    {
+      "examples_presented": 10000,
+      "mean_pairwise_loss": 0.6349824409484863,
+      "token_f1_pct": 10.90537300607124,
+      "tfidf_similarity_pct": 4.281998732395635
+    },
+    {
+      "examples_presented": 50000,
+      "mean_pairwise_loss": 0.34237797607183457,
+      "token_f1_pct": 10.327033938058356,
+      "tfidf_similarity_pct": 4.681843795396033
+    },
+    {
+      "examples_presented": 200000,
+      "mean_pairwise_loss": 0.040152490783165726,
+      "token_f1_pct": 10.497665330896046,
+      "tfidf_similarity_pct": 4.424283573068734
+    }
+  ],
+  "vsa_selected_validation_f1_pct": 10.948562182202263,
+  "vsa_selected_test": {
+    "token_f1_pct": 11.266718086755457,
+    "tfidf_similarity_pct": 4.402472475316416
+  },
+  "results": [
+    {
+      "library_tokens": 1000147,
+      "prompt_tokens": 412105,
+      "response_tokens": 588042,
+      "library_pairs": 2518,
+      "held_out_pairs": 200,
+      "acceptance_pct": 100.0,
+      "nearest_token_f1_pct": 13.509360337852822,
+      "composed_token_f1_pct": 14.332169515827568,
+      "nearest_tfidf_similarity_pct": 3.970696645387925,
+      "composed_tfidf_similarity_pct": 4.079981514512477,
+      "nearest_exact_match_pct": 0,
+      "query_p50_ms": 0.146308,
+      "query_p95_ms": 0.488863,
+      "composition_is_source_extractive": true,
+      "learned_composer_token_f1_pct": 9.82721246902875,
+      "learned_composer_tfidf_similarity_pct": 2.4572052241444338,
+      "learned_composer_novel_combination_pct": 86.5,
+      "learned_composer_latency_p50_ms": 0.4260785,
+      "learned_composer_pairs": 2518,
+      "global_ranker_token_f1_pct": 14.82759708716523,
+      "global_ranker_tfidf_similarity_pct": 4.65298043927517,
+      "global_ranker_selection_counts": {
+        "complete": 199,
+        "cross_source_splice": 1
+      },
+      "global_ranker_updates": 313,
+      "global_ranker_weights": {
+        "query_overlap": 0.24083207237994528,
+        "evidence_coverage": 1.030672794700614,
+        "single_source": 0.01544598350576172,
+        "complete_response": 0.038390878688416764,
+        "retrieval_priority": -0.010786652370963726,
+        "transition_coherence": -0.01851801654085297,
+        "length_fit": -0.004863344861283823,
+        "repetition": -0.054187130076409275
+      },
+      "vsa_sequence_token_f1_pct": 10.918355824815274,
+      "vsa_sequence_tfidf_similarity_pct": 3.1051819997769683,
+      "vsa_sequence_selection_counts": {
+        "complete": 88,
+        "cross_source_splice": 18,
+        "learned_composition": 8,
+        "single_source_splice": 86
+      },
+      "vsa_sequence_updates": 313,
+      "target_checkpoint_tokens": 1000000,
+      "source_conversations_seen": 1742,
+      "elapsed_seconds": 24.89953243394848
+    },
+    {
+      "library_tokens": 3000049,
+      "prompt_tokens": 983883,
+      "response_tokens": 2016166,
+      "library_pairs": 9171,
+      "held_out_pairs": 200,
+      "acceptance_pct": 100.0,
+      "nearest_token_f1_pct": 14.274074138458781,
+      "composed_token_f1_pct": 15.194980789953632,
+      "nearest_tfidf_similarity_pct": 5.057012622498583,
+      "composed_tfidf_similarity_pct": 5.463934210994165,
+      "nearest_exact_match_pct": 0,
+      "query_p50_ms": 0.19270949999999998,
+      "query_p95_ms": 1.244609,
+      "composition_is_source_extractive": true,
+      "learned_composer_token_f1_pct": 10.209630115637038,
+      "learned_composer_tfidf_similarity_pct": 2.448319578134542,
+      "learned_composer_novel_combination_pct": 87.0,
+      "learned_composer_latency_p50_ms": 0.507873,
+      "learned_composer_pairs": 9171,
+      "global_ranker_token_f1_pct": 14.970412254641005,
+      "global_ranker_tfidf_similarity_pct": 5.774976337007175,
+      "global_ranker_selection_counts": {
+        "complete": 198,
+        "cross_source_splice": 2
+      },
+      "global_ranker_updates": 1276,
+      "global_ranker_weights": {
+        "query_overlap": 0.037989743843273464,
+        "evidence_coverage": 0.6386682258363082,
+        "single_source": 0.004468528616694743,
+        "complete_response": 0.016471079490883864,
+        "retrieval_priority": 0.004842848818765512,
+        "transition_coherence": -0.02439568983455458,
+        "length_fit": -0.031654850511387445,
+        "repetition": -0.002455385366402739
+      },
+      "vsa_sequence_token_f1_pct": 12.675660331143845,
+      "vsa_sequence_tfidf_similarity_pct": 4.247180666508773,
+      "vsa_sequence_selection_counts": {
+        "complete": 100,
+        "cross_source_splice": 22,
+        "learned_composition": 9,
+        "single_source_splice": 69
+      },
+      "vsa_sequence_updates": 1276,
+      "target_checkpoint_tokens": 3000000,
+      "source_conversations_seen": 6917,
+      "elapsed_seconds": 54.7929276189534
+    },
+    {
+      "library_tokens": 10000323,
+      "prompt_tokens": 3268545,
+      "response_tokens": 6731778,
+      "library_pairs": 30080,
+      "held_out_pairs": 200,
+      "acceptance_pct": 100.0,
+      "nearest_token_f1_pct": 15.203938849063192,
+      "composed_token_f1_pct": 15.901087847519758,
+      "nearest_tfidf_similarity_pct": 5.828955033213388,
+      "composed_tfidf_similarity_pct": 6.34823996905929,
+      "nearest_exact_match_pct": 0,
+      "query_p50_ms": 0.41210250000000004,
+      "query_p95_ms": 4.216363,
+      "composition_is_source_extractive": true,
+      "learned_composer_token_f1_pct": 9.135696875619868,
+      "learned_composer_tfidf_similarity_pct": 2.620558814272659,
+      "learned_composer_novel_combination_pct": 95.5,
+      "learned_composer_latency_p50_ms": 0.791856,
+      "learned_composer_pairs": 30080,
+      "global_ranker_token_f1_pct": 14.60738263115162,
+      "global_ranker_tfidf_similarity_pct": 5.894559497617429,
+      "global_ranker_selection_counts": {
+        "complete": 200
+      },
+      "global_ranker_updates": 4368,
+      "global_ranker_weights": {
+        "query_overlap": 0.0032401419331856587,
+        "evidence_coverage": 0.005446955738511842,
+        "single_source": 0.009289314865846679,
+        "complete_response": 0.00874145044143905,
+        "retrieval_priority": -0.016760599682438614,
+        "transition_coherence": -0.01762880320204797,
+        "length_fit": -0.004741561523488133,
+        "repetition": 0.01768450217765988
+      },
+      "vsa_sequence_token_f1_pct": 12.589845894557786,
+      "vsa_sequence_tfidf_similarity_pct": 4.416044066288387,
+      "vsa_sequence_selection_counts": {
+        "complete": 76,
+        "cross_source_splice": 28,
+        "learned_composition": 12,
+        "single_source_splice": 84
+      },
+      "vsa_sequence_updates": 2000,
+      "target_checkpoint_tokens": 10000000,
+      "source_conversations_seen": 24381,
+      "elapsed_seconds": 136.83868718205485
+    }
+  ]
+}

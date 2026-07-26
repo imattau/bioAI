@@ -1,0 +1,21 @@
+{
+  "sentences": 500000,
+  "tokens": 4499997,
+  "vocabulary": 1000010,
+  "token_storage_bytes": 17999988,
+  "offset_storage_bytes": 4000008,
+  "process_peak_rss_delta_mib": 678.34765625,
+  "ingestion_seconds": 7.046682131011039,
+  "ingestion_sentences_per_second": 70955.37881574081,
+  "queries": 100,
+  "correct": 100,
+  "accuracy": 1.0,
+  "exact_latency_p50_ms": 0.025463,
+  "exact_latency_p95_ms": 0.031638,
+  "candidate_latency_p50_ms": 39.3253715,
+  "candidate_latency_p95_ms": 39.92965,
+  "common_latency_p50_ms": 55.2071695,
+  "common_latency_p95_ms": 56.062308,
+  "semantic_correct": true,
+  "semantic_latency_ms": 0.051588
+}

@@ -1,0 +1,19 @@
+{
+  "benchmark": "semantic_chunk_vsa_sequence_ab",
+  "dataset": "OpenAssistant/oasst1",
+  "model": "qwen3-embedding:0.6b",
+  "dimension": 256,
+  "library_pairs": 1000,
+  "preference_pairs_requested": 100,
+  "preference_pairs_usable": 99,
+  "presentations": 10000,
+  "test_pairs": 50,
+  "random_token_vsa": {
+    "token_f1_pct": 12.983874476062711,
+    "tfidf_similarity_pct": 4.587257276664481
+  },
+  "semantic_chunk_vsa": {
+    "token_f1_pct": 13.455723177123874,
+    "tfidf_similarity_pct": 4.867043551729502
+  }
+}

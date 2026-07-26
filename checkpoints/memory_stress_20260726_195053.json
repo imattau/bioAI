@@ -1,0 +1,131 @@
+{
+  "config": {
+    "num_turns": 10,
+    "llm_model": "qwen2.5-coder:1.5b",
+    "vsa_dim": 1000,
+    "store_capacity": 2000,
+    "report_interval": 2,
+    "use_llm_facts": true
+  },
+  "summary": {
+    "total_turns": 10,
+    "exact_recall": 10,
+    "accuracy_pct": 100.0,
+    "first_half_correct": 5,
+    "second_half_correct": 5,
+    "decoder_size": 10,
+    "clonal_size": 0
+  },
+  "records": [
+    {
+      "turn": 1,
+      "fact": "The human body contains approximately 100 trillion cells, most of which are part of the nervous system and immune system",
+      "query": "exact recall",
+      "agent_response": "I need to learn more about that.",
+      "retrieved": "The human body contains approximately 100 trillion cells, most of which are part of the nervous system and immune system",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": 0.0,
+      "latency_ms": 335.2719530230388
+    },
+    {
+      "turn": 2,
+      "fact": "The surface of Mars is covered with red dust that can be seen from Earth",
+      "query": "exact recall",
+      "agent_response": "The human body contains approximately 100 trillion cells, most of which are part of the nervous system and immune system",
+      "retrieved": "The surface of Mars is covered with red dust that can be seen from Earth",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -218400000000.0,
+      "latency_ms": 88.94245303235948
+    },
+    {
+      "turn": 3,
+      "fact": "Germany's geography is characterized by its rolling hills and extensive plains in the south-west, with mountain ranges stretching from east to west across much of the country, including the Alps, Silesia, and Bavaria",
+      "query": "exact recall",
+      "agent_response": "The surface of Mars is covered with red dust that can be seen from Earth",
+      "retrieved": "Germany's geography is characterized by its rolling hills and extensive plains in the south-west, with mountain ranges stretching from east to west across much of the country, including the Alps, Silesia, and Bavaria",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -634200000000.0,
+      "latency_ms": 124.8500260990113
+    },
+    {
+      "turn": 4,
+      "fact": "The Sun and planets in the Solar System orbit around the center of mass of all matter in our galaxy, making it the third-closest star to us",
+      "query": "exact recall",
+      "agent_response": "The surface of Mars is covered with red dust that can be seen from Earth",
+      "retrieved": "The Sun and planets in the Solar System orbit around the center of mass of all matter in our galaxy, making it the third-closest star to us",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -12385800000000.0,
+      "latency_ms": 87.11307006888092
+    },
+    {
+      "turn": 5,
+      "fact": "The piano was invented in the 17th century by Bartolomeo Cristofori in Italy",
+      "query": "exact recall",
+      "agent_response": "The Sun and planets in the Solar System orbit around the center of mass of all matter in our galaxy, making it the third-closest star to us",
+      "retrieved": "The piano was invented in the 17th century by Bartolomeo Cristofori in Italy",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -12472800000000.0,
+      "latency_ms": 89.97793996240944
+    },
+    {
+      "turn": 6,
+      "fact": "Dinosaurs were the dominant terrestrial vertebrates during the Mesozoic Era for over 150 million years",
+      "query": "exact recall",
+      "agent_response": "The human body contains approximately 100 trillion cells, most of which are part of the nervous system and immune system",
+      "retrieved": "Dinosaurs were the dominant terrestrial vertebrates during the Mesozoic Era for over 150 million years",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -3610681250000.0,
+      "latency_ms": 90.99372697528452
+    },
+    {
+      "turn": 7,
+      "fact": "Dinosaurs evolved from small reptiles that became the ancestors of birds and mammals",
+      "query": "exact recall",
+      "agent_response": "Dinosaurs were the dominant terrestrial vertebrates during the Mesozoic Era for over 150 million years",
+      "retrieved": "Dinosaurs evolved from small reptiles that became the ancestors of birds and mammals",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -12939400000000.0,
+      "latency_ms": 88.94450997468084
+    },
+    {
+      "turn": 8,
+      "fact": "The deepest point in the ocean is Mount Everest, located at an elevation of 8848 meters above sea level",
+      "query": "exact recall",
+      "agent_response": "The piano was invented in the 17th century by Bartolomeo Cristofori in Italy",
+      "retrieved": "The deepest point in the ocean is Mount Everest, located at an elevation of 8848 meters above sea level",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -12977000000000.0,
+      "latency_ms": 89.99322599265724
+    },
+    {
+      "turn": 9,
+      "fact": "The Sun is the central star in our solar system, providing energy for life on Earth and influencing our planet's climate and seasons",
+      "query": "exact recall",
+      "agent_response": "The Sun and planets in the Solar System orbit around the center of mass of all matter in our galaxy, making it the third-closest star to us",
+      "retrieved": "The Sun is the central star in our solar system, providing energy for life on Earth and influencing our planet's climate and seasons",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -12816400000000.0,
+      "latency_ms": 85.97288897726685
+    },
+    {
+      "turn": 10,
+      "fact": "Mars has seasons, similar to Earth's, which cause changes in the Martian climate",
+      "query": "exact recall",
+      "agent_response": "The Sun and planets in the Solar System orbit around the center of mass of all matter in our galaxy, making it the third-closest star to us",
+      "retrieved": "Mars has seasons, similar to Earth's, which cause changes in the Martian climate",
+      "exact_recall": true,
+      "drift_detected": false,
+      "energy_z": -13371400000000.0,
+      "latency_ms": 89.98504001647234
+    }
+  ]
+}

@@ -29,7 +29,6 @@ class Rotary(nn.Module):
         return self.cos_cached, self.sin_cached
 
 
-@torch.no_grad()
 def apply_rotary(x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -> torch.Tensor:
     half = x.shape[-1] // 2
     cos = cos[:x.shape[1], :half].unsqueeze(1)

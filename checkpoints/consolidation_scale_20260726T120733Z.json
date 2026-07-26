@@ -1,0 +1,68 @@
+{
+  "benchmark": "semantic_consolidation_scale",
+  "config": {
+    "observations": 1000000,
+    "concepts": 10000,
+    "dimension": 256,
+    "queries": 20,
+    "noise": 0.1,
+    "relation_every": 10,
+    "relation_subjects": 10000,
+    "seed": 47
+  },
+  "checkpoints": [
+    10000,
+    100000,
+    1000000
+  ],
+  "results": [
+    {
+      "observations": 10000,
+      "promoted_concepts": 0,
+      "relation_keys": 1000,
+      "relation_alternatives": 1000,
+      "ingestion_seconds": 0.14481487206649035,
+      "ingestion_observations_per_second": 69053.68113993565,
+      "process_peak_rss_delta_mib": 1.4921875,
+      "prototype_queries": 0,
+      "prototype_top1_accuracy_pct": 0.0,
+      "prototype_query_p50_ms": 0.0,
+      "prototype_query_p95_ms": 0.0
+    },
+    {
+      "observations": 100000,
+      "promoted_concepts": 10000,
+      "relation_keys": 10000,
+      "relation_alternatives": 10000,
+      "ingestion_seconds": 1.422731978003867,
+      "ingestion_observations_per_second": 70287.3074802907,
+      "process_peak_rss_delta_mib": 21.7890625,
+      "prototype_queries": 20,
+      "prototype_top1_accuracy_pct": 100.0,
+      "prototype_query_p50_ms": 79.4521325,
+      "prototype_query_p95_ms": 139.285404
+    },
+    {
+      "observations": 1000000,
+      "promoted_concepts": 10000,
+      "relation_keys": 10000,
+      "relation_alternatives": 19091,
+      "ingestion_seconds": 16.027060550055467,
+      "ingestion_observations_per_second": 62394.47320217051,
+      "process_peak_rss_delta_mib": 32.0859375,
+      "prototype_queries": 20,
+      "prototype_top1_accuracy_pct": 100.0,
+      "prototype_query_p50_ms": 79.1396435,
+      "prototype_query_p95_ms": 88.959205,
+      "persisted_mib": 10.199431419372559,
+      "bytes_per_observation": 10.694879,
+      "raw_bitpacked_episode_semantic_mib": 30.517578125,
+      "semantic_compression_ratio": 2.992086212476083,
+      "save_seconds": 0.27082645089831203,
+      "load_seconds": 0.1747398079605773,
+      "reload_counts_match": true,
+      "conflicting_relation_keys": 9091,
+      "conflicts_retained_pct": 90.91
+    }
+  ]
+}

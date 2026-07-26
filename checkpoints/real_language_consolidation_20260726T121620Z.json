@@ -1,0 +1,127 @@
+{
+  "benchmark": "ag_news_real_language_consolidation",
+  "dataset": "fancyzhx/ag_news",
+  "model": "qwen3-embedding:0.6b",
+  "dimension": 1024,
+  "train_articles": 8000,
+  "test_articles": 1600,
+  "classes": [
+    "World",
+    "Sports",
+    "Business",
+    "Science and Technology"
+  ],
+  "embedding_seconds": 107.69730635895394,
+  "embedding_articles_per_second": 89.13871966308336,
+  "consolidation_seconds": 0.06205027794931084,
+  "vsa_correct": 1332,
+  "vsa_accuracy_pct": 83.25,
+  "float_centroid_correct": 1419,
+  "float_centroid_accuracy_pct": 88.6875,
+  "vsa_vs_float_delta_points": -5.4375,
+  "query_cold_ms": 0.778475,
+  "query_warm_p50_ms": 0.096382,
+  "query_warm_p95_ms": 0.10606,
+  "errors": [
+    {
+      "expected": "Business",
+      "predicted": "Science and Technology",
+      "text": "Toy Safety Glance 398,000 Bumble Bee toys distributed by Graco Children #39;s Products. Graco received 26 reports of antennae breaking off the toys, including five reports of children who started to choke on the broken parts."
+    },
+    {
+      "expected": "Business",
+      "predicted": "Science and Technology",
+      "text": "Sneaky Credit Card Tactics Keep an eye on your credit card issuers -- they may be about to raise your rates."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "Business",
+      "text": "Navy streamlines NMCI contract Officials at the Navy and contractor EDS said they have reached an agreement to revise performance measurements on the Navy Marine Corps Intranet contract, which EDS called a critical step toward billing NMCI seats on a 100 percent basis."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "World",
+      "text": "Teenager Charged With Creating Sasser Informants, seeking a reward from Microsoft, led police to the German student."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "China's inflation rate slows sharply but problems remain (AFP) AFP - China's inflation rate eased sharply in October as government efforts to cool the economy began to really bite, with food prices, one of the main culprits, showing some signs of slowing, official data showed."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "Sports",
+      "text": "This week in game news They risked hypothermia and fought off the effects of sleep deprivation so they could be among the first to achieve their quest in the wee hours of the morning."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "Business",
+      "text": "NY School Bus Driver Fired Over Stem Cell Talk (Reuters) Reuters - A school bus driver who chatted about\\stem cell research with her pupils was fired for inappropriate\\behavior, a local newspaper said on Thursday."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "Ban for former Ahold executives Dutch  retailer Ahold's former chairman and its ex-finance officer are barred from executive posts as part of a US fraud case settlement."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "World",
+      "text": "The Shockwaves of Sumatra The Indian Ocean earthquake of December 2004 produced     a shockwave that created tsunamis all across the Indian Ocean. The tsunamis hammered nearby Indonesia and struck as far as     the coast of East Africa. The death toll has climbed over 100,000 and continues to grow.    It also created social shockwaves.  "
+    },
+    {
+      "expected": "Sports",
+      "predicted": "Business",
+      "text": "Glazer bid for Old Trafford falls flat Malcolm Glazer #39;s bid for Manchester United is dead in the water after major shareholders John Magnier and JP McManus told the American there was no basis for a deal."
+    },
+    {
+      "expected": "Business",
+      "predicted": "Science and Technology",
+      "text": "SAS Braathens to cut Gatwick, Geneva flights blackhawk writes  quot;SAS Braathens, the Norwegian unit of Scandinavian airline SAS, will cut Oslo routes to Geneva and London Gatwick in the first step of a plan to eliminate 10 routes."
+    },
+    {
+      "expected": "Business",
+      "predicted": "Science and Technology",
+      "text": "UK writing off poor nations' debt Gordon Brown says the UK will write off its share of debts owed by the world's poorest countries to the World Bank."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "Presidential winner faces 'twin deficits' battle (AFP) AFP - Whoever wins the November 2 presidential election will inherit massive budget and trade deficits that pose huge economic challenges that will give little relief for President George W. Bush or rival John Kerry."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "Business",
+      "text": "Apple releases Security Update 2004-09-30 (MacCentral) MacCentral - Apple on Monday released Security Update 2004-09-30, which fixes two AFP Server and CUPS issues as well as problems with NetInfoManager, postfix and the ServerAdmin component in Mac OS X Server v10.2.8 and v10.3.5. In addition, a QuickTime heap buffer overflow problem that could allow someone to execute code hidden in a BMP has been repaired. The CUPS and QuickTime fixes apply to Mac OS X v10.3.5 and v10.2.8 as well as the Server versions of each while the others apply only to the user and Server editions of v10.3.5."
+    },
+    {
+      "expected": "Sports",
+      "predicted": "Business",
+      "text": "World awaits Chinese Grand Prix A quarter of a billion dollars to build the track. Tens of millions in racing fees. More than 150,000 live spectators and a television audience of hundreds of millions."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "Glazer stake in Man Utd nears 30 US tycoon Malcolm Glazer lifts his stake in Manchester Utd to 28.11, one day after spending 17m on  further share buys."
+    },
+    {
+      "expected": "Sports",
+      "predicted": "Science and Technology",
+      "text": "Arrowhead: It still is pointing the way In comparison to its contemporaries it could be termed a modern marvel, an example of how to do things right when everyone else was doing things wrong."
+    },
+    {
+      "expected": "Science and Technology",
+      "predicted": "Business",
+      "text": "TruSecure merges with Betrusted BOSTON - Information security services companies TruSecure Corp. and Betrusted plan to announce on Tuesday that they have merged, forming a new company called Cybertrust."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "Tests Show James Died of Heart Attack LOS ANGELES - Toxicology and other tests determined that funk singer Rick James died last month from a heart attack due to an enlarged heart, with numerous drugs including methamphetamine and cocaine contributing factors, the county coroner announced Thursday.    The death was declared an accident, said coroner's spokesman David Campbell, who emphasized that none of the drugs were found to be at life-threatening levels..."
+    },
+    {
+      "expected": "World",
+      "predicted": "Business",
+      "text": "German Far-Right Profits from Anger Over Reforms German far-right parties surged in eastern state elections Sunday, riding public anger against government welfare cuts and fanning fears among mainstream parties that the country #39;s image could suffer."
+    }
+  ]
+}

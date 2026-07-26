@@ -1,0 +1,63 @@
+{
+  "benchmark": "semantic_consolidation_scale",
+  "config": {
+    "observations": 1000000,
+    "concepts": 10000,
+    "dimension": 256,
+    "queries": 20,
+    "noise": 0.1,
+    "relation_every": 10,
+    "relation_subjects": 10000,
+    "seed": 47
+  },
+  "checkpoints": [
+    10000,
+    100000,
+    1000000
+  ],
+  "results": [
+    {
+      "observations": 10000,
+      "promoted_concepts": 0,
+      "relation_keys": 1000,
+      "relation_alternatives": 1000,
+      "ingestion_seconds": 0.13303708494640887,
+      "ingestion_observations_per_second": 75167.0107927296,
+      "process_peak_rss_delta_mib": 1.35546875,
+      "prototype_queries": 0,
+      "prototype_top1_accuracy_pct": 0.0,
+      "prototype_query_p50_ms": 0.0,
+      "prototype_query_p95_ms": 0.0
+    },
+    {
+      "observations": 100000,
+      "promoted_concepts": 10000,
+      "relation_keys": 10000,
+      "relation_alternatives": 10000,
+      "ingestion_seconds": 1.3896570910001174,
+      "ingestion_observations_per_second": 71960.19841702917,
+      "process_peak_rss_delta_mib": 21.71484375,
+      "prototype_queries": 20,
+      "prototype_top1_accuracy_pct": 100.0,
+      "prototype_query_p50_ms": 79.442196,
+      "prototype_query_p95_ms": 138.662124
+    },
+    {
+      "observations": 1000000,
+      "promoted_concepts": 10000,
+      "relation_keys": 10000,
+      "relation_alternatives": 19091,
+      "ingestion_seconds": 16.027923414949328,
+      "ingestion_observations_per_second": 62391.11418933377,
+      "process_peak_rss_delta_mib": 32.19140625,
+      "prototype_queries": 20,
+      "prototype_top1_accuracy_pct": 100.0,
+      "prototype_query_p50_ms": 79.067212,
+      "prototype_query_p95_ms": 80.32289,
+      "persisted_mib": 10.199431419372559,
+      "bytes_per_observation": 10.694879,
+      "conflicting_relation_keys": 9091,
+      "conflicts_retained_pct": 90.91
+    }
+  ]
+}
