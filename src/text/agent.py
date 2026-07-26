@@ -24,6 +24,9 @@ class BioAIDialogueAgent:
         self._monitor_calibrated = False
         self.turn_count = 0
         self._text_index: dict[bytes, str] = {}
+        self._last_query_vec: torch.Tensor | None = None
+        self._cached_context: str = ""
+        self._ctx_cache_threshold: float = 0.7
 
     def _calibrate_monitor(self):
         if self._monitor_calibrated:
@@ -65,13 +68,26 @@ class BioAIDialogueAgent:
             return results[0][0]
         return ""
 
-    def process_turn(self, user_input: str) -> dict:
+    def process_turn(self, user_input: str, ctx_cache: bool = True) -> dict:
         self.turn_count += 1
         user_vec = self.encoder.encode(user_input)
         self._calibrate_monitor()
 
         novelty = self._detect_novelty(user_vec)
-        context = self._retrieve_context(user_vec)
+
+        if ctx_cache and self._last_query_vec is not None:
+            sim = self.vsa.similarity(user_vec, self._last_query_vec).item()
+            if sim > self._ctx_cache_threshold:
+                context = self._cached_context
+            else:
+                context = self._retrieve_context(user_vec)
+                self._cached_context = context
+                self._last_query_vec = user_vec
+        else:
+            context = self._retrieve_context(user_vec)
+            self._cached_context = context
+            self._last_query_vec = user_vec
+
         self._store_turn(user_input, user_vec)
 
         if not context:
@@ -156,6 +172,9 @@ class BioAIDialogueAgent:
                                       state["text_index_values"]))
         agent._monitor_calibrated = state["_monitor_calibrated"]
         agent.turn_count = state["turn_count"]
+        agent._last_query_vec = None
+        agent._cached_context = ""
+        agent._ctx_cache_threshold = 0.7
         if agent._monitor_calibrated:
             agent.monitor.calibrated = True
             agent.monitor.energy_mean = state["monitor_energy_mean"]
