@@ -98,3 +98,36 @@ def test_identity_two_triples():
 
     s, r, o = memory.complete({"subject": "cat", "relation": "fears"})
     assert o == "dog", f"Expected dog, got {o}"
+
+
+def test_genuine_collision_is_flagged_ambiguous():
+    """When a partial cue truly matches >1 stored triple, no decode can be
+    'correct' — the memory should surface this instead of silently guessing.
+    """
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")  # same (relation, object), different subject
+
+    matches = memory.ground_truth_ambiguity({"relation": "chases", "object": "mouse"})
+    assert {s for s, _, _ in matches} == {"cat", "dog"}
+
+    result = memory.complete_detailed({"relation": "chases", "object": "mouse"}, top_k=2)
+    assert result.ambiguous
+    assert {name for name, _ in result.candidates} == {"cat", "dog"}
+
+
+def test_unique_query_not_flagged_ambiguous():
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "cat")
+
+    assert len(memory.ground_truth_ambiguity({"relation": "chases", "object": "mouse"})) == 1
+    result = memory.complete_detailed({"relation": "chases", "object": "mouse"})
+    assert result.best == "cat"
+    assert not result.ambiguous

@@ -83,30 +83,50 @@ def task_single_completion(memory: RelationalMemory, stored_triples: list) -> di
 
     This tests whether binding + Hopfield can retrieve a full relational
     pattern from a partial cue. All triples here were stored in the Hopfield net.
+
+    Splits accuracy by whether the query is genuinely ambiguous in the stored
+    data (more than one stored triple matches the known slots) — a collision
+    no encoding scheme can resolve to a single right answer — vs uniquely
+    determined queries, where the encoder/Hopfield mechanism should be ~100%.
     """
-    correct = {"subject": 0, "relation": 0, "object": 0}
-    total = len(stored_triples)
+    queries = {
+        "subject": lambda s, r, o: {"relation": r, "object": o},
+        "relation": lambda s, r, o: {"subject": s, "object": o},
+        "object": lambda s, r, o: {"subject": s, "relation": r},
+    }
+    stats = {
+        role: {"unique_correct": 0, "unique_total": 0, "ambig_correct": 0,
+               "ambig_total": 0, "ambig_top3_hit": 0}
+        for role in queries
+    }
 
     for s, r, o in stored_triples:
-        # Complete subject from (relation, object)
-        s_recalled, _, _ = memory.complete({"relation": r, "object": o})
-        if s_recalled == s:
-            correct["subject"] += 1
+        truth = {"subject": s, "relation": r, "object": o}
+        for role, make_known in queries.items():
+            known = make_known(s, r, o)
+            result = memory.complete_detailed(known)
+            ok = result.best == truth[role]
+            bucket = stats[role]
+            if len(memory.ground_truth_ambiguity(known)) <= 1:
+                bucket["unique_total"] += 1
+                bucket["unique_correct"] += ok
+            else:
+                bucket["ambig_total"] += 1
+                bucket["ambig_correct"] += ok
+                bucket["ambig_top3_hit"] += any(name == truth[role] for name, _ in result.candidates)
 
-        # Complete relation from (subject, object)
-        _, r_recalled, _ = memory.complete({"subject": s, "object": o})
-        if r_recalled == r:
-            correct["relation"] += 1
+    def pct(n, d):
+        return round(100 * n / d, 1) if d else None
 
-        # Complete object from (subject, relation)
-        _, _, o_recalled = memory.complete({"subject": s, "relation": r})
-        if o_recalled == o:
-            correct["object"] += 1
-
-    return {
-        f"{role}_pct": round(100 * correct[role] / total, 1)
-        for role in ("subject", "relation", "object")
-    }
+    out = {}
+    for role, b in stats.items():
+        total = b["unique_total"] + b["ambig_total"]
+        out[f"{role}_pct"] = pct(b["unique_correct"] + b["ambig_correct"], total)
+        out[f"{role}_unique_pct"] = pct(b["unique_correct"], b["unique_total"])
+        out[f"{role}_ambiguous_pct"] = pct(b["ambig_correct"], b["ambig_total"])
+        out[f"{role}_ambiguous_top3_pct"] = pct(b["ambig_top3_hit"], b["ambig_total"])
+        out[f"{role}_ambiguous_frac"] = pct(b["ambig_total"], total)
+    return out
 
 
 def task_analogy(
@@ -217,7 +237,7 @@ def task_comp_generalization(memory: RelationalMemory, all_entities, train_entit
 def run(
     n_triples: int = 200,
     dim: int = 10000,
-    hopfield_beta: float = 1.0,
+    hopfield_beta: float = 50.0,
     hopfield_steps: int = 10,
     seed: int = 42,
     entities_list: list[str] | None = None,
@@ -252,9 +272,11 @@ def run(
     # ── Task 1: Single-relation completion (from STORED triples) ──
     print("\n─── Task 1: Single-relation completion (from stored) ───")
     t1 = task_single_completion(memory, train)
-    print(f"  Subject:  {t1['subject_pct']:.1f}%  "
-          f"Relation: {t1['relation_pct']:.1f}%  "
-          f"Object:   {t1['object_pct']:.1f}%")
+    print(f"  {'role':10s}  {'overall':>8s}  {'unique':>8s}  {'ambiguous':>10s}  {'ambig top3':>11s}  {'%ambig':>7s}")
+    for role in ("subject", "relation", "object"):
+        print(f"  {role:10s}  {t1[f'{role}_pct']:>7.1f}%  {t1[f'{role}_unique_pct']:>7.1f}%  "
+              f"{t1[f'{role}_ambiguous_pct']:>9.1f}%  {t1[f'{role}_ambiguous_top3_pct']:>10.1f}%  "
+              f"{t1[f'{role}_ambiguous_frac']:>6.1f}%")
 
     # ── Task 2: Analogy completion ──
     print("\n─── Task 2: Analogy completion ───")
@@ -293,7 +315,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--n-triples", type=int, default=200)
     parser.add_argument("--dim", type=int, default=10000)
-    parser.add_argument("--hopfield-beta", type=float, default=1.0)
+    parser.add_argument("--hopfield-beta", type=float, default=50.0)
     parser.add_argument("--hopfield-steps", type=int, default=10)
     parser.add_argument("--capacity-test", action="store_true",
                         help="Run capacity stress test instead of standard tasks")
