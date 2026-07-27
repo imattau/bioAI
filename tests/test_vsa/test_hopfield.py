@@ -27,6 +27,7 @@ class TestHopfieldNet:
 
     def test_modern_recall_separates_correlated_patterns(self):
         hop = HopfieldNet(dim=100, retrieval_mode="modern")
+        hop.to(self.vsa.device)
         common = self.vsa.make_vector()
         patterns = []
         for _ in range(20):
@@ -36,6 +37,7 @@ class TestHopfieldNet:
             patterns.append(pattern)
         hop.store_batch(patterns)
         for index, pattern in enumerate(patterns):
-            recalled = hop.recall(pattern + 0.5 * torch.randn(100))
+            noise = 0.5 * torch.randn(100, device=pattern.device)
+            recalled = hop.recall(pattern + noise)
             predicted = torch.stack(patterns) @ recalled
             assert predicted.argmax().item() == index

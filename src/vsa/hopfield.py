@@ -72,6 +72,7 @@ class HopfieldNet(nn.Module):
 
     def set_state(self, patterns: list[torch.Tensor]):
         self.patterns = patterns
+        self.packed_patterns = [pack_bipolar(p) for p in patterns] if self.packed else []
         self.weights = None
         for p in patterns:
             if self.weights is None:

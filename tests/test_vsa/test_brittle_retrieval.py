@@ -91,7 +91,11 @@ class TestBrittleRetrieval:
         )
 
     def test_hopfield_net_collapses(self):
-        hop = HopfieldNet(dim=self.DIM)
+        # Explicit classical mode: this test demonstrates classical Hopfield's
+        # attractor collapse on correlated patterns. "modern" (the current
+        # HopfieldNet default) is specifically designed not to have this
+        # failure mode, so it must be requested explicitly here.
+        hop = HopfieldNet(dim=self.DIM, retrieval_mode="classical")
         for s in self.similar:
             hop.store(s)
         prec = self._precision_hopfield(hop)
@@ -116,7 +120,9 @@ class TestBrittleRetrieval:
         )
 
     def test_hopfield_vs_assoc_gap(self):
-        hop = HopfieldNet(dim=self.DIM)
+        # See test_hopfield_net_collapses: classical mode is required to
+        # reproduce the crosstalk this test is measuring against.
+        hop = HopfieldNet(dim=self.DIM, retrieval_mode="classical")
         for s in self.similar:
             hop.store(s)
         hop_prec = self._precision_hopfield(hop)

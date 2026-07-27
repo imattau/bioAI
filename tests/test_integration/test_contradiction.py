@@ -40,8 +40,14 @@ class TestContradiction:
 
     def _has_contradiction(self, query: torch.Tensor,
                            query_subject: torch.Tensor) -> bool:
+        # Each fact bundles 2 bound terms (subject + property), unnormalized.
+        # A literal stored fact self-matches at ~2.0 (both terms agree); a
+        # query merely sharing one bound term with a stored fact (e.g. same
+        # subject, different property) already scores ~1.0. 0.99 doesn't
+        # separate those two cases, so it must sit above the partial-match
+        # band and below the full-match one.
         top_results = self.store.lookup(query, k=1)
-        if top_results and top_results[0][1] > 0.99:
+        if top_results and top_results[0][1] > 1.5:
             return False
         return self._same_subject_count(query, query_subject) >= 2
 
