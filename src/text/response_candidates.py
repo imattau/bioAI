@@ -184,3 +184,114 @@ class SequenceCandidateScorer:
         scorer.weights = state.get("weights", scorer.weights)
         scorer.updates = state.get("updates", 0)
         return scorer
+
+
+class EpisodicPreferenceScorer:
+    """Retrieves immutable preference episodes for context-local adaptation."""
+
+    def __init__(
+        self,
+        base_scorer: SequenceCandidateScorer | None = None,
+        adaptation_rate: float = 0.5,
+        retrieval_limit: int = 32,
+    ):
+        self.base_scorer = base_scorer or SequenceCandidateScorer()
+        self.adaptation_rate = adaptation_rate
+        self.retrieval_limit = retrieval_limit
+        self.prompt_memory = TokenLibrary(vector_cache_size=0)
+        self.feature_deltas: list[list[float]] = []
+        self.updates = 0
+
+    def learn_preference(
+        self,
+        prompt: str,
+        preferred: dict,
+        rejected: dict,
+        evidence: list[str],
+    ) -> None:
+        positive = self.base_scorer.features(prompt, preferred, evidence)
+        negative = self.base_scorer.features(prompt, rejected, evidence)
+        self.prompt_memory.add(prompt)
+        self.feature_deltas.append([
+            left - right for left, right in zip(positive, negative)
+        ])
+        self.updates += 1
+
+    def contextual_weights(self, prompt: str) -> list[float]:
+        weights = list(self.base_scorer.weights)
+        matches = self.prompt_memory.candidate_ids(
+            prompt, limit=self.retrieval_limit
+        )
+        if not matches:
+            return weights
+        query_terms = self.prompt_memory.semantic_terms(prompt)
+        total_weight = 0.0
+        accumulated = [0.0] * len(weights)
+        for rank, (episode_id, _) in enumerate(matches):
+            episode_terms = self.prompt_memory.semantic_terms(
+                self.prompt_memory.texts[episode_id]
+            )
+            similarity = (
+                len(query_terms & episode_terms)
+                / max(1, len(query_terms | episode_terms))
+            )
+            relevance = max(0.05, similarity) / (1 + 0.1 * rank)
+            total_weight += relevance
+            for index, delta in enumerate(self.feature_deltas[episode_id]):
+                accumulated[index] += relevance * delta
+        for index in range(len(weights)):
+            weights[index] += (
+                self.adaptation_rate
+                * accumulated[index] / max(total_weight, 1e-9)
+            )
+        return weights
+
+    def score(
+        self,
+        prompt: str,
+        candidate: dict,
+        evidence: list[str],
+        weights: list[float] | None = None,
+    ) -> float:
+        values = self.base_scorer.features(prompt, candidate, evidence)
+        return sum(
+            weight * value
+            for weight, value in zip(
+                weights or self.contextual_weights(prompt), values
+            )
+        )
+
+    def rank(self, prompt: str, candidates: list[dict], evidence: list[str]):
+        weights = self.contextual_weights(prompt)
+        ranked = [
+            {
+                **candidate,
+                "score": self.score(
+                    prompt, candidate, evidence, weights=weights
+                ),
+            }
+            for candidate in candidates
+        ]
+        return sorted(ranked, key=lambda item: item["score"], reverse=True)
+
+    def get_state(self) -> dict:
+        return {
+            "base_scorer": self.base_scorer.get_state(),
+            "adaptation_rate": self.adaptation_rate,
+            "retrieval_limit": self.retrieval_limit,
+            "prompt_memory": self.prompt_memory.get_state(),
+            "feature_deltas": self.feature_deltas,
+            "updates": self.updates,
+        }
+
+    @classmethod
+    def from_state(cls, state: dict) -> "EpisodicPreferenceScorer":
+        scorer = cls(
+            SequenceCandidateScorer.from_state(state["base_scorer"]),
+            state.get("adaptation_rate", 0.5),
+            state.get("retrieval_limit", 32),
+        )
+        scorer.prompt_memory = TokenLibrary.from_state(state["prompt_memory"])
+        scorer.feature_deltas = state.get("feature_deltas", [])
+        scorer.updates = state.get("updates", len(scorer.feature_deltas))
+        return scorer

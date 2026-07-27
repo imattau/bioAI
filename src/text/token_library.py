@@ -211,6 +211,23 @@ class TokenLibrary:
                 return self.texts[sentence_id]
         return None
 
+    def exact_sentence_ids(
+        self, text: str, require_identical_text: bool = True
+    ) -> list[int]:
+        """Return every exact token-sequence match, optionally preserving text."""
+        tokens = self.tokenize(text)
+        if any(token not in self.token_to_id for token in tokens):
+            return []
+        ids = self._encode_tokens(tokens, add_new=False)
+        matches = []
+        for sentence_id in self._exact.get(self._digest(ids), []):
+            if list(self.sequence(sentence_id)) != ids:
+                continue
+            if require_identical_text and self.texts[sentence_id] != text:
+                continue
+            matches.append(sentence_id)
+        return matches
+
     def candidate_ids(
         self,
         query: str,

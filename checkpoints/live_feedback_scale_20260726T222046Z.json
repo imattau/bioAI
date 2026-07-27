@@ -1,0 +1,41 @@
+{
+  "benchmark": "wildchat_live_feedback_scale",
+  "training_dataset": "allenai/WildChat-1M",
+  "held_out_dataset": "OpenAssistant/oasst1:validation",
+  "filters": "English, non-toxic, non-redacted",
+  "evaluation_workers": 1,
+  "checkpoints": [
+    1000,
+    10000,
+    30000
+  ],
+  "results": [
+    {
+      "interactions": 1000,
+      "library_tokens": 345263,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 20.426924300321808,
+      "frozen_online_token_f1_pct": 27.42205466704453,
+      "global_online_token_f1_pct": 24.86382302708073,
+      "episodic_online_token_f1_pct": 27.067044792204946,
+      "episodic_minus_static_online_points": 6.640120491883139,
+      "composer_pairs": 1000,
+      "global_scorer_updates": 652,
+      "episodic_preferences": 577,
+      "retention_audit_pct": 100.0,
+      "query_p50_ms": 8.476113999999999,
+      "process_peak_rss_delta_mib": 699.4453125,
+      "elapsed_seconds": 25.708692594082095,
+      "held_out_transfer": {
+        "fixed_splice_token_f1_pct": 14.568691720782434,
+        "fixed_splice_tfidf_pct": 3.885202802297363,
+        "frozen_candidate_token_f1_pct": 14.250544537114806,
+        "frozen_candidate_tfidf_pct": 4.616486637222275,
+        "global_update_token_f1_pct": 14.609588855748612,
+        "global_update_tfidf_pct": 4.981948348907753,
+        "episodic_local_token_f1_pct": 14.079694494596795,
+        "episodic_local_tfidf_pct": 4.5507273143834786
+      }
+    }
+  ]
+}

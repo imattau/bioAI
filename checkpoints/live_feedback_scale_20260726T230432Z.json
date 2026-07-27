@@ -1,0 +1,97 @@
+{
+  "benchmark": "wildchat_live_feedback_scale",
+  "training_dataset": "allenai/WildChat-1M",
+  "held_out_dataset": "OpenAssistant/oasst1:validation",
+  "filters": "English, non-toxic, non-redacted",
+  "evaluation_workers": 1,
+  "resumed_from_interactions": 0,
+  "state_path": "checkpoints/live_feedback_scale_state.pt",
+  "checkpoints": [
+    1000,
+    10000,
+    30000
+  ],
+  "results": [
+    {
+      "interactions": 1000,
+      "library_tokens": 345263,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 20.449981891378606,
+      "frozen_online_token_f1_pct": 27.445125577638542,
+      "global_online_token_f1_pct": 25.084888010785406,
+      "episodic_online_token_f1_pct": 27.090115702798954,
+      "episodic_minus_static_online_points": 6.640133811420351,
+      "composer_pairs": 1000,
+      "global_scorer_updates": 639,
+      "episodic_preferences": 575,
+      "retention_audit_pct": 100.0,
+      "query_p50_ms": 8.484869,
+      "process_peak_rss_delta_mib": 690.6953125,
+      "elapsed_seconds": 30.18125519505702,
+      "held_out_transfer": {
+        "fixed_splice_token_f1_pct": 14.551841455111925,
+        "fixed_splice_tfidf_pct": 3.8867434943872703,
+        "frozen_candidate_token_f1_pct": 14.250544537114806,
+        "frozen_candidate_tfidf_pct": 4.616486637222275,
+        "global_update_token_f1_pct": 14.563921734047932,
+        "global_update_tfidf_pct": 4.962979625776931,
+        "episodic_local_token_f1_pct": 14.079694494596795,
+        "episodic_local_tfidf_pct": 4.5507273143834786
+      }
+    },
+    {
+      "interactions": 10000,
+      "library_tokens": 3300422,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 21.174034332299062,
+      "frozen_online_token_f1_pct": 29.449357383542207,
+      "global_online_token_f1_pct": 26.461056631803725,
+      "episodic_online_token_f1_pct": 29.27261692935223,
+      "episodic_minus_static_online_points": 8.098582597053166,
+      "composer_pairs": 10000,
+      "global_scorer_updates": 6915,
+      "episodic_preferences": 6078,
+      "retention_audit_pct": 100.0,
+      "query_p50_ms": 13.111764,
+      "process_peak_rss_delta_mib": 1535.62890625,
+      "elapsed_seconds": 257.3280880500097,
+      "held_out_transfer": {
+        "fixed_splice_token_f1_pct": 15.257152142958583,
+        "fixed_splice_tfidf_pct": 5.14836737101837,
+        "frozen_candidate_token_f1_pct": 14.871025631865272,
+        "frozen_candidate_tfidf_pct": 5.025538032211878,
+        "global_update_token_f1_pct": 14.534811296555944,
+        "global_update_tfidf_pct": 5.621489604653529,
+        "episodic_local_token_f1_pct": 14.808250604266334,
+        "episodic_local_tfidf_pct": 5.061559190896613
+      }
+    },
+    {
+      "interactions": 30000,
+      "library_tokens": 9978048,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 19.282561930080885,
+      "frozen_online_token_f1_pct": 27.135842843179297,
+      "global_online_token_f1_pct": 23.921961199595586,
+      "episodic_online_token_f1_pct": 26.993204348177912,
+      "episodic_minus_static_online_points": 7.710642418097027,
+      "composer_pairs": 30000,
+      "global_scorer_updates": 21152,
+      "episodic_preferences": 18582,
+      "retention_audit_pct": 100.0,
+      "query_p50_ms": 15.454937,
+      "process_peak_rss_delta_mib": 2354.72265625,
+      "elapsed_seconds": 795.2452236640966,
+      "held_out_transfer": {
+        "fixed_splice_token_f1_pct": 15.827224771055523,
+        "fixed_splice_tfidf_pct": 6.2878449870953865,
+        "frozen_candidate_token_f1_pct": 16.345470019958068,
+        "frozen_candidate_tfidf_pct": 6.3597681499312,
+        "global_update_token_f1_pct": 14.680538817618025,
+        "global_update_tfidf_pct": 5.80322905915178,
+        "episodic_local_token_f1_pct": 16.215605318497563,
+        "episodic_local_tfidf_pct": 6.276791432049113
+      }
+    }
+  ]
+}

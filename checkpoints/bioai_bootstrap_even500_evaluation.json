@@ -1,0 +1,19 @@
+{
+  "held_out_count": 200,
+  "seed": 211,
+  "default": {
+    "token_f1_pct": 16.73040189271747,
+    "tfidf_pct": 7.245445616076279
+  },
+  "teacher_bootstrap": {
+    "token_f1_pct": 17.429412994271708,
+    "tfidf_pct": 8.237612702915413
+  },
+  "paired_token_f1": {
+    "mean_points": 0.6990111015542384,
+    "ci95_low_points": -0.21961255053246787,
+    "ci95_high_points": 1.6369729428026614,
+    "probability_improvement": 0.9274
+  },
+  "confirmed": false
+}
