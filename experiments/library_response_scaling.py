@@ -78,6 +78,33 @@ def token_f1(predicted: str, reference: str) -> float:
     return 2 * precision * recall / (precision + recall) if overlap else 0.0
 
 
+def token_f0_5(predicted: str, reference: str) -> float:
+    """F0.5 — weights precision 4x over recall to penalise padding."""
+    predicted_tokens = TokenLibrary.tokenize(predicted)
+    reference_tokens = TokenLibrary.tokenize(reference)
+    if not predicted_tokens or not reference_tokens:
+        return 0.0
+    from collections import Counter
+    overlap = sum(
+        (Counter(predicted_tokens) & Counter(reference_tokens)).values()
+    )
+    precision = overlap / len(predicted_tokens)
+    recall = overlap / len(reference_tokens)
+    if not overlap:
+        return 0.0
+    beta2 = 0.25
+    return (1 + beta2) * precision * recall / (beta2 * precision + recall)
+
+
+FROZEN_VALIDATION_PATH = Path("checkpoints") / "frozen_validation.json"
+
+
+def load_frozen_validation(path=FROZEN_VALIDATION_PATH):
+    """Return the frozen validation pairs as list of (prompt, response)."""
+    import json
+    return [tuple(item) for item in json.loads(path.read_text())]
+
+
 def compose_response(
     query: str,
     candidates: list[int],
