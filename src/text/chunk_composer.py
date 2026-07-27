@@ -16,6 +16,9 @@ class LearnedChunkComposer:
         self,
         max_postings_per_term: int = 20_000,
         max_query_terms: int = 24,
+        max_candidate_chunks: int = 4_096,
+        seed_term_limit: int = 3,
+        rarity_multiplier: int = 10,
     ):
         self.chunks: list[str] = []
         self.chunk_to_id: dict[str, int] = {}
@@ -26,6 +29,9 @@ class LearnedChunkComposer:
         self.chunk_counts: Counter = Counter()
         self.max_postings_per_term = max_postings_per_term
         self.max_query_terms = max_query_terms
+        self.max_candidate_chunks = max_candidate_chunks
+        self.seed_term_limit = seed_term_limit
+        self.rarity_multiplier = rarity_multiplier
         self.pairs = 0
 
     @staticmethod
@@ -89,14 +95,41 @@ class LearnedChunkComposer:
 
     def _candidate_scores(self, terms: set[str], starts: bool) -> Counter:
         index = self.start_chunks if starts else self.term_chunks
+        posting_sources = [
+            (term, index[term]) for term in terms if term in index
+        ]
+        if not posting_sources:
+            return Counter()
+
+        # A full scan grows as query_terms * library_chunks and was the
+        # dominant generation cost at scale. Rare terms provide the most
+        # discriminative candidate set; common terms still contribute to the
+        # final score, but only for this bounded shortlist.
+        posting_sources.sort(key=lambda item: (len(item[1]), item[0]))
+        rarest_size = len(posting_sources[0][1])
+        seed_sources = [
+            posting for _, posting in posting_sources
+            if len(posting) <= max(10, rarest_size * self.rarity_multiplier)
+        ][:self.seed_term_limit]
+        candidate_ids = set()
+        for posting in seed_sources:
+            for chunk_id in posting:
+                candidate_ids.add(chunk_id)
+                if len(candidate_ids) >= self.max_candidate_chunks:
+                    break
+            if len(candidate_ids) >= self.max_candidate_chunks:
+                break
+
+        ordered_candidates = sorted(candidate_ids)
         scores = Counter()
-        for term in terms:
-            posting = index.get(term)
-            if not posting:
-                continue
+        for _, posting in posting_sources:
             inverse_frequency = 1.0 / math.sqrt(len(posting))
-            for chunk_id, count in posting.items():
-                scores[chunk_id] += inverse_frequency * math.log1p(count)
+            for chunk_id in ordered_candidates:
+                count = posting.get(chunk_id)
+                if count:
+                    scores[chunk_id] += (
+                        inverse_frequency * math.log1p(count)
+                    )
         return scores
 
     def generate(
@@ -159,6 +192,9 @@ class LearnedChunkComposer:
             "chunk_counts": dict(self.chunk_counts),
             "max_postings_per_term": self.max_postings_per_term,
             "max_query_terms": self.max_query_terms,
+            "max_candidate_chunks": self.max_candidate_chunks,
+            "seed_term_limit": self.seed_term_limit,
+            "rarity_multiplier": self.rarity_multiplier,
             "pairs": self.pairs,
         }
 
@@ -167,6 +203,9 @@ class LearnedChunkComposer:
         composer = cls(
             state.get("max_postings_per_term", 20_000),
             state.get("max_query_terms", 24),
+            state.get("max_candidate_chunks", 4_096),
+            state.get("seed_term_limit", 3),
+            state.get("rarity_multiplier", 10),
         )
         composer.chunks = state.get("chunks", [])
         composer.chunk_to_id = {

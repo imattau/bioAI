@@ -26,10 +26,32 @@ def test_combines_learned_chunks_for_shared_subject():
 
 
 def test_state_round_trip():
-    composer = LearnedChunkComposer()
+    composer = LearnedChunkComposer(
+        max_candidate_chunks=128,
+        seed_term_limit=2,
+        rarity_multiplier=5,
+    )
     composer.learn("Explain gravity", "Mass attracts mass.")
     restored = LearnedChunkComposer.from_state(composer.get_state())
     assert restored.generate("Explain gravity") == "Mass attracts mass."
+    assert restored.max_candidate_chunks == 128
+    assert restored.seed_term_limit == 2
+    assert restored.rarity_multiplier == 5
+
+
+def test_rare_terms_bound_common_term_scoring_candidates():
+    composer = LearnedChunkComposer(max_candidate_chunks=16)
+    for index in range(100):
+        prompt = f"common subject example {index}"
+        if index == 73:
+            prompt += " distinctive"
+        composer.learn(prompt, f"Response number {index}.")
+
+    scores = composer._candidate_scores(
+        {"common", "subject", "distinctive"}, starts=True
+    )
+
+    assert list(scores) == [73]
 
 
 def test_agent_exposes_learned_composer():

@@ -14,6 +14,7 @@ from src.text.response_generator import OllamaResponseGenerator
 from src.text.consolidation import ConsolidationMemory
 from src.text.chunk_composer import LearnedChunkComposer
 from src.text.response_candidates import (
+    EpisodicPreferenceScorer,
     FixedSpliceCandidateGenerator,
     SequenceCandidateScorer,
 )
@@ -54,7 +55,9 @@ class BioAIDialogueAgent:
         self.chunk_composer: LearnedChunkComposer | None = None
         self.candidate_generator = FixedSpliceCandidateGenerator()
         self.candidate_scorer = SequenceCandidateScorer()
+        self.preference_scorer = EpisodicPreferenceScorer()
         self.sequence_ranker: VSASequenceRanker | None = None
+        self._last_learning_context: dict | None = None
 
     def enable_semantic_retrieval(
         self,
@@ -94,6 +97,99 @@ class BioAIDialogueAgent:
         self.sequence_ranker = VSASequenceRanker(
             encoder=SemanticChunkVSASequenceEncoder(self.semantic_encoder)
         )
+
+    @staticmethod
+    def _feedback_intent(text: str) -> str | None:
+        normalised = re.sub(r"[^a-z ]", "", text.lower()).strip()
+        positive = {
+            "correct", "thats correct", "that is correct", "yes",
+            "yes correct", "thanks", "thank you", "good answer",
+        }
+        negative = {
+            "incorrect", "thats wrong", "that is wrong", "wrong",
+            "no thats wrong", "no that is wrong",
+        }
+        if normalised in positive:
+            return "positive"
+        if normalised in negative:
+            return "negative"
+        return None
+
+    def record_feedback(
+        self,
+        preferred_response: str | None = None,
+        accepted: bool = True,
+        store_correction: bool = True,
+    ) -> dict:
+        context = self._last_learning_context
+        if context is None:
+            return {"learned": False, "reason": "no_previous_answer"}
+        prompt = context["prompt"]
+        rejected_text = context["response"]
+        if preferred_response is None:
+            if not accepted:
+                return {
+                    "learned": False,
+                    "reason": "negative_feedback_requires_correction",
+                }
+            preferred_response = rejected_text
+
+        self.learn_conversation(prompt, preferred_response)
+        preferred = {
+            "text": preferred_response,
+            "kind": "human_preferred",
+            "source_ids": [],
+        }
+        alternatives = [
+            candidate for candidate in context["candidates"]
+            if candidate["text"] != preferred_response
+        ]
+        if preferred_response != rejected_text:
+            rejected = {
+                "text": rejected_text,
+                "kind": "rejected_answer",
+                "source_ids": context.get("selected_source_ids", []),
+            }
+        elif alternatives:
+            rejected = alternatives[0]
+        else:
+            rejected = None
+
+        scorer_updated = False
+        sequence_updated = False
+        if rejected is not None:
+            self.candidate_scorer.learn_preference(
+                prompt, preferred, rejected, context["evidence"]
+            )
+            self.preference_scorer.learn_preference(
+                prompt, preferred, rejected, context["evidence"]
+            )
+            scorer_updated = True
+            if self.sequence_ranker is not None:
+                self.sequence_ranker.learn_preference(
+                    prompt, preferred, rejected, context["evidence"]
+                )
+                sequence_updated = True
+
+        correction_stored = (
+            store_correction and preferred_response != rejected_text
+        )
+        if correction_stored:
+            self.turn_count += 1
+            self._store_turn(
+                preferred_response,
+                self.encoder.encode(preferred_response),
+                long_term=True,
+            )
+        return {
+            "learned": True,
+            "prompt": prompt,
+            "preferred_response": preferred_response,
+            "correction_stored": correction_stored,
+            "chunk_pairs": self.chunk_composer.pairs,
+            "candidate_scorer_updated": scorer_updated,
+            "sequence_ranker_updated": sequence_updated,
+        }
 
     def _calibrate_monitor(self):
         if self._monitor_calibrated:
@@ -296,6 +392,62 @@ class BioAIDialogueAgent:
         }
 
     def process_turn(self, user_input: str, ctx_cache: bool = True) -> dict:
+        correction_match = re.match(
+            r"^\s*(?:no|actually|correction)\s*[:,]\s*(.+)$",
+            user_input,
+            flags=re.IGNORECASE,
+        )
+        if correction_match and self._last_learning_context is not None:
+            correction = correction_match.group(1).strip()
+            learned = self.record_feedback(
+                preferred_response=correction,
+                accepted=True,
+                store_correction=True,
+            )
+            return {
+                "response": "Thanks, I've learned the correction.",
+                "response_generated": False,
+                "response_mode": "feedback_learning",
+                "sources": [],
+                "intent": "feedback",
+                "retrieval_accepted": False,
+                "retrieval_score": 0.0,
+                "retrieval_margin": 0.0,
+                "retrieval_candidates": [],
+                "reasoning": None,
+                "drift_detected": False,
+                "energy_z": 0.0,
+                "clonal_created": False,
+                "feedback": learned,
+                "turn": self.turn_count,
+            }
+        feedback = self._feedback_intent(user_input)
+        if feedback is not None and self._last_learning_context is not None:
+            self.turn_count += 1
+            learned = self.record_feedback(
+                accepted=(feedback == "positive")
+            )
+            return {
+                "response": (
+                    "Thanks, I'll reinforce that response."
+                    if learned["learned"]
+                    else "Understood. Please provide the corrected answer."
+                ),
+                "response_generated": False,
+                "response_mode": "feedback_learning",
+                "sources": [],
+                "intent": "feedback",
+                "retrieval_accepted": False,
+                "retrieval_score": 0.0,
+                "retrieval_margin": 0.0,
+                "retrieval_candidates": [],
+                "reasoning": None,
+                "drift_detected": False,
+                "energy_z": 0.0,
+                "clonal_created": False,
+                "feedback": learned,
+                "turn": self.turn_count,
+            }
         self.turn_count += 1
         user_vec = self.encoder.encode(user_input)
         intent = self._infer_intent(user_input)
@@ -357,7 +509,11 @@ class BioAIDialogueAgent:
                 self.sequence_ranker
                 if self.sequence_ranker is not None
                 and self.sequence_ranker.updates > 0
-                else self.candidate_scorer
+                else (
+                    self.preference_scorer
+                    if self.preference_scorer.updates > 0
+                    else self.candidate_scorer
+                )
             )
             ranked_candidates = ranker.rank(user_input, candidates, evidence)
             response = (
@@ -404,6 +560,20 @@ class BioAIDialogueAgent:
             }
             for source_id in source_ids
         ]
+        if intent == "question" and retrieval["accepted"]:
+            evidence = [
+                candidate["text"] for candidate in retrieval["candidates"]
+            ]
+            learning_candidates = self.candidate_generator.generate(
+                user_input, evidence, self.chunk_composer
+            )
+            self._last_learning_context = {
+                "prompt": user_input,
+                "response": response,
+                "evidence": evidence,
+                "candidates": learning_candidates,
+                "selected_source_ids": source_ids,
+            }
 
         return {
             "response": response,
@@ -477,10 +647,12 @@ class BioAIDialogueAgent:
                 if self.chunk_composer is not None else None
             ),
             "candidate_scorer": self.candidate_scorer.get_state(),
+            "preference_scorer": self.preference_scorer.get_state(),
             "sequence_ranker": (
                 self.sequence_ranker.get_state()
                 if self.sequence_ranker is not None else None
             ),
+            "last_learning_context": self._last_learning_context,
         }
         torch.save(state, path)
 
@@ -558,6 +730,12 @@ class BioAIDialogueAgent:
         agent.candidate_scorer = SequenceCandidateScorer.from_state(
             state.get("candidate_scorer", {})
         )
+        agent.preference_scorer = EpisodicPreferenceScorer.from_state(
+            state.get(
+                "preference_scorer",
+                EpisodicPreferenceScorer().get_state(),
+            )
+        )
         sequence_state = state.get("sequence_ranker")
         sequence_embedder = (
             OllamaEmbedder(agent.semantic_model)
@@ -569,6 +747,7 @@ class BioAIDialogueAgent:
             )
             if sequence_state else None
         )
+        agent._last_learning_context = state.get("last_learning_context")
         if agent._monitor_calibrated:
             agent.monitor.calibrated = True
             agent.monitor.energy_mean = state["monitor_energy_mean"]

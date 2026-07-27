@@ -1,0 +1,73 @@
+{
+  "benchmark": "wildchat_live_feedback_scale",
+  "training_dataset": "allenai/WildChat-1M",
+  "held_out_dataset": "OpenAssistant/oasst1:validation",
+  "filters": "English, non-toxic, non-redacted",
+  "checkpoints": [
+    1000,
+    10000,
+    30000
+  ],
+  "results": [
+    {
+      "interactions": 1000,
+      "library_tokens": 345263,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 20.438902612681748,
+      "live_online_token_f1_pct": 25.11680154468534,
+      "live_minus_static_online_points": 4.677898932003593,
+      "composer_pairs": 1000,
+      "scorer_updates": 641,
+      "retention_audit_pct": 98.0,
+      "query_p50_ms": 3.099828,
+      "process_peak_rss_delta_mib": 502.3125,
+      "elapsed_seconds": 14.422508517978713,
+      "held_out_transfer": {
+        "static_token_f1_pct": 14.551841455111925,
+        "live_token_f1_pct": 14.648874614495217,
+        "static_tfidf_pct": 3.8867434943872703,
+        "live_tfidf_pct": 4.879250657913345
+      }
+    },
+    {
+      "interactions": 10000,
+      "library_tokens": 3300422,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 21.17552530492574,
+      "live_online_token_f1_pct": 26.626468246909322,
+      "live_minus_static_online_points": 5.450942941983586,
+      "composer_pairs": 10000,
+      "scorer_updates": 6887,
+      "retention_audit_pct": 95.0,
+      "query_p50_ms": 4.800796500000001,
+      "process_peak_rss_delta_mib": 1521.29296875,
+      "elapsed_seconds": 84.9778091988992,
+      "held_out_transfer": {
+        "static_token_f1_pct": 15.257152142958583,
+        "live_token_f1_pct": 15.066161643056308,
+        "static_tfidf_pct": 5.14836737101837,
+        "live_tfidf_pct": 5.418358210625191
+      }
+    },
+    {
+      "interactions": 30000,
+      "library_tokens": 9978048,
+      "online_window": 1000,
+      "static_online_token_f1_pct": 19.282561930080885,
+      "live_online_token_f1_pct": 23.583971345511355,
+      "live_minus_static_online_points": 4.301409415430468,
+      "composer_pairs": 30000,
+      "scorer_updates": 21154,
+      "retention_audit_pct": 97.0,
+      "query_p50_ms": 6.255027500000001,
+      "process_peak_rss_delta_mib": 2166.2109375,
+      "elapsed_seconds": 273.66203136299737,
+      "held_out_transfer": {
+        "static_token_f1_pct": 15.827224771055523,
+        "live_token_f1_pct": 13.153592263809932,
+        "static_tfidf_pct": 6.2878449870953865,
+        "live_tfidf_pct": 4.820689117182942
+      }
+    }
+  ]
+}
