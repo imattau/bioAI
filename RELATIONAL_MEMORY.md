@@ -202,7 +202,7 @@ same way):
   rather than a query with multiple stored matches). Guarded by refusing
   to answer unless the subject was actually ever stored as a subject.
 
-### 2.6 Ground-truth-only candidate display, and compositional entity encoding (`commits 496bcb5`, next)
+### 2.6 Ground-truth-only candidate display, and compositional entity encoding (`commits 496bcb5`, `6fb835a`)
 
 **Ground-truth-only candidate display (`commit 496bcb5`).** Found via a
 longer multi-turn conversation, not a unit test: `complete_detailed`'s
@@ -258,6 +258,77 @@ that guarantee), and `token_vectors` is persisted alongside
 `entity_vectors`/`relation_vectors` so new entities created after a
 save/load round trip still compose consistently with pre-existing ones
 that share words.
+
+### 2.7 Basal-ganglia relevance selection for `resolve()`'s query chain
+
+`resolve()` (§2.4) deliberately does not search memory for "what else might
+help disambiguate this" — it takes a caller-supplied, ordered chain of
+queries. That was an explicit deferral, not a permanent decision:
+`ARCHITECTURE.md` §3.4 assigns exactly this — "which memory to attend to"
+as a competitive-selection problem, the same one solved for motor actions
+— to the basal-ganglia subsystem, and `src/basal/actor_critic.py`
+(`GoNoGoActorCritic`) already exists for that role but was, until now, only
+exercised on bandit-style reward tasks (`tests/test_basal/test_odyssey_arena.py`),
+not wired to anything in `RelationalMemory`.
+
+`RelationalMemory.resolve_auto(known, candidate_queries, context=None,
+max_steps=3, ...)` closes that gap, narrowly: given a **bounded pool of
+already-available candidate follow-up queries** (not an open-ended memory
+search — still not built, and still not what this does), it uses a new
+`RelevanceSelector` (`src/basal/relevance.py`, wrapping `GoNoGoActorCritic`)
+to choose which to try next, instead of requiring the caller to hand a
+pre-ordered chain or trying all of them.
+
+**Mechanics:**
+- **State**: the VSA encoding of the original `known`/`context` query
+  (`RelationalEncoder.encode_query`) — a fixed-size vector already available
+  for free, representing "this kind of disambiguation situation."
+- **Actions**: positional, not identity-based — action *i* means "try
+  whichever query is currently at position *i* in the caller's
+  `candidate_queries` list." The action space size is fixed
+  (`relevance_max_candidates`, default 8, per `GoNoGoActorCritic`'s
+  fixed-`n_actions` design), so only the first `relevance_max_candidates`
+  entries of any candidate list are ever selectable, and invalid positions
+  are masked out of the softmax before sampling.
+- **Reward**: read directly from `resolve()`'s own per-step signal — a
+  chosen query that turns out `informative` gets +1, `contradictory` gets
+  -1, merely uninformative gets **-0.2, not 0**.
+- **Learning**: online, via a single-step (bandit-style, no `next_state`)
+  actor-critic update after every real call. Not pretrained — a fresh
+  selector picks close to uniformly at random and only improves with
+  repeated use *on the same `RelationalMemory` instance*, since what counts
+  as "useful" depends on that memory's actual stored data, not a generic
+  prior.
+
+**Why -0.2 instead of a neutral 0 for "uninformative," found empirically
+during development, not decided up front**: a neutral reward gives the
+actor-critic no gradient pressure to move away from a bad choice it has
+already converged to from initialization — once the critic learns to
+expect ~0 for the state-action pair it keeps landing on, `advantage`
+(`target - value`) collapses toward zero and the policy gradient stalls.
+Confirmed directly: with reward=0 for uninformative picks, roughly 1 in 3
+random initializations got permanently stuck always picking a useless
+candidate, having no reason to ever try the alternative within any
+reasonable number of trials. The -0.2 penalty alone reduced but didn't
+eliminate this (still occasional stalls); `RelevanceSelector` also has a
+fixed epsilon-greedy exploration floor (default 0.15) on top of the
+learned policy, guaranteeing every valid action keeps getting sampled
+regardless of how confident (and wrong) the policy currently is. This is
+standard, well-understood bandit-RL behavior, not a bug specific to this
+wiring — and it's honestly not eliminated, only reduced: `resolve_auto`'s
+tests assert the aggregate statistical claim ("usually converges well
+within a small trial budget, across independent selectors") rather than
+"always converges," because the latter would misrepresent what a real
+bandit mechanism actually guarantees.
+
+**Explicitly not done here** (would be scope creep beyond "relevance
+selection over a given pool"): building the pool of `candidate_queries`
+itself by searching memory for "what else is known about these tied
+candidates" is a separate, harder decision (an unbounded search problem,
+not a bounded selection one) and isn't part of this. Wiring
+`resolve_auto` into `BioAIDialogueAgent` (which would need to build that
+candidate pool from conversation history) is also not done — `resolve()`
+is still what `_answer_relational_query` uses (§2.5).
 
 ## 3. Comparison against `ConsolidationMemory` (empirically tested)
 
@@ -392,14 +463,17 @@ and 3 are done (§2.5) — kept numbered in place rather than renumbered, since
    uses `resolve()` for multi-clue identity questions and
    `complete_detailed` for single-relation ones, surfacing ambiguity
    honestly instead of guessing.
-2. **Automatic relevance selection for `resolve()`'s query chain** — the
-   basal-ganglia piece deliberately deferred in §2.4. `src/basal/` already
-   has a Go/NoGo actor-critic; the natural extension is treating "which
-   other stored relation might disambiguate this" as the same kind of
-   competitive selection problem it already solves for actions, per
-   `ARCHITECTURE.md` §3.4's own framing. Per §5, this is also the natural
-   home for transitive-chaining edge-selection (MINERVA-style), not a
-   separate mechanism.
+2. ~~Automatic relevance selection for `resolve()`'s query chain~~ —
+   **partially done, §2.7.** `resolve_auto`/`RelevanceSelector` pick which
+   of a *given, bounded* candidate-query pool to try next, learning online
+   from reward-prediction-error. Still open: (a) building that candidate
+   pool by searching memory for "what else is known about these tied
+   candidates" — a harder, unbounded search problem, deliberately not
+   attempted; (b) wiring `resolve_auto` into `BioAIDialogueAgent` itself
+   (`_answer_relational_query` still uses plain `resolve()`, §2.5); (c) per
+   §5, this selector is also the natural home for transitive-chaining
+   edge-selection (MINERVA-style) once chaining (next-step #5) is built,
+   not a separate mechanism — not yet connected to that.
 3. ~~Persistence for `RelationalMemory`~~ — **done, §2.5.**
    `RelationalEncoder`/`RelationalMemory.get_state`/`from_state` serialize
    `role_vectors`/`entity_vectors`/`relation_vectors` and each relation's

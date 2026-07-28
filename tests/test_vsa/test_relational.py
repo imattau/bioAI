@@ -383,3 +383,79 @@ def test_query_phrasing_mismatch_still_retrieves():
     result = memory.complete_detailed({"relation": "is", "object": "mammal"}, top_k=3)
     assert result.best == "cat"
     assert not result.ambiguous
+
+
+def test_resolve_auto_eventually_resolves_with_enough_steps():
+    """Functional/plumbing correctness, not learning: given enough
+    max_steps to exhaust the candidate pool, resolve_auto must reach the
+    same correct answer resolve() would with a hand-ordered chain,
+    regardless of which order the (untrained, near-random) selector tries
+    candidates in.
+    """
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")
+    memory.store_triple("cat", "is", "a mammal")
+    memory.store_triple("dog", "is", "a mammal")  # uninformative: shared
+    memory.store_triple("dog", "fears", "water")
+    memory.store_triple("fox", "fears", "water")  # informative: narrows to dog
+
+    known = {"relation": "chases", "object": "mouse"}
+    candidates = [
+        ({"relation": "is", "object": "a mammal"}, None),
+        ({"relation": "fears", "object": "water"}, None),
+    ]
+
+    trace = memory.resolve_auto(known, candidates, top_k=2, max_steps=2)
+    assert trace.resolved
+    assert trace.final_candidates == ["dog"]
+
+
+def test_resolve_auto_no_candidates_behaves_like_plain_resolve():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")
+
+    known = {"relation": "chases", "object": "mouse"}
+    auto_trace = memory.resolve_auto(known, [], top_k=2)
+    plain_trace = memory.resolve([(known, None)], top_k=2)
+
+    assert auto_trace.final_candidates == plain_trace.final_candidates
+    assert len(auto_trace.steps) == 1
+
+
+def test_resolve_auto_respects_max_steps():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")
+    # Three uninformative candidates -- none of them ever narrow the pool,
+    # so with max_steps=1 exactly one extra step should be attempted.
+    memory.store_triple("cat", "is", "a mammal")
+    memory.store_triple("dog", "is", "a mammal")
+
+    known = {"relation": "chases", "object": "mouse"}
+    useless = ({"relation": "is", "object": "a mammal"}, None)
+
+    trace = memory.resolve_auto(
+        known, [useless, useless, useless], top_k=2, max_steps=1
+    )
+    assert not trace.resolved
+    assert len(trace.steps) == 2  # initial query + exactly one auto step
+
+
+def test_resolve_auto_immediate_resolution_uses_no_steps():
+    """If the first query alone already resolves it, no candidate queries
+    should be tried at all (nothing to learn from either)."""
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "chases", "mouse")
+
+    known = {"relation": "chases", "object": "mouse"}
+    useless = ({"relation": "is", "object": "a mammal"}, None)
+
+    trace = memory.resolve_auto(known, [useless], top_k=2)
+    assert trace.resolved
+    assert len(trace.steps) == 1

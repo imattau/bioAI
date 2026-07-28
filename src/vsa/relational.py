@@ -36,6 +36,7 @@ from dataclasses import dataclass, field
 
 import torch
 
+from src.basal.relevance import RelevanceSelector
 from src.vsa.hopfield import HopfieldNet
 from src.vsa.primitives import VSA
 from src.vsa.store import AssociativeStore
@@ -288,14 +289,17 @@ class RelationalMemory:
         dim: int = 10000,
         hopfield_beta: float = 50.0,
         ambiguity_margin: float = DEFAULT_AMBIGUITY_MARGIN,
+        relevance_max_candidates: int = 8,
     ):
         self.encoder = encoder
         self.dim = dim
         self.hopfield_beta = hopfield_beta
         self.ambiguity_margin = ambiguity_margin
+        self.relevance_max_candidates = relevance_max_candidates
         self.nets: dict[str, HopfieldNet] = {}
         self.store = AssociativeStore(dim)
         self.triples: list[tuple[str, str, str, dict[str, str]]] = []
+        self._relevance_selector: RelevanceSelector | None = None
 
     def _net_for(self, relation: str) -> HopfieldNet:
         net = self.nets.get(relation)
@@ -528,6 +532,97 @@ class RelationalMemory:
             resolved=len(final) == 1,
             contradictory=any_contradiction,
         )
+
+    def _get_relevance_selector(self) -> RelevanceSelector:
+        if self._relevance_selector is None:
+            self._relevance_selector = RelevanceSelector(
+                state_dim=self.dim,
+                max_candidates=self.relevance_max_candidates,
+                device=self.encoder.vsa.device,
+            )
+        return self._relevance_selector
+
+    def resolve_auto(
+        self,
+        known: dict[str, str],
+        candidate_queries: list[tuple[dict[str, str], dict[str, str] | None]],
+        context: dict[str, str] | None = None,
+        max_steps: int = 3,
+        steps: int = 10,
+        top_k: int = 5,
+    ) -> ResolutionTrace:
+        """Like resolve(), but autonomously chooses which of
+        `candidate_queries` to try next instead of requiring the caller to
+        supply a fixed, ordered chain — the basal-ganglia relevance-selection
+        role ARCHITECTURE.md SS3.4 assigns to "which memory to attend to",
+        applied to picking follow-up disambiguating queries instead of
+        motor actions. resolve() itself deliberately does not do this (see
+        its docstring) — this is that deferred piece, now that it has a
+        concrete decision to make: not "search all of memory for anything
+        relevant" (still not built, and not what this does), but "given a
+        bounded pool of already-available candidate queries, which is
+        worth trying first."
+
+        `known`/`context` form the mandatory first query, exactly as in a
+        plain resolve() call. `candidate_queries` is the pool of possible
+        follow-up evidence available (e.g. other facts already established
+        in the current conversation) — not all of them are necessarily
+        used, and only the first `relevance_max_candidates` are ever
+        selectable (GoNoGoActorCritic has a fixed action-space size).
+        Actions are positional: "try whichever candidate is currently
+        first in the remaining list", not identity-based, so a caller that
+        wants the selector to learn a stable preference should present
+        `candidate_queries` in a consistent order for what it considers
+        "the same kind" of situation (e.g. sorted by a cheap symbolic
+        heuristic) rather than arbitrary/random order.
+
+        Reward is read directly from resolve()'s own per-step signal: a
+        chosen query that turns out `informative` (see ResolutionStep) gets
+        +1, `contradictory` gets -1, and merely uninformative (no data, or
+        data that doesn't narrow the pool) gets a small negative -0.2
+        rather than a neutral 0. That's deliberate, not arbitrary: a
+        neutral reward gives the actor-critic no gradient pressure to move
+        away from a bad choice it's already converged to from
+        initialization, since advantage collapses toward zero once the
+        critic learns to expect ~0 for that state-action — confirmed
+        empirically during development, where one in three random
+        initializations got permanently stuck always picking a useless
+        candidate it happened to favor from the start, having no reason to
+        ever try the alternative. A consistent small penalty keeps eroding
+        a bad choice's probability even without directly sampling the
+        better one, which a strictly neutral reward does not.
+
+        The selector is trained online via a single-step actor-critic
+        update (RelevanceSelector.learn). This means a single call is no
+        better than trying candidates in the caller's given order; it only
+        gets better at picking useful queries first across *repeated*
+        calls on the same RelationalMemory instance (same accumulated
+        weights) — it is not pretrained, deliberately, since what counts
+        as "useful" depends on this memory's actual stored data, not a
+        generic prior.
+        """
+        accumulated: list[tuple[dict[str, str], dict[str, str] | None]] = [(known, context)]
+        remaining = list(candidate_queries)[: self.relevance_max_candidates]
+
+        trace = self.resolve(accumulated, steps=steps, top_k=top_k)
+        state = self.encoder.encode_query(known, context)
+        selector = self._get_relevance_selector()
+
+        steps_taken = 0
+        while not trace.resolved and remaining and steps_taken < max_steps:
+            idx = selector.select(state, n_valid=len(remaining))
+            chosen = remaining.pop(idx)
+            candidate_accumulated = accumulated + [chosen]
+            new_trace = self.resolve(candidate_accumulated, steps=steps, top_k=top_k)
+            last_step = new_trace.steps[-1]
+            reward = 1.0 if last_step.informative else (-1.0 if last_step.contradictory else -0.2)
+            selector.learn(state, idx, reward)
+
+            accumulated = candidate_accumulated
+            trace = new_trace
+            steps_taken += 1
+
+        return trace
 
     def _ground_truth_intersection(
         self, role: str, queries: list[tuple[dict[str, str], dict[str, str] | None]]
