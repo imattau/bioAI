@@ -175,6 +175,29 @@ class CompletionResult:
     ambiguous: bool = False
 
 
+@dataclass
+class ResolutionStep:
+    """One query in a multi-step resolution chain, and its effect on the pool."""
+
+    known: dict[str, str]
+    context: dict[str, str]
+    result: CompletionResult
+    survivors: list[str]
+    informative: bool
+    contradictory: bool = False
+
+
+@dataclass
+class ResolutionTrace:
+    """Result of intersecting candidate pools across a chain of independent queries."""
+
+    role: str | None
+    steps: list[ResolutionStep] = field(default_factory=list)
+    final_candidates: list[str] = field(default_factory=list)
+    resolved: bool = False
+    contradictory: bool = False
+
+
 class RelationalMemory:
     """Relational memory partitioned by relation, with Hebbian (Hopfield) storage.
 
@@ -313,6 +336,113 @@ class RelationalMemory:
         full = dict(known)
         full[result.role] = result.best
         return full["subject"], full["relation"], full["object"]
+
+    def resolve(
+        self,
+        queries: list[tuple[dict[str, str], dict[str, str] | None]],
+        steps: int = 10,
+        top_k: int = 5,
+    ) -> ResolutionTrace:
+        """Multi-step candidate intersection across independent queries for
+        the same missing role — e.g. resolving "who chases the mouse" using
+        one query, then narrowing further with "who fears water" as a
+        separate, independent piece of evidence about the same entity.
+
+        Each query is a (known, context) pair targeting the same missing
+        target role. This is deliberately intersection, not score averaging:
+        the entity being resolved has to be consistent with *every* piece of
+        evidence simultaneously, so the candidate pool only ever shrinks, and
+        one noisy step can't outvote a decisive one. `top_k` should be large
+        enough that the true candidate isn't cut from an early step's list
+        before later evidence gets a chance to use it — too small and a
+        single step's cutoff can silently doom the whole chain; too large and
+        no step ever narrows anything.
+
+        A step's `informative` flag is set only when it actually shrinks the
+        pool (or establishes it, for the first real evidence). A step that
+        changes nothing contributed no information and must not be allowed to
+        look like part of a chain of reasoning that resolved something — see
+        the discussion in complete_detailed's docstring about forced
+        collapse manufacturing false confidence.
+
+        If intersecting a step's candidates with the running pool would empty
+        it entirely, that step is treated as *conflicting* evidence rather
+        than accepted at face value: the prior pool is kept, and the step is
+        marked `contradictory` (surfaced on the trace) instead of silently
+        concluding "no answer." This only fires once real evidence exists —
+        a step that returns nothing before any evidence has been gathered
+        yet is just uninformative, not contradictory.
+
+        Every query in the list is processed, even after the pool has
+        already narrowed to one candidate — a system that stops checking new
+        evidence the moment it thinks it has an answer would silently miss a
+        later query that actually conflicts with that answer, which is
+        exactly the blind spot this method exists to avoid.
+        """
+        if not queries:
+            raise ValueError("resolve() requires at least one query")
+
+        role: str | None = None
+        survivors: set[str] | None = None
+        trace_steps: list[ResolutionStep] = []
+        any_contradiction = False
+
+        for known, context in queries:
+            missing = [r for r in TARGET_ROLES if r not in known]
+            if len(missing) != 1:
+                raise ValueError(f"Expected exactly 2 known target slots, got {list(known.keys())}")
+            if role is None:
+                role = missing[0]
+            elif missing[0] != role:
+                raise ValueError(
+                    f"All queries in a resolution chain must target the same "
+                    f"role (got '{role}' then '{missing[0]}')"
+                )
+
+            result = self.complete_detailed(known, context=context, steps=steps, top_k=top_k)
+            this_candidates = {name for name, _ in result.candidates}
+            contradictory = False
+
+            if not this_candidates:
+                # No data for this step (e.g. relation never stored) —
+                # contributes nothing either way.
+                new_survivors = survivors
+                informative = False
+            elif survivors is None:
+                # First real evidence: establishes the starting pool.
+                new_survivors = this_candidates
+                informative = True
+            else:
+                intersected = survivors & this_candidates
+                if not intersected:
+                    # Would wipe out everything established so far — treat as
+                    # conflicting evidence, not a reason to discard prior work.
+                    new_survivors = survivors
+                    informative = False
+                    contradictory = True
+                    any_contradiction = True
+                else:
+                    informative = len(intersected) < len(survivors)
+                    new_survivors = intersected
+
+            trace_steps.append(ResolutionStep(
+                known=dict(known),
+                context=dict(context or {}),
+                result=result,
+                survivors=sorted(new_survivors) if new_survivors else [],
+                informative=informative,
+                contradictory=contradictory,
+            ))
+            survivors = new_survivors
+
+        final = sorted(survivors) if survivors else []
+        return ResolutionTrace(
+            role=role,
+            steps=trace_steps,
+            final_candidates=final,
+            resolved=len(final) == 1,
+            contradictory=any_contradiction,
+        )
 
     def ground_truth_ambiguity(
         self, known: dict[str, str], context: dict[str, str] | None = None

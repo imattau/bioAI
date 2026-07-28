@@ -1,5 +1,7 @@
 """Tests for VSA relational reasoning prototype."""
 
+import pytest
+
 from src.vsa.primitives import VSA
 from src.vsa.relational import RelationalEncoder, RelationalMemory
 
@@ -191,3 +193,111 @@ def test_store_and_complete_without_context_unaffected():
     memory.store_triple("cat", "chases", "mouse")
     s, r, o = memory.complete({"relation": "chases", "object": "mouse"})
     assert s == "cat"
+
+
+def test_resolve_intersects_candidates_across_steps():
+    """Two independent clues about the same unknown subject narrow the
+    candidate pool via intersection, resolving a collision neither clue
+    resolves alone.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=2000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")   # collision: {cat, dog}
+    memory.store_triple("dog", "fears", "water")
+    memory.store_triple("fox", "fears", "water")    # collision: {dog, fox}
+
+    trace = memory.resolve([
+        ({"relation": "chases", "object": "mouse"}, None),
+        ({"relation": "fears", "object": "water"}, None),
+    ], top_k=2)
+
+    assert trace.resolved
+    assert trace.final_candidates == ["dog"]
+    assert not trace.contradictory
+    assert trace.steps[0].survivors == ["cat", "dog"]
+    assert trace.steps[0].informative
+    assert trace.steps[1].survivors == ["dog"]
+    assert trace.steps[1].informative
+
+
+def test_resolve_marks_uninformative_step():
+    """A step whose candidates don't narrow the pool must not be reported
+    as having contributed to the resolution.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=2000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")
+    memory.store_triple("cat", "hides-from", "owl")
+    memory.store_triple("dog", "hides-from", "owl")  # same {cat, dog} — no new info
+    memory.store_triple("dog", "fears", "water")
+    memory.store_triple("fox", "fears", "water")
+
+    trace = memory.resolve([
+        ({"relation": "chases", "object": "mouse"}, None),
+        ({"relation": "hides-from", "object": "owl"}, None),
+        ({"relation": "fears", "object": "water"}, None),
+    ], top_k=2)
+
+    assert len(trace.steps) == 3
+    assert trace.steps[0].informative
+    assert not trace.steps[1].informative
+    assert trace.steps[2].informative
+    assert trace.resolved
+    assert trace.final_candidates == ["dog"]
+
+
+def test_resolve_flags_contradiction_without_discarding_progress():
+    """Evidence that conflicts with an already-narrowed pool is flagged,
+    not silently accepted or allowed to erase prior progress — including
+    when it arrives after the pool has already resolved to one candidate.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=2000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse")
+    memory.store_triple("dog", "fears", "water")
+    memory.store_triple("fox", "fears", "water")
+    memory.store_triple("cat", "likes", "fish")     # conflicts with "dog"
+    memory.store_triple("mouse", "likes", "fish")
+
+    trace = memory.resolve([
+        ({"relation": "chases", "object": "mouse"}, None),
+        ({"relation": "fears", "object": "water"}, None),   # narrows to {dog}
+        ({"relation": "likes", "object": "fish"}, None),    # conflicts
+    ], top_k=2)
+
+    assert trace.resolved
+    assert trace.final_candidates == ["dog"]
+    assert trace.contradictory
+    assert trace.steps[-1].contradictory
+    assert trace.steps[-1].survivors == ["dog"]  # prior pool kept, not wiped
+
+
+def test_resolve_requires_same_target_role():
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+    memory.store_triple("cat", "chases", "mouse")
+
+    with pytest.raises(ValueError):
+        memory.resolve([
+            ({"relation": "chases", "object": "mouse"}, None),  # targets "subject"
+            ({"subject": "cat", "object": "mouse"}, None),       # targets "relation"
+        ])
+
+
+def test_resolve_requires_at_least_one_query():
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+
+    with pytest.raises(ValueError):
+        memory.resolve([])
