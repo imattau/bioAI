@@ -540,6 +540,17 @@ and 3 are done (§2.5) — kept numbered in place rather than renumbered, since
 §5's research citations reference these numbers directly (e.g. "next-step
 #2", "next-step #8").
 
+A 2026-07-28 cleanup (see `ARCHITECTURE_STATUS.md`) removed the generation
+subsystem (`src/nca/*`, `src/decoder/{dit,diffusion,sampler,decoder}.py`)
+and the orphaned `NegativeSelectionDetector`/`DetectorEnsemble` as unused
+relative to `BioAIDialogueAgent`. Checked against the list below: none of
+it touches those components, so nothing here changes as a result — except
+confirming item #7's premise still holds. `src/immune/detector.py`
+(a sibling of `monitor.py` in the same package) is what got removed;
+`SelfMonitor` in `monitor.py`, the module #7 actually points to, is
+untouched and remains the designated home for a unified contradiction
+check.
+
 1. ~~Wire `resolve()` into the actual dialogue/generation pipeline~~ —
    **done, §2.5.** `_answer_relational_query` in `src/text/agent.py` now
    uses `resolve()` for multi-clue identity questions and
