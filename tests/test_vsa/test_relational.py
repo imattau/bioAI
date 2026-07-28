@@ -407,7 +407,7 @@ def test_resolve_auto_eventually_resolves_with_enough_steps():
         ({"relation": "fears", "object": "water"}, None),
     ]
 
-    trace = memory.resolve_auto(known, candidates, top_k=2, max_steps=2)
+    trace = memory.resolve_auto([(known, None)], candidates, top_k=2, max_steps=2)
     assert trace.resolved
     assert trace.final_candidates == ["dog"]
 
@@ -419,7 +419,7 @@ def test_resolve_auto_no_candidates_behaves_like_plain_resolve():
     memory.store_triple("dog", "chases", "mouse")
 
     known = {"relation": "chases", "object": "mouse"}
-    auto_trace = memory.resolve_auto(known, [], top_k=2)
+    auto_trace = memory.resolve_auto([(known, None)], [], top_k=2)
     plain_trace = memory.resolve([(known, None)], top_k=2)
 
     assert auto_trace.final_candidates == plain_trace.final_candidates
@@ -440,15 +440,15 @@ def test_resolve_auto_respects_max_steps():
     useless = ({"relation": "is", "object": "a mammal"}, None)
 
     trace = memory.resolve_auto(
-        known, [useless, useless, useless], top_k=2, max_steps=1
+        [(known, None)], [useless, useless, useless], top_k=2, max_steps=1
     )
     assert not trace.resolved
     assert len(trace.steps) == 2  # initial query + exactly one auto step
 
 
 def test_resolve_auto_immediate_resolution_uses_no_steps():
-    """If the first query alone already resolves it, no candidate queries
-    should be tried at all (nothing to learn from either)."""
+    """If the mandatory queries alone already resolve it, no candidate
+    queries should be tried at all (nothing to learn from either)."""
     vsa = VSA(dim=1000)
     memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
     memory.store_triple("cat", "chases", "mouse")
@@ -456,6 +456,27 @@ def test_resolve_auto_immediate_resolution_uses_no_steps():
     known = {"relation": "chases", "object": "mouse"}
     useless = ({"relation": "is", "object": "a mammal"}, None)
 
-    trace = memory.resolve_auto(known, [useless], top_k=2)
+    trace = memory.resolve_auto([(known, None)], [useless], top_k=2)
     assert trace.resolved
-    assert len(trace.steps) == 1
+
+
+def test_resolve_auto_processes_all_mandatory_queries_first():
+    """Multiple mandatory queries (e.g. every clue a user explicitly
+    stated) must all be processed via resolve()'s own exhaustive-check
+    semantics -- including contradiction detection -- before any
+    auto-selected candidate is tried.
+    """
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "is", "a mammal")
+    memory.store_triple("dog", "is", "a mammal")
+    memory.store_triple("dog", "is", "loyal")
+
+    mandatory = [
+        ({"relation": "is", "object": "a mammal"}, None),
+        ({"relation": "is", "object": "loyal"}, None),
+    ]
+    trace = memory.resolve_auto(mandatory, [], top_k=2)
+    assert trace.resolved
+    assert trace.final_candidates == ["dog"]
+    assert len(trace.steps) == 2  # both mandatory queries processed, no auto steps

@@ -38,7 +38,38 @@ def test_genuine_tie_is_surfaced_honestly_not_guessed():
     assert "a dwarf planet" in result["response"].lower()
 
 
-def test_multi_clue_resolve_narrows_a_tie():
+def test_multi_clue_resolve_narrows_a_tie_via_explicit_clue():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.process_turn("Cat is a mammal")
+    agent.process_turn("Dog is a mammal")
+    agent.process_turn("Cat is furry")
+    agent.process_turn("Dog is furry")
+
+    # Nothing else is known yet about cat/dog beyond mammal+furry (both
+    # share both) -- genuinely tied, nothing to escalate to either.
+    tied = agent.process_turn("Who is a mammal and is furry?")
+    assert tied["response_mode"] == "relational_ambiguous"
+    assert set(tied["ambiguous_candidates"]) >= {"cat", "dog"}
+
+    agent.process_turn("Dog is loyal")
+
+    # A clue only ONE of them shares narrows it via resolve()'s explicit
+    # candidate intersection — not just the last clue winning on its own.
+    result = agent.process_turn("Who is a mammal and is loyal?")
+    assert result["response_mode"] == "relational_reasoning"
+    assert result["response"] == "Dog is loyal"
+    assert not result["ambiguous"]
+
+
+def test_ambiguous_multi_clue_escalates_to_other_known_facts():
+    """When the explicitly stated clues alone leave it tied, the agent
+    should escalate via resolve_auto to other already-known facts about
+    the tied candidates instead of giving up at "ambiguous" -- the
+    basal-ganglia relevance-selection wiring (RELATIONAL_MEMORY.md SS2.7).
+    Same setup as the "still tied" case above, except "Dog is loyal" is
+    already known (just not mentioned in this question) -- the agent must
+    find and use it on its own.
+    """
     agent = BioAIDialogueAgent(vsa_dim=64)
     agent.process_turn("Cat is a mammal")
     agent.process_turn("Dog is a mammal")
@@ -46,15 +77,7 @@ def test_multi_clue_resolve_narrows_a_tie():
     agent.process_turn("Dog is furry")
     agent.process_turn("Dog is loyal")
 
-    # Two clues that both cat and dog share: still genuinely tied, no way
-    # to pick between them from this evidence alone.
-    tied = agent.process_turn("Who is a mammal and is furry?")
-    assert tied["response_mode"] == "relational_ambiguous"
-    assert set(tied["ambiguous_candidates"]) >= {"cat", "dog"}
-
-    # A clue only ONE of them shares narrows it via resolve()'s candidate
-    # intersection — not just the last clue winning on its own.
-    result = agent.process_turn("Who is a mammal and is loyal?")
+    result = agent.process_turn("Who is a mammal and is furry?")
     assert result["response_mode"] == "relational_reasoning"
     assert result["response"] == "Dog is loyal"
     assert not result["ambiguous"]

@@ -544,17 +544,17 @@ class RelationalMemory:
 
     def resolve_auto(
         self,
-        known: dict[str, str],
+        queries: list[tuple[dict[str, str], dict[str, str] | None]],
         candidate_queries: list[tuple[dict[str, str], dict[str, str] | None]],
-        context: dict[str, str] | None = None,
         max_steps: int = 3,
         steps: int = 10,
         top_k: int = 5,
     ) -> ResolutionTrace:
         """Like resolve(), but autonomously chooses which of
-        `candidate_queries` to try next instead of requiring the caller to
-        supply a fixed, ordered chain — the basal-ganglia relevance-selection
-        role ARCHITECTURE.md SS3.4 assigns to "which memory to attend to",
+        `candidate_queries` to try next (if `queries` alone isn't enough)
+        instead of requiring the caller to supply a fixed, ordered chain for
+        everything — the basal-ganglia relevance-selection role
+        ARCHITECTURE.md SS3.4 assigns to "which memory to attend to",
         applied to picking follow-up disambiguating queries instead of
         motor actions. resolve() itself deliberately does not do this (see
         its docstring) — this is that deferred piece, now that it has a
@@ -563,15 +563,19 @@ class RelationalMemory:
         bounded pool of already-available candidate queries, which is
         worth trying first."
 
-        `known`/`context` form the mandatory first query, exactly as in a
-        plain resolve() call. `candidate_queries` is the pool of possible
-        follow-up evidence available (e.g. other facts already established
-        in the current conversation) — not all of them are necessarily
-        used, and only the first `relevance_max_candidates` are ever
-        selectable (GoNoGoActorCritic has a fixed action-space size).
-        Actions are positional: "try whichever candidate is currently
-        first in the remaining list", not identity-based, so a caller that
-        wants the selector to learn a stable preference should present
+        `queries` are mandatory — processed exactly like a plain resolve()
+        call, every one of them, in order, before any auto-selection
+        starts (so evidence the caller already knows is authoritative and
+        gets checked in full, including resolve()'s own contradiction
+        detection). `candidate_queries` is the *optional* pool of possible
+        follow-up evidence available beyond that (e.g. other facts already
+        recorded about the tied candidates) — only tried if `queries` alone
+        leaves the pool ambiguous, not all of them are necessarily used,
+        and only the first `relevance_max_candidates` are ever selectable
+        (GoNoGoActorCritic has a fixed action-space size). Actions are
+        positional: "try whichever candidate is currently first in the
+        remaining list", not identity-based, so a caller that wants the
+        selector to learn a stable preference should present
         `candidate_queries` in a consistent order for what it considers
         "the same kind" of situation (e.g. sorted by a cheap symbolic
         heuristic) rather than arbitrary/random order.
@@ -601,11 +605,20 @@ class RelationalMemory:
         as "useful" depends on this memory's actual stored data, not a
         generic prior.
         """
-        accumulated: list[tuple[dict[str, str], dict[str, str] | None]] = [(known, context)]
+        if not queries:
+            raise ValueError("resolve_auto() requires at least one mandatory query")
+
+        accumulated: list[tuple[dict[str, str], dict[str, str] | None]] = list(queries)
         remaining = list(candidate_queries)[: self.relevance_max_candidates]
 
         trace = self.resolve(accumulated, steps=steps, top_k=top_k)
-        state = self.encoder.encode_query(known, context)
+        state = (
+            self.encoder.vsa.bundle([
+                self.encoder.encode_query(known, context) for known, context in queries
+            ])
+            if len(queries) > 1
+            else self.encoder.encode_query(*queries[0])
+        )
         selector = self._get_relevance_selector()
 
         steps_taken = 0

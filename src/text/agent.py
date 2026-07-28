@@ -399,6 +399,33 @@ class BioAIDialogueAgent:
             "candidates": [],
         }
 
+    def _gather_candidate_queries(
+        self, candidates: list[str], exclude_pairs: set[tuple[str, str]]
+    ) -> list[tuple[dict, dict | None]]:
+        """Bounded pool of other already-recorded (relation, object) facts
+        about the tied `candidates`, for resolve_auto to select from — only
+        used as a fallback when the user's explicitly stated clues alone
+        don't resolve the ambiguity (see _answer_relational_query). This is
+        deliberately not an open-ended memory search: only facts literally
+        already stored about entities already in the tied pool, excluding
+        the exact (relation, object) pairs already tried -- note this
+        excludes by the specific pair, not the whole relation name, since
+        two different clues can legitimately share a relation (e.g. "is a
+        mammal" and "is loyal" are both relation "is"). See
+        RELATIONAL_MEMORY.md SS2.7.
+        """
+        seen: set[tuple[str, str]] = set(exclude_pairs)
+        pool: list[tuple[dict, dict | None]] = []
+        for subject, relation, obj, _ctx in self.relational.triples:
+            if subject not in candidates:
+                continue
+            key = (relation, obj)
+            if key in seen:
+                continue
+            seen.add(key)
+            pool.append(({"relation": relation, "object": obj}, None))
+        return pool
+
     def _answer_relational_query(self, user_input: str) -> dict | None:
         """Answer a question directly from relational memory when possible.
 
@@ -424,16 +451,23 @@ class BioAIDialogueAgent:
             # just "everything" and intersecting them narrows nothing even
             # when the underlying scores are clearly separated.
             trace = self.relational.resolve(queries, top_k=2)
+            if not trace.resolved and trace.final_candidates:
+                # The explicit clues alone weren't enough -- escalate to
+                # basal-ganglia relevance selection (RELATIONAL_MEMORY.md
+                # SS2.7) over other already-known facts about the tied
+                # candidates, rather than giving up or guessing.
+                exclude = set(clues)
+                pool = self._gather_candidate_queries(trace.final_candidates, exclude)
+                if pool:
+                    trace = self.relational.resolve_auto(
+                        queries, pool, top_k=2, max_steps=3
+                    )
             if trace.resolved:
-                # Cite the last clue: in "X and also Y" phrasing that's
-                # typically the newly-added, most specific piece of
-                # evidence — any true clue about the resolved entity would
-                # be a correct citation, this is just a readability choice.
-                relation, obj = clues[-1]
+                # Cite whichever query actually settled it -- the last
+                # explicit clue, or the auto-selected one if escalation was
+                # what resolved it.
                 return self._relational_result(
-                    {"relation": relation, "object": obj},
-                    "subject",
-                    trace.final_candidates[0],
+                    trace.steps[-1].known, "subject", trace.final_candidates[0],
                 )
             if trace.final_candidates:
                 return self._ambiguous_relational_result(trace.final_candidates)

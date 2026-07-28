@@ -271,18 +271,24 @@ as a competitive-selection problem, the same one solved for motor actions
 exercised on bandit-style reward tasks (`tests/test_basal/test_odyssey_arena.py`),
 not wired to anything in `RelationalMemory`.
 
-`RelationalMemory.resolve_auto(known, candidate_queries, context=None,
-max_steps=3, ...)` closes that gap, narrowly: given a **bounded pool of
-already-available candidate follow-up queries** (not an open-ended memory
-search — still not built, and still not what this does), it uses a new
-`RelevanceSelector` (`src/basal/relevance.py`, wrapping `GoNoGoActorCritic`)
-to choose which to try next, instead of requiring the caller to hand a
-pre-ordered chain or trying all of them.
+`RelationalMemory.resolve_auto(queries, candidate_queries, max_steps=3,
+...)` closes that gap, narrowly: `queries` are mandatory — processed via
+`resolve()` in full first, exactly as given, including its own
+contradiction detection — and only if those alone leave the pool ambiguous
+does a new `RelevanceSelector` (`src/basal/relevance.py`, wrapping
+`GoNoGoActorCritic`) choose which of a **bounded pool of already-available
+candidate follow-up queries** (not an open-ended memory search — still not
+built, and still not what this does) to try next, instead of requiring the
+caller to hand a pre-ordered chain or trying all of them. Splitting
+mandatory-vs-optional this way matters: evidence the caller already has
+(e.g. every clue a user explicitly stated) must always be checked in full,
+not skipped just because the pool got resolved early — only genuinely
+optional extra evidence goes through selection.
 
 **Mechanics:**
-- **State**: the VSA encoding of the original `known`/`context` query
-  (`RelationalEncoder.encode_query`) — a fixed-size vector already available
-  for free, representing "this kind of disambiguation situation."
+- **State**: the VSA encoding of the mandatory `queries` (bundled together
+  if there's more than one) — a fixed-size vector already available for
+  free, representing "this kind of disambiguation situation."
 - **Actions**: positional, not identity-based — action *i* means "try
   whichever query is currently at position *i* in the caller's
   `candidate_queries` list." The action space size is fixed
@@ -321,14 +327,46 @@ within a small trial budget, across independent selectors") rather than
 "always converges," because the latter would misrepresent what a real
 bandit mechanism actually guarantees.
 
-**Explicitly not done here** (would be scope creep beyond "relevance
-selection over a given pool"): building the pool of `candidate_queries`
-itself by searching memory for "what else is known about these tied
-candidates" is a separate, harder decision (an unbounded search problem,
-not a bounded selection one) and isn't part of this. Wiring
-`resolve_auto` into `BioAIDialogueAgent` (which would need to build that
-candidate pool from conversation history) is also not done — `resolve()`
-is still what `_answer_relational_query` uses (§2.5).
+### 2.8 Wiring `resolve_auto` into `BioAIDialogueAgent` (`commit next`)
+
+`_answer_relational_query`'s multi-clue branch (§2.5) now escalates to
+`resolve_auto` when the user's explicitly stated clues alone leave the
+pool ambiguous, instead of giving up at "it could be X or Y":
+
+```python
+trace = self.relational.resolve(queries, top_k=2)   # explicit clues, always checked in full
+if not trace.resolved and trace.final_candidates:
+    exclude = set(clues)
+    pool = self._gather_candidate_queries(trace.final_candidates, exclude)
+    if pool:
+        trace = self.relational.resolve_auto(queries, pool, top_k=2, max_steps=3)
+```
+
+`_gather_candidate_queries` builds the **bounded** pool this needed
+(§2.7's "explicitly not done" item (a), now done, narrowly): other
+`(relation, object)` facts already literally recorded in
+`self.relational.triples` about entities still in the tied pool, excluding
+the exact `(relation, object)` pairs already tried — not the whole
+relation name, since two different clues can legitimately share a relation
+(e.g. "is a mammal" and "is loyal" are both relation `"is"`; excluding by
+relation name alone was an actual bug caught while wiring this in, where
+"Dog is loyal" got incorrectly excluded from the pool just for sharing a
+relation with the explicit clues). This is still not an open-ended memory
+search — only facts about entities *already in the current tied pool*,
+capped the same way `resolve_auto` itself caps any candidate list.
+
+Whichever query actually resolved it — the last explicit clue, or an
+auto-selected one — is read from `trace.steps[-1].known` for the response
+citation, rather than always citing the last explicit clue regardless of
+what actually settled it.
+
+**Still not done**: `resolve_auto`'s single-relation counterpart. "What is
+X's Y" (§2.5's other branch) still only uses `complete_detailed` — as
+established throughout this document, that question shape's tied
+candidates are alternative values of *one* relation, not one entity's
+membership across several relations, so `resolve()`/`resolve_auto`'s
+intersection mechanism doesn't apply to it regardless of selection
+strategy.
 
 ## 3. Comparison against `ConsolidationMemory` (empirically tested)
 
@@ -464,16 +502,16 @@ and 3 are done (§2.5) — kept numbered in place rather than renumbered, since
    `complete_detailed` for single-relation ones, surfacing ambiguity
    honestly instead of guessing.
 2. ~~Automatic relevance selection for `resolve()`'s query chain~~ —
-   **partially done, §2.7.** `resolve_auto`/`RelevanceSelector` pick which
-   of a *given, bounded* candidate-query pool to try next, learning online
-   from reward-prediction-error. Still open: (a) building that candidate
-   pool by searching memory for "what else is known about these tied
-   candidates" — a harder, unbounded search problem, deliberately not
-   attempted; (b) wiring `resolve_auto` into `BioAIDialogueAgent` itself
-   (`_answer_relational_query` still uses plain `resolve()`, §2.5); (c) per
-   §5, this selector is also the natural home for transitive-chaining
-   edge-selection (MINERVA-style) once chaining (next-step #5) is built,
-   not a separate mechanism — not yet connected to that.
+   **done, §2.7-2.8.** `resolve_auto`/`RelevanceSelector` pick which of a
+   bounded candidate-query pool to try next, learning online from
+   reward-prediction-error; `_answer_relational_query` builds that pool
+   from other already-recorded facts about the tied candidates
+   (`_gather_candidate_queries`, a bounded lookup, not a search) and
+   escalates to it when the user's explicit clues alone aren't enough.
+   Still open: per §5, this selector is also the natural home for
+   transitive-chaining edge-selection (MINERVA-style) once chaining
+   (next-step #5) is built, not a separate mechanism — not yet connected
+   to that.
 3. ~~Persistence for `RelationalMemory`~~ — **done, §2.5.**
    `RelationalEncoder`/`RelationalMemory.get_state`/`from_state` serialize
    `role_vectors`/`entity_vectors`/`relation_vectors` and each relation's
