@@ -69,6 +69,14 @@ class RelationalEncoder:
         self.entity_vectors: dict[str, torch.Tensor] = {}
         self.relation_vectors: dict[str, torch.Tensor] = {}
         self.token_vectors: dict[str, torch.Tensor] = {}
+        # A third named vector cache, alongside relation_vectors and
+        # entity_vectors, for frame templates ("[SUBJECT] is the capital
+        # of [OBJECT]") bound under the "frame" role -- see
+        # src/text/ecology/frame_extractor.py. Kept separate from
+        # entity_vectors so a frame template string never spuriously
+        # competes with (or gets confused for) an actual subject/object
+        # entity name during decode.
+        self.frame_vectors: dict[str, torch.Tensor] = {}
         for name in TARGET_ROLES:
             self.role(name)
 
@@ -117,15 +125,40 @@ class RelationalEncoder:
             self.relation_vectors[name] = self.vsa.make_vector()
         return self.relation_vectors[name]
 
+    def frame(self, template: str) -> torch.Tensor:
+        """Compose a frame-template value the same way `entity()` composes
+        a multi-word entity: bundle its constituent word vectors (treating
+        "[SUBJECT]"/"[OBJECT]" as ordinary tokens), so two templates
+        sharing several glue words get graceful partial similarity instead
+        of being unrelated random vectors. Uses its own token cache
+        (`token()`, shared with `entity()`) but a separate top-level cache
+        (`frame_vectors`) so a template string is never stored as, or
+        confused with, an actual entity."""
+        if template not in self.frame_vectors:
+            words = template.split()
+            self.frame_vectors[template] = (
+                self.vsa.bundle([self.token(w) for w in words])
+                if len(words) > 1 else self.token(words[0])
+            )
+        return self.frame_vectors[template]
+
     def filler(self, role: str, name: str) -> torch.Tensor:
         """Filler vector for *name* under *role*. Context roles share the
         entity cache — the same underlying value (e.g. "kitchen") bound
         under different roles (e.g. "scene" vs "object") yields different
         composite vectors, so sharing vocabulary across roles is safe."""
-        return self.relation(name) if role == "relation" else self.entity(name)
+        if role == "relation":
+            return self.relation(name)
+        if role == "frame":
+            return self.frame(name)
+        return self.entity(name)
 
     def candidates_for(self, role: str) -> dict[str, torch.Tensor]:
-        return self.relation_vectors if role == "relation" else self.entity_vectors
+        if role == "relation":
+            return self.relation_vectors
+        if role == "frame":
+            return self.frame_vectors
+        return self.entity_vectors
 
     def encode(self, fields: dict[str, str]) -> torch.Tensor:
         """Bind and bundle an arbitrary set of (role, value) pairs.
@@ -212,6 +245,7 @@ class RelationalEncoder:
             "entity_vectors": {k: v.to(torch.float16) for k, v in self.entity_vectors.items()},
             "relation_vectors": {k: v.to(torch.float16) for k, v in self.relation_vectors.items()},
             "token_vectors": {k: v.to(torch.float16) for k, v in self.token_vectors.items()},
+            "frame_vectors": {k: v.to(torch.float16) for k, v in self.frame_vectors.items()},
         }
 
     @classmethod
@@ -228,6 +262,11 @@ class RelationalEncoder:
         # to stay consistent with tokens shared by pre-existing entities.
         encoder.token_vectors = {
             k: v.to(torch.float32) for k, v in state.get("token_vectors", {}).items()
+        }
+        # Older saves predate the frame role entirely -- absent means no
+        # frame was ever stored yet, an empty cache is the correct value.
+        encoder.frame_vectors = {
+            k: v.to(torch.float32) for k, v in state.get("frame_vectors", {}).items()
         }
         return encoder
 
@@ -314,11 +353,45 @@ class RelationalMemory:
         relation: str,
         object_: str,
         context: dict[str, str] | None = None,
+        frame: str | None = None,
     ):
-        vec = self.encoder.encode_triple(subject, relation, object_, context)
+        """*frame*, when given (a template string like "[SUBJECT] is the
+        capital of [OBJECT]" from `src/text/ecology/frame_extractor.py`),
+        is bound in as an ordinary extra context role under the name
+        "frame" -- the same generic mechanism `context` roles already use,
+        just with a first-class keyword so callers don't need to know
+        "frame" is a magic context key. Lets `recall_frame` later answer
+        "what phrasing was *this specific* stored fact taught with," which
+        genuine per-triple Hopfield recall can answer -- unlike
+        `FrameLibrary.select_frame`'s relation-wide frequency weighting,
+        which has no notion of a specific triple at all.
+        """
+        full_context = dict(context or {})
+        if frame is not None:
+            full_context["frame"] = frame
+        vec = self.encoder.encode_triple(subject, relation, object_, full_context)
         self._net_for(relation).store(vec)
         self.store.insert(vec)
-        self.triples.append((subject, relation, object_, dict(context or {})))
+        self.triples.append((subject, relation, object_, full_context))
+
+    def recall_frame(
+        self,
+        known: dict[str, str],
+        context: dict[str, str] | None = None,
+        steps: int = 10,
+    ) -> str | None:
+        """Recall the frame template a matching stored triple was taught
+        with, if any -- pattern-completion over the same net `complete_detailed`
+        uses, just decoding the "frame" role instead of subject/relation/object.
+        Returns `None` if the relation's net doesn't exist, is empty, or no
+        frame was ever bound for a matching triple (frame_vectors empty)."""
+        relation = known.get("relation")
+        net = self.nets.get(relation) if relation is not None else None
+        if net is None or len(net) == 0 or not self.encoder.frame_vectors:
+            return None
+        query = self.encoder.encode_query(known, context)
+        recalled = net.recall(query, steps=steps)
+        return self.encoder.decode_filler(recalled, "frame", self.encoder.frame_vectors)
 
     def _infer_relation(
         self, known: dict[str, str], context: dict[str, str], steps: int, top_k: int

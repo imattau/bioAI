@@ -88,6 +88,7 @@ def _reproduce(
     sequence_ranker,
     relational_memory,
     generation: int,
+    frame_library=None,
 ) -> list[ResponseOrganism]:
     genotype_survivors = [organism for organism in survivors if organism.propositions]
     candidates = []
@@ -116,7 +117,7 @@ def _reproduce(
         build_proposition_organism(
             prompt, child.propositions, evidence, scorer, all_propositions,
             sequence_ranker, kind=child.kind, generation=generation,
-            lineage=child.lineage,
+            lineage=child.lineage, frame_library=frame_library,
         )
         for child in candidates
     ]
@@ -153,6 +154,7 @@ class ResponseEcosystem:
         composer=None,
         sequence_ranker=None,
         relational_memory=None,
+        frame_library=None,
         fallback: str = "",
     ) -> EcosystemResult:
         candidates = self.candidate_generator.generate(prompt, evidence, composer)
@@ -165,7 +167,8 @@ class ResponseEcosystem:
         )
         if self.enable_synthesis:
             population += seed_proposition_population(
-                prompt, propositions, evidence, self.scorer, sequence_ranker
+                prompt, propositions, evidence, self.scorer, sequence_ranker,
+                frame_library=frame_library,
             )
         population = [
             organism for organism in population if survives_predation(organism)
@@ -199,6 +202,7 @@ class ResponseEcosystem:
                 offspring = _reproduce(
                     reproduction_pool, propositions, prompt, evidence,
                     self.scorer, sequence_ranker, relational_memory, round_index,
+                    frame_library=frame_library,
                 )
             else:
                 offspring = []

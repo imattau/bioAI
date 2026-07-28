@@ -480,3 +480,80 @@ def test_resolve_auto_processes_all_mandatory_queries_first():
     assert trace.resolved
     assert trace.final_candidates == ["dog"]
     assert len(trace.steps) == 2  # both mandatory queries processed, no auto steps
+
+
+# ── Phase 4: frame role (per-fact phrasing recall) ──────────────────────
+
+def test_frame_role_recalls_stored_phrasing():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple(
+        "france", "capital", "paris",
+        frame="The capital of [SUBJECT] is [OBJECT]",
+    )
+    recalled = memory.recall_frame({"subject": "france", "relation": "capital"})
+    assert recalled == "The capital of [SUBJECT] is [OBJECT]"
+
+
+def test_frame_role_distinguishes_different_phrasings_per_relation():
+    """Two triples under different relations, taught with different
+    frames, must each recall their own phrasing, not bleed into each
+    other via the shared frame_vectors cache."""
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple(
+        "france", "capital", "paris",
+        frame="The capital of [SUBJECT] is [OBJECT]",
+    )
+    memory.store_triple(
+        "paris", "capital_of", "france",
+        frame="[SUBJECT] is the capital of [OBJECT]",
+    )
+    assert memory.recall_frame(
+        {"subject": "france", "relation": "capital"}
+    ) == "The capital of [SUBJECT] is [OBJECT]"
+    assert memory.recall_frame(
+        {"subject": "paris", "relation": "capital_of"}
+    ) == "[SUBJECT] is the capital of [OBJECT]"
+
+
+def test_frame_role_none_without_a_stored_frame():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("cat", "chases", "mouse")  # no frame= given
+    assert memory.recall_frame({"subject": "cat", "relation": "chases"}) is None
+
+
+def test_frame_role_none_for_unknown_relation():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple("france", "capital", "paris", frame="x [SUBJECT] y [OBJECT]")
+    assert memory.recall_frame({"subject": "cat", "relation": "chases"}) is None
+
+
+def test_frame_vectors_persist_across_save_load():
+    vsa = VSA(dim=1000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=1000)
+    memory.store_triple(
+        "france", "capital", "paris",
+        frame="The capital of [SUBJECT] is [OBJECT]",
+    )
+    restored = RelationalMemory.from_state(memory.get_state())
+    assert restored.recall_frame(
+        {"subject": "france", "relation": "capital"}
+    ) == "The capital of [SUBJECT] is [OBJECT]"
+
+
+def test_frame_does_not_pollute_entity_decode_candidates():
+    """A frame template string must never show up as a candidate subject/
+    object -- it lives in its own frame_vectors cache, not entity_vectors."""
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+    memory.store_triple(
+        "france", "capital", "paris",
+        frame="The capital of [SUBJECT] is [OBJECT]",
+    )
+    assert "The capital of [SUBJECT] is [OBJECT]" not in encoder.entity_vectors
+    s, r, o = memory.complete({"relation": "capital", "subject": "france"})
+    assert o == "paris"

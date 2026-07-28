@@ -1,15 +1,20 @@
-"""Minimal proposition realiser: phenotype from genotype (Phase 2).
+"""Proposition realiser: phenotype from genotype.
 
-Renders a tuple of propositions into text using a small, fixed set of
-relation -> English templates -- no paraphrasing model. Every subject and
-object string comes straight from a `Proposition`'s fields (which are
-themselves `ConsolidationMemory._normalise`d substrings of the original
-source sentence), so every piece of factual content in the realised text
-is traceable to a source proposition; only grammatical connectives ("is",
-"and", ". ") are synthesized. This intentionally stays this simple through
-Phase 2 -- Phase 4 (deferred, see the response-ecosystem plan) is where a
-learned clause-frame realiser would replace the fixed template table with
-genuine grammatical recombination.
+Phase 2 rendered every relation through a small, fixed table of English
+templates. Phase 4 adds an optional `frame_library` (`frame_extractor.py`):
+when given, a relation's phrasing is drawn from the frames actually
+observed for it (`FrameLibrary.select_frame`), weighted by how often each
+was seen, instead of always using the one fixed template -- "Wombats are
+in Australia" and "The cat sits within the box" produce genuinely
+different clause shapes for the same "in" relation once both have been
+observed, rather than collapsing to one canonical phrasing. Falls back to
+the fixed table when no `frame_library` is given or it has nothing for
+that relation, so every existing caller (`PropositionRealiser.realise(propositions)`,
+with no second argument) keeps working unchanged. Every subject and object
+string still comes straight from a `Proposition`'s fields, so all factual
+content stays traceable to a source proposition regardless of which
+phrasing path rendered it -- only grammatical connectives are synthesized
+or drawn from a previously-observed frame.
 """
 
 from __future__ import annotations
@@ -26,7 +31,10 @@ _RELATION_TEMPLATES = {
 
 class PropositionRealiser:
     @staticmethod
-    def realise(propositions: tuple[Proposition, ...]) -> str:
+    def realise(
+        propositions: tuple[Proposition, ...],
+        frame_library=None,
+    ) -> str:
         if not propositions:
             return ""
         groups: dict[tuple[str, str], list[str]] = {}
@@ -47,12 +55,21 @@ class PropositionRealiser:
                     f"there may be multiple possible answers for {subject}: {objects}"
                 )
                 continue
-            template = _RELATION_TEMPLATES.get(
-                relation, "{subject} {relation} {object}"
+            frame = (
+                frame_library.select_frame(relation)
+                if frame_library is not None else None
             )
-            clauses.append(
-                template.format(subject=subject, relation=relation, object=objects)
-            )
+            if frame is not None:
+                clause = frame.template.replace(
+                    "[SUBJECT]", subject).replace("[OBJECT]", objects)
+            else:
+                template = _RELATION_TEMPLATES.get(
+                    relation, "{subject} {relation} {object}"
+                )
+                clause = template.format(
+                    subject=subject, relation=relation, object=objects
+                )
+            clauses.append(clause)
 
         clauses = [
             clause[:1].upper() + clause[1:] if clause else clause

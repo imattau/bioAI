@@ -16,6 +16,7 @@ from src.text.ecology import (
     extract_propositions,
 )
 from src.text.ecology.organism import ResponseOrganism
+from src.text.ecology.frame_extractor import FrameLibrary
 from src.text.ecology.operators import (
     add_supported_proposition,
     add_uncertainty_qualifier,
@@ -335,3 +336,58 @@ def test_ecosystem_relational_memory_threaded_through_agent():
         "ecological_generation", "abstention", "relational_reasoning",
         "relational_ambiguous",
     )
+
+
+# ── Phase 4: frame-aware realisation ────────────────────────────────────
+
+def test_realiser_uses_observed_frame_when_given_a_library():
+    library = FrameLibrary()
+    library.observe("The cat sits within the box.")  # teaches an "in" frame
+    props = (Proposition("wombats", "in", "australia", 0, "x"),)
+
+    without_library = PropositionRealiser.realise(props)
+    with_library = PropositionRealiser.realise(props, frame_library=library)
+
+    assert "sits within" in with_library.lower()
+    assert "sits within" not in without_library.lower()
+
+
+def test_realiser_falls_back_to_fixed_template_when_library_has_nothing():
+    library = FrameLibrary()  # empty -- nothing observed for "in"
+    props = (Proposition("wombats", "in", "australia", 0, "x"),)
+    assert PropositionRealiser.realise(
+        props, frame_library=library
+    ) == PropositionRealiser.realise(props)
+
+
+def test_ecosystem_frame_library_influences_realised_output():
+    library = FrameLibrary()
+    library.observe("The cat sits within the box.")
+    eco = ResponseEcosystem(max_rounds=4)
+    prompt = "What do you know about wombats?"
+    evidence = ["Wombats are marsupials.", "Wombats are in Australia."]
+    result = eco.generate(prompt, evidence, frame_library=library)
+    assert "sits within" in result.response.lower()
+
+
+def test_agent_learn_conversation_populates_frame_library():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.learn_conversation("Tell me about the box.", "The cat sits within the box.")
+    assert "[SUBJECT] sits within [OBJECT]" in agent.frame_library.frames
+
+
+def test_agent_frame_library_persists_across_save_load():
+    import tempfile
+    from pathlib import Path
+
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.learn_conversation("Tell me about the box.", "The cat sits within the box.")
+    path = Path(tempfile.mktemp(suffix=".pt"))
+    try:
+        agent.save(path)
+        restored = BioAIDialogueAgent.load(path)
+        assert (
+            "[SUBJECT] sits within [OBJECT]" in restored.frame_library.frames
+        )
+    finally:
+        path.unlink(missing_ok=True)

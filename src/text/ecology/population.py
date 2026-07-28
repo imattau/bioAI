@@ -73,8 +73,9 @@ def build_proposition_organism(
     kind: str = "proposition_composition",
     generation: int = 0,
     lineage: tuple[str, ...] = (),
+    frame_library=None,
 ) -> ResponseOrganism:
-    text = PropositionRealiser.realise(propositions)
+    text = PropositionRealiser.realise(propositions, frame_library=frame_library)
     source_ids = tuple(sorted({
         prop.source_id for prop in propositions if prop.source_id >= 0
     }))
@@ -97,6 +98,7 @@ def seed_proposition_population(
     evidence: list[str],
     scorer: SequenceCandidateScorer,
     sequence_ranker=None,
+    frame_library=None,
 ) -> list[ResponseOrganism]:
     """One organism per source: everything a single retrieved memory
     asserted. Cross-source integration isn't pre-seeded -- it emerges
@@ -111,6 +113,7 @@ def seed_proposition_population(
     return [
         build_proposition_organism(
             prompt, tuple(props), evidence, scorer, propositions, sequence_ranker,
+            frame_library=frame_library,
         )
         for props in by_source.values()
     ]

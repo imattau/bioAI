@@ -23,6 +23,7 @@ from src.text.vsa_sequence_ranker import (
     VSASequenceRanker,
 )
 from src.text.ecology import ResponseEcosystem
+from src.text.ecology.frame_extractor import FrameLibrary
 
 
 RELATIONAL_VSA_DIM = 2000
@@ -119,6 +120,13 @@ class BioAIDialogueAgent:
         self.candidate_scorer = SequenceCandidateScorer()
         self.sequence_ranker: VSASequenceRanker | None = None
         self.response_ecosystem: ResponseEcosystem | None = None
+        # Always on (unlike chunk_composer/response_ecosystem): a pure
+        # Python evidence-counting structure with no cost when empty, and
+        # response_ecosystem's frame-aware realisation degrades gracefully
+        # to its fixed template table when it has nothing for a relation
+        # yet -- there's no reason to gate this behind an opt-in flag the
+        # way an LLM-backed or VSA-training component needs to be.
+        self.frame_library = FrameLibrary()
 
     def enable_semantic_retrieval(
         self,
@@ -144,6 +152,7 @@ class BioAIDialogueAgent:
         if self.chunk_composer is None:
             self.enable_chunk_composition()
         self.chunk_composer.learn(prompt, response)
+        self.frame_library.observe(response)
 
     def enable_vsa_sequence_ranking(self, dimension: int = 512):
         self.sequence_ranker = VSASequenceRanker(dimension=dimension)
@@ -802,7 +811,8 @@ class BioAIDialogueAgent:
             ]
             result = self.response_ecosystem.generate(
                 user_input, evidence, self.chunk_composer, self.sequence_ranker,
-                relational_memory=self.relational, fallback=context,
+                relational_memory=self.relational, frame_library=self.frame_library,
+                fallback=context,
             )
             response = result.response
             synthesized = True
@@ -1002,6 +1012,7 @@ class BioAIDialogueAgent:
                 }
                 if self.response_ecosystem is not None else None
             ),
+            "frame_library": self.frame_library.get_state(),
         }
         torch.save(state, path)
 
@@ -1117,6 +1128,9 @@ class BioAIDialogueAgent:
                 max_rounds=ecosystem_state.get("max_rounds", 3),
             )
             if ecosystem_state is not None else None
+        )
+        agent.frame_library = FrameLibrary.from_state(
+            state.get("frame_library", {})
         )
         if agent._monitor_calibrated:
             agent.monitor.calibrated = True

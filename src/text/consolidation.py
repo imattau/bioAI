@@ -33,17 +33,22 @@ class ConsolidationMemory:
     def _normalise(value: str) -> str:
         return " ".join(re.findall(r"[a-z0-9]+", value.lower())).strip()
 
+    # Single source of truth for the subject/object extraction patterns --
+    # also reused, unmodified, by src/text/ecology/frame_extractor.py to
+    # recover the literal matched wording (not just the flattened relation
+    # label) for frame learning. Do not fork a second copy of this tuple.
+    _RELATION_PATTERNS = (
+        (r"^(?:the\s+)?capital\s+of\s+(.+?)\s+is\s+(.+)$", "capital"),
+        (r"^(.+?)\s+is\s+the\s+capital\s+of\s+(.+)$", "capital_of"),
+        (r"^(.+?)\s+(?:is|are)\s+(?:located\s+)?in\s+(.+)$", "in"),
+        (r"^(.+?)\s+(?:lies|sits)\s+(?:within|in)\s+(.+)$", "in"),
+        (r"^(.+?)\s+(?:is|are|was|were)\s+(.+)$", "is"),
+    )
+
     @classmethod
     def extract_relations(cls, text: str) -> list[tuple[str, str, str]]:
         sentence = text.strip().rstrip(".!?")
-        patterns = (
-            (r"^(?:the\s+)?capital\s+of\s+(.+?)\s+is\s+(.+)$", "capital"),
-            (r"^(.+?)\s+is\s+the\s+capital\s+of\s+(.+)$", "capital_of"),
-            (r"^(.+?)\s+(?:is|are)\s+(?:located\s+)?in\s+(.+)$", "in"),
-            (r"^(.+?)\s+(?:lies|sits)\s+(?:within|in)\s+(.+)$", "in"),
-            (r"^(.+?)\s+(?:is|are|was|were)\s+(.+)$", "is"),
-        )
-        for pattern, relation in patterns:
+        for pattern, relation in cls._RELATION_PATTERNS:
             match = re.match(pattern, sentence, flags=re.IGNORECASE)
             if match:
                 subject = cls._normalise(match.group(1))
