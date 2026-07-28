@@ -93,16 +93,30 @@ unconfirmed without reading `detector.py`'s call sites more closely.
 generalized to "which memory to attend to" as an action-selection problem,
 not just motor actions.
 
-**Actual**: `src/basal/actor_critic.py` (`GoNoGoActorCritic`) exists and is
-wired into `BioAIDialogueAgent`, but used narrowly — bandit-style reward
-learning (`tests/test_basal/test_odyssey_arena.py`), not yet the
-relevance-selection role the design assigns it. This session deliberately
-did *not* build the connection from `resolve()`'s multi-step query chain to
-this subsystem (i.e., automatically choosing which additional evidence to
-query next) — that's explicitly this subsystem's job per §3.4, and
-building an ad hoc heuristic instead would pre-empt it. This is a real,
-currently-open seam between §3.2 and §3.4, not a hypothetical one — see
-`RELATIONAL_MEMORY.md` §6 next-step #2.
+**Actual (updated since first written)**: `src/basal/actor_critic.py`
+(`GoNoGoActorCritic`) is now wired into two places, with different
+maturity. (1) `src/basal/relevance.py` (`RelevanceSelector`) wraps it for
+`RelationalMemory.resolve_auto`'s query-chain selection (`RELATIONAL_MEMORY.md`
+§2.7-2.8) — a real "which memory to attend to" role with a genuine
+self-supervised reward (whether a chosen query narrowed the candidate
+pool, read directly from `resolve()`'s own ground-truth-checked
+`informative` flag). (2) `BioAIDialogueAgent.gonogo` itself — previously
+created in `__init__` but never called anywhere, genuinely dead in the
+live pipeline — now makes a real Go/NoGo decision on every general-retrieval
+question turn (`_retrieve_context`), visible as `gonogo_go`/`gonogo_action`
+on the result. Its behavioral influence is gated off by default
+(`gonogo_gate_enabled`) and it only learns from explicit `record_feedback`
+calls, because unlike (1), there's no ambient ground-truth signal for
+"was this general free-text retrieval actually correct" — the agent can't
+determine that on its own, so nothing pretends to learn from ordinary
+conversation without real external supervision.
+
+Still not done: (2) case's `record_feedback` requires an external caller
+(a benchmark harness, a real user correction) — nothing in ordinary
+conversation supplies it automatically, so in typical use gonogo currently
+makes a decision but doesn't yet learn from it. `tests/test_basal/test_odyssey_arena.py`'s
+bandit-style task remains a separate, simpler validation of the same
+underlying actor-critic mechanics.
 
 ### 5. Generation (§3.5 — developmental/NCA)
 

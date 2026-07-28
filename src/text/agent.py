@@ -45,6 +45,18 @@ class BioAIDialogueAgent:
         self.monitor = SelfMonitor(self.hopfield, energy_threshold=3.0)
         self.clonal = ClonalPool(input_dim=vsa_dim, max_modules=50)
         self.gonogo = GoNoGoActorCritic(input_dim=vsa_dim, n_actions=4)
+        self._gonogo_optimizer = torch.optim.AdamW(self.gonogo.parameters(), lr=1e-3)
+        # Off by default: see _retrieve_context / record_feedback. gonogo
+        # computes a real decision every question turn regardless (visible
+        # as gonogo_go/gonogo_action on the result), but there is no
+        # ambient ground-truth signal in ordinary conversation to safely
+        # let an untrained network start overriding the calibrated
+        # threshold rule's accept/reject behavior from turn one -- several
+        # existing tests depend on that rule's deterministic output.
+        # Enabling the gate only makes sense once record_feedback has
+        # actually trained it on real outcomes.
+        self.gonogo_gate_enabled = False
+        self._last_gonogo_decision: dict | None = None
         self.history: list[dict] = []
         self._monitor_calibrated = False
         self.turn_count = 0
@@ -301,6 +313,7 @@ class BioAIDialogueAgent:
             reranked, key=lambda item: item[2], reverse=True
         )[:3]
         if not candidates:
+            self._last_gonogo_decision = None
             return {
                 "accepted": False,
                 "text": "",
@@ -311,16 +324,39 @@ class BioAIDialogueAgent:
         best_id, best_text, best_score = candidates[0]
         second_score = candidates[1][2] if len(candidates) > 1 else -1.0
         margin = best_score - second_score
-        accepted = (
+        heuristic_accepted = (
             best_score >= self._retrieval_threshold
             and margin >= self._retrieval_margin
         )
+
+        # gonogo makes a real Go/NoGo decision every question turn (state =
+        # the query vector) regardless of the gate below -- it's always
+        # exercised, always visible on the result, and always trainable via
+        # record_feedback. Whether it actually CHANGES the outcome is
+        # gated separately (gonogo_gate_enabled): with no ambient
+        # ground-truth signal in ordinary conversation, an untrained
+        # network vetoing turns at random would just be noise, not
+        # learning -- see the comment in __init__.
+        gonogo_action, _ = self.gonogo.act(user_vec)
+        gonogo_go = gonogo_action in (0, 1)
+        self._last_gonogo_decision = {"state": user_vec.detach(), "action": gonogo_action}
+        accepted = heuristic_accepted
+        if self.gonogo_gate_enabled and heuristic_accepted and not gonogo_go:
+            # NoGo can only veto an already-accepted candidate (suppress),
+            # never approve one the threshold rule already rejected --
+            # matches the indirect pathway's suppressive role and bounds
+            # the gate's influence to "more cautious," never "more likely
+            # to hallucinate."
+            accepted = False
+
         return {
             "accepted": accepted,
             "memory_id": best_id if accepted else None,
             "text": best_text if accepted else "",
             "score": best_score,
             "margin": margin,
+            "gonogo_action": gonogo_action,
+            "gonogo_go": gonogo_go,
             "candidates": [
                 {"id": sentence_id, "text": text, "score": score}
                 for sentence_id, text, score in candidates
@@ -688,11 +724,52 @@ class BioAIDialogueAgent:
             "reasoning": retrieval.get("reasoning"),
             "ambiguous": retrieval.get("ambiguous", False),
             "ambiguous_candidates": retrieval.get("ambiguous_candidates", []),
+            "gonogo_go": retrieval.get("gonogo_go"),
+            "gonogo_action": retrieval.get("gonogo_action"),
             "drift_detected": novelty["novel"],
             "energy_z": novelty["energy_z"],
             "clonal_created": novelty["clonal_created"],
             "turn": self.turn_count,
         }
+
+    def record_feedback(self, correct: bool, reward: float | None = None) -> None:
+        """Train gonogo's retrieval accept/reject decision (see
+        _retrieve_context) from EXPLICIT external feedback about the most
+        recent question turn's retrieval -- e.g. a benchmark harness that
+        knows the correct answer, or a real user correction.
+
+        There is no ambient reward signal for this decision in ordinary
+        unsupervised conversation: unlike RelationalMemory.resolve_auto,
+        which can self-supervise from its own ground-truth triple
+        intersection (see RELATIONAL_MEMORY.md SS2.7), whether a general
+        free-text retrieval was actually correct isn't something the agent
+        can determine on its own. So gonogo computes a real decision every
+        question turn (visible as gonogo_go/gonogo_action on process_turn's
+        result) but its weights only change when this is called -- without
+        it, gonogo never learns from ordinary conversation. That's the
+        honest characterization of the current wiring, not a limitation to
+        hide: gonogo_gate_enabled defaults to False for exactly this
+        reason (see __init__), so nothing behavioral changes until this
+        has actually trained it on real outcomes and a caller opts in.
+
+        No-op if the most recent question turn didn't reach a retrieval
+        decision (e.g. it was a statement, or answered via the
+        reasoning/relational paths instead of _retrieve_context).
+        """
+        if self._last_gonogo_decision is None:
+            return
+        reward = reward if reward is not None else (1.0 if correct else -1.0)
+        state = self._last_gonogo_decision["state"]
+        # The actual action sampled during _retrieve_context, not a
+        # re-derived one: act() samples stochastically, so recomputing
+        # (even deterministically) from the same state could give a
+        # different action than the one that actually produced this turn's
+        # observed outcome, misattributing the reward.
+        action = self._last_gonogo_decision["action"]
+        loss = self.gonogo.compute_loss(state, action, reward, next_state=None)
+        self._gonogo_optimizer.zero_grad()
+        loss.backward()
+        self._gonogo_optimizer.step()
 
     def recall(self, query: str) -> str:
         exact = self.library.exact_lookup(query)
@@ -728,6 +805,8 @@ class BioAIDialogueAgent:
             "hash_store": self.hash_store.get_state(),
             "agent_hopfield": self.hopfield.get_state(),
             "clonal": self.clonal.get_state(),
+            "gonogo_state_dict": self.gonogo.state_dict(),
+            "gonogo_gate_enabled": self.gonogo_gate_enabled,
             "decoder": self.decoder.get_state(),
             "history": history,
             "text_index_keys": list(self._text_index.keys()),
@@ -784,6 +863,11 @@ class BioAIDialogueAgent:
         agent.clonal = ClonalPool(input_dim=vsa.dim)
         agent.clonal.set_state(state["clonal"])
         agent.gonogo = GoNoGoActorCritic(input_dim=vsa.dim, n_actions=4)
+        if "gonogo_state_dict" in state:
+            agent.gonogo.load_state_dict(state["gonogo_state_dict"])
+        agent._gonogo_optimizer = torch.optim.AdamW(agent.gonogo.parameters(), lr=1e-3)
+        agent.gonogo_gate_enabled = state.get("gonogo_gate_enabled", False)
+        agent._last_gonogo_decision = None
         agent.history = state["history"]
         agent._text_index = dict(zip(state["text_index_keys"],
                                       state["text_index_values"]))
