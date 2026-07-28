@@ -202,6 +202,63 @@ same way):
   rather than a query with multiple stored matches). Guarded by refusing
   to answer unless the subject was actually ever stored as a subject.
 
+### 2.6 Ground-truth-only candidate display, and compositional entity encoding (`commits 496bcb5`, next)
+
+**Ground-truth-only candidate display (`commit 496bcb5`).** Found via a
+longer multi-turn conversation, not a unit test: `complete_detailed`'s
+top-k candidates are drawn from the whole shared entity-vector namespace
+(every entity ever seen, across every relation), so in a small/young
+vocabulary an unrelated low-score entity from a completely different fact
+could still make the top-k cut — "What is Pluto?" once listed `"france"`
+(from an unrelated capital-city fact) as a plausible answer alongside "a
+planet"/"a dwarf planet". Fixed by building `_answer_relational_query`'s
+`ambiguous_candidates` list from `ground_truth_ambiguity` (the literal
+stored triples) instead of `result.candidates` — ground truth can't
+contain noise, by construction.
+
+**Compositional entity encoding.** A second issue surfaced from the same
+kind of real-usage testing: multi-word entity/object values (e.g. "a
+mammal" extracted from "Cat is a mammal") were encoded as one opaque
+atomic symbol — a single random vector keyed on the whole string. That
+means "a mammal", "mammal", and "the mammal" were completely unrelated
+random vectors with zero similarity, despite meaning the same thing: not
+an ambiguity, a *silent miss* — the mirror image of the collision problem
+the rest of this document is about. Collisions are "too many things
+match, forced to guess"; this was "the two things that obviously match
+don't, because the strings differ."
+
+This is a documented, named problem in the literature — Open Information
+Extraction produces exactly these uncanonicalized noun phrases (see
+[CESI, Vashishth et al. 2018](https://arxiv.org/abs/1902.00172), which
+opens with this exact failure mode for extracted (NP, relation, NP)
+triples) — and `ConsolidationMemory.extract_relations` is structurally a
+small hand-rolled OpenIE extractor, so this isn't a bug specific to this
+codebase's regex choices.
+
+Fix: `RelationalEncoder.entity()` now strips leading stopword articles
+("a"/"an"/"the") and composes multi-word values by *bundling* their
+constituent word vectors (via a shared `token_vectors` cache), rather
+than treating the whole string as one atomic symbol — the standard VSA
+compositional-semantics approach to phrase representation ("bundle word
+vectors for graceful partial similarity" rather than "one random vector
+per exact string"), tracing to the same compositionality argument as
+[Mikolov et al.'s phrase-vector work](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality).
+Measured effect: "a mammal"/"mammal"/"the mammal" now collapse to the
+*same* vector (only "mammal" survives stopword stripping); "a dwarf
+planet"/"a planet" get partial similarity (~0.7, sharing "planet");
+unrelated concepts stay near-orthogonal (<0.1). A fact stored as "Cat is
+a mammal" is now retrievable by a query phrased as "mammal" with full
+confidence, not a silent miss.
+
+This only changes vector-similarity-based retrieval (`complete_detailed`,
+`resolve()`'s VSA fallback) — `ground_truth_ambiguity`'s exact-string
+matching is deliberately untouched (it's the "no guessing" authoritative
+signal throughout this document, and paraphrase-matching would undermine
+that guarantee), and `token_vectors` is persisted alongside
+`entity_vectors`/`relation_vectors` so new entities created after a
+save/load round trip still compose consistently with pre-existing ones
+that share words.
+
 ## 3. Comparison against `ConsolidationMemory` (empirically tested)
 
 `src/text/agent.py`'s actual live relational reasoning today is

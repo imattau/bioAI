@@ -52,6 +52,12 @@ ROLE_NAMES = TARGET_ROLES  # backward-compatible alias
 # completion is flagged as ambiguous rather than confidently decoded.
 DEFAULT_AMBIGUITY_MARGIN = 0.1
 
+# Stripped before composing a multi-word entity vector: these carry no
+# distinguishing content and would otherwise correlate every entity that
+# happens to use one ("a mammal", "a dwarf planet", ...) via a shared
+# meaningless component. See RELATIONAL_MEMORY.md SS2.6.
+_ENTITY_STOPWORDS = frozenset({"a", "an", "the"})
+
 
 class RelationalEncoder:
     """Encode relational triples (plus optional context roles) as VSA vectors."""
@@ -61,6 +67,7 @@ class RelationalEncoder:
         self.role_vectors: dict[str, torch.Tensor] = {}
         self.entity_vectors: dict[str, torch.Tensor] = {}
         self.relation_vectors: dict[str, torch.Tensor] = {}
+        self.token_vectors: dict[str, torch.Tensor] = {}
         for name in TARGET_ROLES:
             self.role(name)
 
@@ -70,9 +77,38 @@ class RelationalEncoder:
             self.role_vectors[name] = self.vsa.make_vector()
         return self.role_vectors[name]
 
+    def token(self, word: str) -> torch.Tensor:
+        """Lazily create the vector for a single word, shared across every
+        entity value that contains it."""
+        if word not in self.token_vectors:
+            self.token_vectors[word] = self.vsa.make_vector()
+        return self.token_vectors[word]
+
     def entity(self, name: str) -> torch.Tensor:
+        """Compose a multi-word entity value from its constituent word
+        vectors (bundled), rather than treating the whole string as one
+        opaque atomic symbol.
+
+        This matters for exactly the failure mode Open KB canonicalization
+        research documents (see CESI, Vashishth et al. 2018): "a mammal",
+        "mammal", and "the mammal" extracted from slightly different
+        phrasings would otherwise be completely unrelated random vectors —
+        a silent miss, not even an ambiguity, since they'd share zero
+        similarity despite meaning the same thing. Bundling constituent
+        word vectors gives them graceful partial similarity instead (the
+        same effect VSA compositional-semantics literature gets from
+        bundling for phrase representation), while a single word still
+        gets a plain vector (bundle of one token, not an entity-level
+        composite) so single-word entities are unaffected.
+        """
         if name not in self.entity_vectors:
-            self.entity_vectors[name] = self.vsa.make_vector()
+            words = [w for w in name.split() if w not in _ENTITY_STOPWORDS]
+            if not words:
+                words = name.split() or [name]
+            self.entity_vectors[name] = (
+                self.vsa.bundle([self.token(w) for w in words])
+                if len(words) > 1 else self.token(words[0])
+            )
         return self.entity_vectors[name]
 
     def relation(self, name: str) -> torch.Tensor:
@@ -174,6 +210,7 @@ class RelationalEncoder:
             "role_vectors": {k: v.to(torch.float16) for k, v in self.role_vectors.items()},
             "entity_vectors": {k: v.to(torch.float16) for k, v in self.entity_vectors.items()},
             "relation_vectors": {k: v.to(torch.float16) for k, v in self.relation_vectors.items()},
+            "token_vectors": {k: v.to(torch.float16) for k, v in self.token_vectors.items()},
         }
 
     @classmethod
@@ -183,6 +220,14 @@ class RelationalEncoder:
         encoder.role_vectors = {k: v.to(torch.float32) for k, v in state["role_vectors"].items()}
         encoder.entity_vectors = {k: v.to(torch.float32) for k, v in state["entity_vectors"].items()}
         encoder.relation_vectors = {k: v.to(torch.float32) for k, v in state["relation_vectors"].items()}
+        # Older saves predate token-level composition (RELATIONAL_MEMORY.md
+        # SS2.6) and won't have this key — fine, entity_vectors already holds
+        # the fully-composed vectors for everything stored before that
+        # point; only NEW entities created after restore need token_vectors
+        # to stay consistent with tokens shared by pre-existing entities.
+        encoder.token_vectors = {
+            k: v.to(torch.float32) for k, v in state.get("token_vectors", {}).items()
+        }
         return encoder
 
 

@@ -335,3 +335,51 @@ def test_persistence_round_trip():
     restored.store_triple("fox", "fears", "water")
     result = restored.complete_detailed({"subject": "fox", "relation": "fears"})
     assert result.best == "water"
+
+
+def test_multiword_entities_compose_from_shared_words():
+    """Different phrasings of the same underlying value ('a mammal' vs
+    'mammal' vs 'the mammal') must share strong similarity instead of being
+    unrelated random vectors -- otherwise a query phrased slightly
+    differently from how a fact was originally stored silently fails to
+    match at all, rather than even reaching 'ambiguous'. See
+    RELATIONAL_MEMORY.md SS2.6.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+
+    a_mammal = encoder.entity("a mammal")
+    mammal = encoder.entity("mammal")
+    the_mammal = encoder.entity("the mammal")
+    reptile = encoder.entity("a reptile")
+
+    # Stripping "a"/"the" leaves only "mammal" in all three -- they should
+    # be identical, not just similar.
+    assert vsa.similarity(a_mammal, mammal).item() > 0.99
+    assert vsa.similarity(the_mammal, mammal).item() > 0.99
+
+    # Genuinely different concepts must still be near-orthogonal.
+    assert vsa.similarity(a_mammal, reptile).item() < 0.1
+
+    # Partial overlap ("a dwarf planet" shares "planet" with "a planet")
+    # gives partial, not full or zero, similarity.
+    dwarf_planet = encoder.entity("a dwarf planet")
+    planet = encoder.entity("a planet")
+    sim = vsa.similarity(dwarf_planet, planet).item()
+    assert 0.3 < sim < 0.9
+
+
+def test_query_phrasing_mismatch_still_retrieves():
+    """The motivating case: a fact stored with an article, queried without
+    one, must still retrieve confidently -- before compositional entity
+    encoding this would have been a silent miss (near-zero similarity to
+    an unrelated random vector), not even reaching 'ambiguous'.
+    """
+    vsa = VSA(dim=2000)
+    memory = RelationalMemory(RelationalEncoder(vsa), dim=2000)
+    memory.store_triple("cat", "is", "a mammal")
+    memory.store_triple("dog", "is", "a reptile")
+
+    result = memory.complete_detailed({"relation": "is", "object": "mammal"}, top_k=3)
+    assert result.best == "cat"
+    assert not result.ambiguous
