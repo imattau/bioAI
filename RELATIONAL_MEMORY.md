@@ -133,6 +133,75 @@ Design decisions, and why:
   after relational reasoning is solid — building an ad hoc relevance
   heuristic here would jump that sequencing.
 
+**Update (`commit 1099002`) — ground-truth-exact final answer.**
+`final_candidates`/`resolved` now prefer an exact intersection of the
+literal stored triples over the per-step top-k VSA intersection above,
+whenever every step in the chain has at least one ground-truth match —
+the same principle `ambiguous` already applies in `complete_detailed`,
+extended to the multi-step case. This was found via genuine
+nondeterminism while wiring `resolve()` into real usage (§2.5), not just
+theory: `top_k` truncates each step's candidate list, so a real candidate
+could be silently dropped from the approximate intersection by chance
+even when the exact combination was uniquely recorded in memory. The
+ground-truth intersection mirrors the same contradiction-preserving rule
+(a conflicting step is skipped rather than collapsing prior progress to
+nothing), implemented as `_ground_truth_intersection`.
+
+### 2.5 Persistence, and wiring into `BioAIDialogueAgent` (`commits 1099002`, `f69fd5f`)
+
+**Persistence.** `RelationalEncoder`/`RelationalMemory` gained
+`get_state`/`from_state`, closing next-step #3 below. Stored as float16
+(matching the convention already used for `VSAEncoder`'s
+`word_cache`/`pos_vectors`), and `AssociativeStore` isn't persisted
+redundantly — it only backs `exact_lookup` (a diagnostic helper, not used
+by `complete_detailed`/`resolve`), so it's rebuilt from `triples` on load
+instead of doubling the save size.
+
+**Wiring.** `BioAIDialogueAgent.relational` is fed in parallel with
+`ConsolidationMemory` from the same `extract_relations()` output in
+`_store_turn`, using its own VSA independent of `vsa_dim` (which is
+sometimes set very small, e.g. 64, for the bag-of-words text
+encoder/novelty-detection path — reliable VSA bind/unbind needs real
+dimensionality). `process_turn`'s question branch tries
+`_answer_relational_query` before falling back to ordinary retrieval:
+
+- Single-relation questions ("what is X's Y") use `complete_detailed`
+  directly.
+- Multi-clue identity questions ("who is X and is Y") use `resolve()` to
+  intersect independent evidence about the same unknown subject — the one
+  question shape that actually fits `resolve()`'s design. "What is X's Y"
+  doesn't fit it at all: there the tied candidates are alternative values
+  of *one* (subject, relation) pair, not one entity's membership across
+  *several* different relations, so no second query targeting the same
+  missing role naturally exists for that shape.
+- Genuine ambiguity is surfaced honestly ("it could be X or Y — I don't
+  have enough information to be sure") instead of guessed, with
+  `ambiguous`/`ambiguous_candidates` now on `process_turn`'s return dict
+  and a `relational_reasoning`/`relational_ambiguous` `response_mode`.
+
+**Two correctness issues found by wiring this into real usage, not just
+isolated tests** (the whole reason to do this wiring rather than stop at
+§2.4 — see also the ground-truth-exact `resolve()` fix above, found the
+same way):
+
+- **Provenance must never be bound as VSA context.** A context role
+  shares the entity-vector namespace used for decode candidates *by
+  design* (§2.3's point about safe cross-role vocabulary sharing) — but
+  binding a sentence-id string in as `context` leaked raw id strings into
+  subject/object candidate lists. Fixed by tracking source ids as plain
+  agent-level metadata (`_relational_sources`) instead of VSA context,
+  persisted separately.
+- **"Who is X" is genuinely ambiguous** between "describe X" (X is the
+  subject) and "which entity has property X" (X is a value some subject
+  has) — `ConsolidationMemory.parse_relation_query` always takes the
+  former reading. A property phrase like "a mammal" landing there as a
+  literal, never-asserted subject would otherwise get a soft Hopfield
+  nearest-match guess instead of an honest "I don't know" — the same
+  false-confidence failure mode §2.2 exists to prevent, just via a
+  different route (a query for a subject that was never stored at all,
+  rather than a query with multiple stored matches). Guarded by refusing
+  to answer unless the subject was actually ever stored as a subject.
+
 ## 3. Comparison against `ConsolidationMemory` (empirically tested)
 
 `src/text/agent.py`'s actual live relational reasoning today is
@@ -165,12 +234,14 @@ intuition. Result:
     `capital_of → in` through an intermediate unknown; `resolve()` only
     intersects independent evidence about *one* unknown — there is no
     unknown-chaining mechanism in `RelationalMemory` at all.
-- **Not available at all:** persistence (already tracked as next-step #3
-  below, confirmed here directly via `hasattr`).
+- **Was not available at all, now closed (§2.5):** persistence — confirmed
+  at the time via `hasattr`; `tests/test_vsa/test_relational_vs_consolidation.py::test_persistence_now_available`
+  verifies the round trip now that `get_state`/`from_state` exist.
 
 Conclusion: `ConsolidationMemory` cannot be removed yet. Its relational half
-is a real candidate for eventual retirement, but only after the two gaps
-above are closed — see §5 for the research pointing at how.
+is a real candidate for eventual retirement, but only after the two
+remaining gaps above (evidence weighting, transitive chaining) are closed —
+see §5 for the research pointing at how.
 
 ## 4. What this does and doesn't solve
 
@@ -254,14 +325,16 @@ rather than VSA/HDC in general. Each item ties to a §6 next step.
 
 ## 6. Next possible steps
 
-Roughly in order of how directly they extend what's already built:
+Roughly in order of how directly they extend what's already built. Items 1
+and 3 are done (§2.5) — kept numbered in place rather than renumbered, since
+§5's research citations reference these numbers directly (e.g. "next-step
+#2", "next-step #8").
 
-1. **Wire `resolve()` into the actual dialogue/generation pipeline**
-   (`src/text/agent.py`). Right now it's only exercised in isolation and via
-   tests — the natural next step is having the agent actually issue a
-   follow-up query when `complete_detailed`/`decode` comes back ambiguous,
-   using whatever else is already known in the conversation as the second
-   `resolve()` step, instead of just picking `complete()`'s single guess.
+1. ~~Wire `resolve()` into the actual dialogue/generation pipeline~~ —
+   **done, §2.5.** `_answer_relational_query` in `src/text/agent.py` now
+   uses `resolve()` for multi-clue identity questions and
+   `complete_detailed` for single-relation ones, surfacing ambiguity
+   honestly instead of guessing.
 2. **Automatic relevance selection for `resolve()`'s query chain** — the
    basal-ganglia piece deliberately deferred in §2.4. `src/basal/` already
    has a Go/NoGo actor-critic; the natural extension is treating "which
@@ -270,13 +343,11 @@ Roughly in order of how directly they extend what's already built:
    `ARCHITECTURE.md` §3.4's own framing. Per §5, this is also the natural
    home for transitive-chaining edge-selection (MINERVA-style), not a
    separate mechanism.
-3. **Persistence for `RelationalMemory`.** Unlike `HopfieldNet` /
-   `BioAIDialogueAgent`, `RelationalEncoder`/`RelationalMemory` currently have
-   no `get_state`/`from_state` (or `set_state` for the per-relation nets) —
-   a save/load round trip would need to serialize `role_vectors`,
-   `entity_vectors`, `relation_vectors`, and each relation's `HopfieldNet`
-   patterns (see `src/vsa/hopfield.py`'s `set_state`, which itself needed a
-   fix this session for exactly this kind of gap).
+3. ~~Persistence for `RelationalMemory`~~ — **done, §2.5.**
+   `RelationalEncoder`/`RelationalMemory.get_state`/`from_state` serialize
+   `role_vectors`/`entity_vectors`/`relation_vectors` and each relation's
+   `HopfieldNet` patterns (float16), and `BioAIDialogueAgent.save`/`load`
+   persist `self.relational` and `self._relational_sources`.
 4. **Evidence-count weighting** (§3/§5). Replace naive duplicate-vector
    storage with explicit weighted bundling — a known VSA technique, not a
    research gap — so repeated claims reliably outrank single conflicting
