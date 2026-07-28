@@ -247,6 +247,40 @@ class BioAIDialogueAgent:
             text.endswith("?") or text.startswith(question_starters)
         ) else "statement"
 
+    # First-word + short-length heuristic, not exact-phrase matching: an
+    # earlier version required the WHOLE normalised message to exactly
+    # equal one of a handful of canonical phrases, which broke on anything
+    # combining two of them ("Yes, that's correct." normalises to "yes that
+    # s correct", which isn't equal to either "yes" or "that s correct" on
+    # its own). Matching on the first word plus a length cap is more
+    # forgiving of real phrasing while still bounding the false-positive
+    # risk: a short reply starting with "no" (e.g. "No thanks") right after
+    # a retrieval-based answer could be misread as a correction -- a real,
+    # disclosed limitation of a heuristic detector, not a hidden one, and
+    # only reachable in the narrow window right after such an answer (see
+    # process_turn's turn-number check).
+    _POSITIVE_FEEDBACK_STARTS = frozenset({
+        "yes", "yep", "yeah", "correct", "exactly", "right", "perfect", "good",
+    })
+    _NEGATIVE_FEEDBACK_STARTS = frozenset({
+        "no", "nope", "wrong", "incorrect",
+    })
+    _MAX_FEEDBACK_WORDS = 5
+
+    @classmethod
+    def _detect_feedback_signal(cls, text: str) -> bool | None:
+        """True/False for a short confirmation/correction utterance, None
+        if `text` isn't feedback-shaped at all (the common case -- an
+        ordinary new statement or question)."""
+        words = ConsolidationMemory._normalise(text).split()
+        if not words or len(words) > cls._MAX_FEEDBACK_WORDS:
+            return None
+        if words[0] in cls._POSITIVE_FEEDBACK_STARTS:
+            return True
+        if words[0] in cls._NEGATIVE_FEEDBACK_STARTS:
+            return False
+        return None
+
     @staticmethod
     def _content_words(text: str) -> set[str]:
         stop_words = {
@@ -371,7 +405,10 @@ class BioAIDialogueAgent:
         else:
             gonogo_action, _ = self.gonogo.act(gonogo_state)
         gonogo_go = gonogo_action in (0, 1)
-        self._last_gonogo_decision = {"state": gonogo_state.detach(), "action": gonogo_action}
+        self._last_gonogo_decision = {
+            "state": gonogo_state.detach(), "action": gonogo_action,
+            "turn": self.turn_count,
+        }
         accepted = heuristic_accepted
         if self.gonogo_gate_enabled and heuristic_accepted and not gonogo_go:
             # NoGo can only veto an already-accepted candidate (suppress),
@@ -622,7 +659,71 @@ class BioAIDialogueAgent:
             sorted({obj for _, _, obj in ground_truth})
         )
 
+    def _handle_feedback_turn(self, user_input: str, positive: bool) -> dict:
+        """Consume a live confirmation/correction turn: train gonogo via
+        record_feedback and respond with an acknowledgement instead of
+        processing this as a new statement or question. Doesn't touch
+        long-term memory (nothing factual was actually asserted) and
+        consumes _last_gonogo_decision so a second feedback-shaped message
+        in a row (with no new retrieval-based question in between) falls
+        through to ordinary handling instead of being misapplied again.
+        """
+        self.turn_count += 1
+        self.record_feedback(correct=positive)
+        self._last_gonogo_decision = None
+        self.history.append({
+            "turn": self.turn_count,
+            "user": user_input,
+            "user_vec": self.encoder.encode(user_input),
+            "long_term": False,
+        })
+        response = (
+            "Thanks, I'll keep that in mind."
+            if positive else
+            "Thanks for the correction — I'll learn from that."
+        )
+        return {
+            "response": response,
+            "response_generated": False,
+            "response_mode": "feedback_acknowledged",
+            "sources": [],
+            "intent": "feedback",
+            "retrieval_accepted": False,
+            "retrieval_score": 0.0,
+            "retrieval_margin": 0.0,
+            "retrieval_candidates": [],
+            "reasoning": None,
+            "ambiguous": False,
+            "ambiguous_candidates": [],
+            "gonogo_go": None,
+            "gonogo_action": None,
+            "drift_detected": False,
+            "energy_z": 0.0,
+            "clonal_created": False,
+            "turn": self.turn_count,
+        }
+
     def process_turn(self, user_input: str, ctx_cache: bool = True) -> dict:
+        # Live feedback loop: a short confirmation/correction directly
+        # following a general-retrieval question turn trains gonogo via
+        # record_feedback, using the user's own next message as the reward
+        # signal -- the only genuinely non-fabricated source of "was that
+        # correct" available in ordinary conversation (see record_feedback's
+        # docstring on why nothing else qualifies). Checked before
+        # incrementing turn_count: the comparison is against the turn number
+        # _retrieve_context tagged its decision with, i.e. "the turn that
+        # just happened," not the one about to start. Requires the decision
+        # to be from the IMMEDIATELY preceding turn, not an arbitrary
+        # earlier one -- feedback several turns later is ambiguous about
+        # what it's even referring to.
+        feedback_signal = self._detect_feedback_signal(user_input)
+        if (
+            feedback_signal is not None
+            and self._last_gonogo_decision is not None
+            and self._last_gonogo_decision.get("turn") == self.turn_count
+        ):
+            return self._handle_feedback_turn(user_input, feedback_signal)
+
         self.turn_count += 1
         user_vec = self.encoder.encode(user_input)
         intent = self._infer_intent(user_input)

@@ -3,10 +3,15 @@
 Previously self.gonogo was created but never called anywhere in the live
 per-turn pipeline. It now makes a real Go/NoGo decision on every question
 turn that reaches _retrieve_context, but only actually changes behavior
-when gonogo_gate_enabled is explicitly turned on, and only learns from
-explicit record_feedback calls -- there's no ambient ground-truth signal
-in ordinary conversation to train it from safely. See the docstrings in
-src/text/agent.py (__init__, _retrieve_context, record_feedback).
+when gonogo_gate_enabled is explicitly turned on. Training requires
+record_feedback -- there's no ambient ground-truth signal in ordinary
+conversation, EXCEPT for one genuinely non-fabricated source: the user's
+own next message, when it's a short confirmation/correction directly
+following a retrieval-based answer. process_turn now detects that pattern
+live (_detect_feedback_signal) and calls record_feedback automatically --
+this file's second half tests that path. See the docstrings in
+src/text/agent.py (__init__, _retrieve_context, record_feedback,
+_detect_feedback_signal, _handle_feedback_turn).
 """
 
 import tempfile
@@ -173,3 +178,90 @@ def test_gonogo_axes_reproducible_across_save_load():
         assert torch.equal(agent._gonogo_margin_axis, restored._gonogo_margin_axis)
     finally:
         path.unlink(missing_ok=True)
+
+
+# ── Live conversational feedback loop ───────────────────────────────────
+
+def _weather_qa(agent):
+    agent.process_turn("The weather today is unusually cold for this time of year.")
+    return agent.process_turn("What is the weather like today?")
+
+
+def test_positive_feedback_after_retrieval_trains_gonogo():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    before = {name: p.clone() for name, p in agent.gonogo.named_parameters()}
+    _weather_qa(agent)
+    result = agent.process_turn("Yes, that's correct.")
+
+    assert result["response_mode"] == "feedback_acknowledged"
+    changed = any(
+        not p.equal(before[name]) for name, p in agent.gonogo.named_parameters()
+    )
+    assert changed
+
+
+def test_negative_feedback_after_retrieval_trains_gonogo():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    before = {name: p.clone() for name, p in agent.gonogo.named_parameters()}
+    _weather_qa(agent)
+    result = agent.process_turn("No, that's wrong.")
+
+    assert result["response_mode"] == "feedback_acknowledged"
+    changed = any(
+        not p.equal(before[name]) for name, p in agent.gonogo.named_parameters()
+    )
+    assert changed
+
+
+def test_feedback_turn_is_not_stored_as_a_fact():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    _weather_qa(agent)
+    library_size_before = len(agent.library)
+    agent.process_turn("Yes, that's correct.")
+
+    assert len(agent.library) == library_size_before
+    assert agent.history[-1]["long_term"] is False
+
+
+def test_feedback_phrase_without_prior_retrieval_falls_through_normally():
+    """A feedback-shaped message with no pending gonogo decision (e.g. the
+    very first turn) isn't feedback about anything -- it must be handled
+    as an ordinary statement instead of silently discarded.
+    """
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    result = agent.process_turn("Yes, that's correct.")
+    assert result["response_mode"] != "feedback_acknowledged"
+
+
+def test_feedback_does_not_apply_across_an_intervening_turn():
+    """Feedback only applies directly after the retrieval-based question it
+    refers to -- an unrelated turn in between breaks that link, since it's
+    ambiguous what a later "yes" would even be confirming.
+    """
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    _weather_qa(agent)
+    agent.process_turn("Cats are mammals.")  # unrelated turn in between
+    result = agent.process_turn("Yes, that's correct.")
+    assert result["response_mode"] != "feedback_acknowledged"
+
+
+def test_feedback_consumed_only_once():
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    _weather_qa(agent)
+    first = agent.process_turn("Yes, that's correct.")
+    second = agent.process_turn("Yes, that's correct.")
+    assert first["response_mode"] == "feedback_acknowledged"
+    assert second["response_mode"] != "feedback_acknowledged"
+
+
+def test_detect_feedback_signal_examples():
+    agent = BioAIDialogueAgent(vsa_dim=32)
+    assert agent._detect_feedback_signal("Yes, that's correct.") is True
+    assert agent._detect_feedback_signal("yeah exactly") is True
+    assert agent._detect_feedback_signal("No, that's wrong.") is False
+    assert agent._detect_feedback_signal("nope incorrect") is False
+    # Ordinary content, including short sentences, must not be misread.
+    assert agent._detect_feedback_signal("What is the capital of France?") is None
+    assert agent._detect_feedback_signal(
+        "No dogs are allowed in the park after dark."
+    ) is None

@@ -111,12 +111,9 @@ calls, because unlike (1), there's no ambient ground-truth signal for
 determine that on its own, so nothing pretends to learn from ordinary
 conversation without real external supervision.
 
-Still not done: (2) case's `record_feedback` requires an external caller
-(a benchmark harness, a real user correction) — nothing in ordinary
-conversation supplies it automatically, so in typical use gonogo currently
-makes a decision but doesn't yet learn from it. `tests/test_basal/test_odyssey_arena.py`'s
-bandit-style task remains a separate, simpler validation of the same
-underlying actor-critic mechanics.
+`tests/test_basal/test_odyssey_arena.py`'s bandit-style task remains a
+separate, simpler validation of the same underlying actor-critic
+mechanics.
 
 **`experiments/gonogo_feedback_benchmark.py`** is that external caller,
 and it found two real bugs in the (2) wiring by actually training it,
@@ -145,6 +142,26 @@ hyperparameter tuning attempted. Both fixes were necessary and are
 confirmed correct in isolation (regression tests in
 `tests/test_text/test_gonogo_wiring.py`); full convergence at practical
 scenario counts is an open question, not yet resolved.
+
+**`record_feedback` is now also wired into the live conversation loop
+itself**, not just external benchmark callers: `process_turn` detects a
+short confirmation ("yes", "that's correct") or correction ("no", "that's
+wrong") directly following a general-retrieval question turn
+(`_detect_feedback_signal`) and calls `record_feedback` automatically,
+using the user's own next message as the reward — the one source of
+feedback in ordinary conversation that isn't fabricated, unlike trying to
+invent a proxy signal from the retrieval's own internals. Bounded
+deliberately: only applies when the feedback-shaped message is the
+*immediately* following turn (an intervening unrelated turn breaks the
+link, since a later "yes" is ambiguous about what it confirms), and the
+detector is a first-word-plus-length heuristic, not real natural-language
+understanding — a short reply starting with "no" for an unrelated reason
+right after such an answer (e.g. "No thanks") could be misread as a
+correction. That's a real, disclosed limitation of a heuristic detector,
+not a hidden one. The behavioral gate (`gonogo_gate_enabled`) is still off
+by default regardless — this wiring makes gonogo *learn* continuously from
+real conversation, it doesn't by itself make gonogo's decisions start
+mattering.
 
 ### 5. Generation (§3.5 — developmental/NCA)
 
