@@ -802,7 +802,7 @@ class BioAIDialogueAgent:
             ]
             result = self.response_ecosystem.generate(
                 user_input, evidence, self.chunk_composer, self.sequence_ranker,
-                fallback=context,
+                relational_memory=self.relational, fallback=context,
             )
             response = result.response
             synthesized = True

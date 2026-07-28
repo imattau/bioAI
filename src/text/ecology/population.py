@@ -1,24 +1,32 @@
 """Seed and prune a bounded response-organism population.
 
-Phase 1 seeds directly from `FixedSpliceCandidateGenerator`'s existing
-output and only selects among those candidates across a few rounds -- no
-new organism is synthesized (see `organism.py`/`niches.py` and the
-response-ecosystem plan's Phase 1 scope).
+Phase 1 seeds from `FixedSpliceCandidateGenerator`'s existing output and
+only selects among those candidates (no propositions). Phase 2 adds
+`seed_proposition_population` (one organism per source's extracted
+propositions) and `build_proposition_organism`, the shared "realise, score,
+assign niche" step used both for initial proposition seeds and for every
+new organism `ecosystem.py`'s succession loop produces via
+`operators.py`'s mutation/recombination.
 """
 
 from __future__ import annotations
 
 from src.text.response_candidates import SequenceCandidateScorer
 
-from .niches import LEARNED_RANK_FEATURE, NICHES
+from .fitness import score_organism
+from .niches import NICHES
 from .organism import ResponseOrganism
+from .proposition_extractor import Proposition
+from .realiser import PropositionRealiser
 
 
 def _token_count(text: str) -> int:
     return len(SequenceCandidateScorer._tokens(text))
 
 
-def _best_fit_niche(feature_values: dict[str, float], token_count: int) -> tuple[str, float]:
+def _best_fit_niche(
+    feature_values: dict[str, float], token_count: int
+) -> tuple[str, float]:
     best_name, best_score = None, float("-inf")
     for name, niche in NICHES.items():
         score = niche.score(feature_values, token_count)
@@ -40,25 +48,72 @@ def seed_population(
     candidate -- that would collapse every organism into one niche)."""
     population = []
     for candidate in candidates:
-        features = scorer.features(prompt, candidate, evidence)
-        fitness = dict(zip(SequenceCandidateScorer.FEATURE_NAMES, features))
-        if sequence_ranker is not None and sequence_ranker.updates > 0:
-            fitness[LEARNED_RANK_FEATURE] = sequence_ranker.score(
-                prompt, candidate, evidence
-            )
-        else:
-            fitness[LEARNED_RANK_FEATURE] = 0.0
-        token_count = _token_count(candidate["text"])
-        niche_name, niche_score = _best_fit_niche(fitness, token_count)
+        text = candidate["text"]
+        source_ids = tuple(candidate.get("source_ids", ()))
+        fitness = score_organism(
+            prompt, text, candidate.get("kind", "unknown"), source_ids,
+            (), evidence, [], scorer, sequence_ranker,
+        )
+        niche_name, niche_score = _best_fit_niche(fitness, _token_count(text))
         fitness["niche_score"] = niche_score
         population.append(ResponseOrganism(
-            text=candidate["text"],
-            kind=candidate.get("kind", "unknown"),
-            source_ids=tuple(candidate.get("source_ids", ())),
-            niche=niche_name,
-            fitness=fitness,
+            text=text, kind=candidate.get("kind", "unknown"),
+            source_ids=source_ids, niche=niche_name, fitness=fitness,
         ))
     return population
+
+
+def build_proposition_organism(
+    prompt: str,
+    propositions: tuple[Proposition, ...],
+    evidence: list[str],
+    scorer: SequenceCandidateScorer,
+    all_propositions: list[Proposition],
+    sequence_ranker=None,
+    kind: str = "proposition_composition",
+    generation: int = 0,
+    lineage: tuple[str, ...] = (),
+) -> ResponseOrganism:
+    text = PropositionRealiser.realise(propositions)
+    source_ids = tuple(sorted({
+        prop.source_id for prop in propositions if prop.source_id >= 0
+    }))
+    fitness = score_organism(
+        prompt, text, kind, source_ids, propositions, evidence,
+        all_propositions, scorer, sequence_ranker,
+    )
+    niche_name, niche_score = _best_fit_niche(fitness, _token_count(text))
+    fitness["niche_score"] = niche_score
+    return ResponseOrganism(
+        text=text, kind=kind, source_ids=source_ids, niche=niche_name,
+        generation=generation, lineage=lineage, propositions=propositions,
+        fitness=fitness,
+    )
+
+
+def seed_proposition_population(
+    prompt: str,
+    propositions: list[Proposition],
+    evidence: list[str],
+    scorer: SequenceCandidateScorer,
+    sequence_ranker=None,
+) -> list[ResponseOrganism]:
+    """One organism per source: everything a single retrieved memory
+    asserted. Cross-source integration isn't pre-seeded -- it emerges
+    through `operators.recombine` during succession instead, which is a
+    more honest demonstration of real synthesis than pre-building an
+    "integrative" seed by hand."""
+    if not propositions:
+        return []
+    by_source: dict[int, list[Proposition]] = {}
+    for prop in propositions:
+        by_source.setdefault(prop.source_id, []).append(prop)
+    return [
+        build_proposition_organism(
+            prompt, tuple(props), evidence, scorer, propositions, sequence_ranker,
+        )
+        for props in by_source.values()
+    ]
 
 
 def select_survivors(
@@ -76,3 +131,17 @@ def select_survivors(
         )
         survivors.extend(members[:survivors_per_niche])
     return survivors
+
+
+def deduplicate_population(
+    population: list[ResponseOrganism],
+) -> list[ResponseOrganism]:
+    seen: set[str] = set()
+    unique = []
+    for organism in population:
+        key = " ".join(organism.text.split()).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(organism)
+    return unique

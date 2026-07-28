@@ -1,16 +1,17 @@
 """Functional niches for the response ecosystem.
 
-Each niche is a different answer *shape* preference, expressed purely as a
+Each niche is a different answer *shape* preference, expressed as a
 weighting over `SequenceCandidateScorer`'s existing named features
-(`response_candidates.py`) plus a length-based bonus -- no new feature
-extraction, per the response-ecosystem plan's Phase 1 scope.
+(`response_candidates.py`), Phase 2's proposition-level fitness terms
+(`coverage`, `grounding`, `contradiction`, `uncertainty_expressed` --
+see `fitness.py`), plus a length-based bonus.
 
-`cautious` is the one niche whose real job (preserving/expressing
-uncertainty) needs an uncertainty-qualifier mutation operator that doesn't
-exist until Phase 2 -- Phase 1 can only *select* among candidates the
-existing generator already produces, none of which hedge. Its weights here
-are an honest approximation (favor evidence coverage without committing to
-one dominant source) rather than a claim that it expresses real caution.
+`cautious`'s weight on `uncertainty_expressed` is the honest resolution of
+a gap disclosed in Phase 1: that niche could only *select* among
+candidates the generator already produced, none of which hedge. Phase 2's
+`add_uncertainty_qualifier` mutation actually produces a hedging variant
+when `RelationalMemory.ground_truth_ambiguity` shows a genuine collision,
+and this weight is what makes `cautious` prefer it once it exists.
 """
 
 from __future__ import annotations
@@ -20,7 +21,14 @@ from dataclasses import dataclass
 from src.text.response_candidates import SequenceCandidateScorer
 
 LEARNED_RANK_FEATURE = "learned_rank"
-FEATURE_NAMES = SequenceCandidateScorer.FEATURE_NAMES + (LEARNED_RANK_FEATURE,)
+PROPOSITION_FEATURES = (
+    "coverage", "grounding", "contradiction", "uncertainty_expressed",
+)
+FEATURE_NAMES = (
+    SequenceCandidateScorer.FEATURE_NAMES
+    + (LEARNED_RANK_FEATURE,)
+    + PROPOSITION_FEATURES
+)
 
 
 @dataclass(frozen=True)
@@ -52,12 +60,13 @@ NICHES: dict[str, Niche] = {
     "direct": Niche(
         name="direct",
         feature_weights={
-            "query_overlap": 1.0, "evidence_coverage": 0.3, "single_source": 1.0,
-            "complete_response": 0.4, "retrieval_priority": 0.8,
+            "query_overlap": 1.0, "evidence_coverage": 0.3, "single_source": 1.5,
+            "complete_response": 0.4, "retrieval_priority": 0.2,
             "transition_coherence": 0.2, "length_fit": 0.3, "repetition": -0.6,
             LEARNED_RANK_FEATURE: 0.6,
+            "coverage": 0.3, "grounding": 1.0, "contradiction": -2.0,
         },
-        preferred_tokens=(1, 12),
+        preferred_tokens=(1, 8),
         length_weight=1.0,
     ),
     "explanatory": Niche(
@@ -67,6 +76,7 @@ NICHES: dict[str, Niche] = {
             "complete_response": 0.5, "retrieval_priority": 0.4,
             "transition_coherence": 0.8, "length_fit": 0.5, "repetition": -0.6,
             LEARNED_RANK_FEATURE: 0.6,
+            "coverage": 0.8, "grounding": 1.0, "contradiction": -2.0,
         },
         preferred_tokens=(10, 35),
     ),
@@ -77,6 +87,7 @@ NICHES: dict[str, Niche] = {
             "complete_response": 0.2, "retrieval_priority": 0.2,
             "transition_coherence": 0.6, "length_fit": 0.4, "repetition": -0.6,
             LEARNED_RANK_FEATURE: 0.5,
+            "coverage": 1.2, "grounding": 1.0, "contradiction": -2.0,
         },
         preferred_tokens=(15, 50),
     ),
@@ -87,6 +98,8 @@ NICHES: dict[str, Niche] = {
             "complete_response": 0.0, "retrieval_priority": 0.0,
             "transition_coherence": 0.5, "length_fit": 0.6, "repetition": -0.8,
             LEARNED_RANK_FEATURE: 0.4,
+            "coverage": 0.6, "grounding": 1.0, "contradiction": -2.0,
+            "uncertainty_expressed": 1.5,
         },
         preferred_tokens=(5, 25),
     ),
