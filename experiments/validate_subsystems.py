@@ -14,7 +14,6 @@ from vsa import VSA, AssociativeStore, HopfieldNet
 from clonal import ClonalPool
 from immune import SelfMonitor
 from basal import GoNoGoActorCritic, MemoryRetrievalEnv
-from nca import NCACell, NCA
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 HD_DIM = 1000
@@ -504,56 +503,6 @@ def validate_action_selection():
 
 
 # =============================================================================
-# 6. NCA — Conditioning & Self-Repair
-# =============================================================================
-def validate_nca():
-    rep.section("NCA Generator")
-
-    cell = NCACell(hidden_dim=16)
-    nca = NCA(cell, grid_size=(16, 16), channels=16)
-
-    # Conditioning effect: different seeds produce different results
-    seed_a = torch.randn(1, 1, 16, 16)
-    seed_b = torch.randn(1, 1, 16, 16)
-    out_a = nca.generate(seed_a, steps=30)
-    out_b = nca.generate(seed_b, steps=30)
-    diff = (out_a - out_b).abs().mean().item()
-    rep.test("different seeds produce different outputs",
-             diff > 0.01, f"mean_abs_diff={diff:.6f}")
-
-    # Convergence: state stabilises over time (use forward to get trajectory)
-    seed = torch.randn(1, 1, 16, 16)
-    states = nca(seed, steps=100)  # returns all states
-    change = (states[-1] - states[-2]).abs().mean().item()
-    rep.test("state changes across 100 steps (not frozen)",
-             change > 0.01, f"final_change={change:.6f} (convergence requires training)")
-
-    # Self-repair: corrupt mid-generation, check recovery
-    seed = torch.randn(1, 1, 16, 16)
-    state = nca.input_proj(seed)
-    for _ in range(20):
-        state = cell(state)
-    corrupt_region_before = state[:, :, 4:8, 4:8].clone()
-    state[:, :, 4:8, 4:8] = 0
-    for _ in range(10):
-        state = cell(state)
-    corrupt_region_after = state[:, :, 4:8, 4:8]
-    region_change = (corrupt_region_after - corrupt_region_before).abs().mean().item()
-    rep.test("corrupted region continues evolving",
-             region_change > 0.01, f"region change={region_change:.6f}; "
-             "self-repair requires a trained NCA and a target-distance metric")
-
-    # Generate with target (coarse conditioning)
-    seed = torch.randn(1, 1, 16, 16)
-    target = torch.randn(1, 1, 16, 16)
-    gen_plain = nca.generate(seed, steps=20)
-    gen_cond = nca.generate(seed, steps=20, target=target)
-    cond_diff = (gen_cond - gen_plain).abs().mean().item()
-    rep.test("target conditioning changes output",
-             cond_diff > 0.001, f"diff={cond_diff:.6f}")
-
-
-# =============================================================================
 # 7. CROSS-SUBSYSTEM INTEGRATION
 # =============================================================================
 def validate_integration():
@@ -631,7 +580,6 @@ if __name__ == "__main__":
         validate_encoder()
         validate_hopfield()
         validate_immune()
-        validate_nca()
     # Run validations that need gradient tracking outside no_grad
     validate_clonal()
     validate_action_selection()

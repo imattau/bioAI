@@ -13,7 +13,6 @@ from vsa import VSA, AssociativeStore, HopfieldNet
 from clonal import ClonalPool
 from immune import SelfMonitor
 from basal import GoNoGoActorCritic
-from decoder import TextDecoder
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 HD_DIM = 10000

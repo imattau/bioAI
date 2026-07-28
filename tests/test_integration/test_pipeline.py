@@ -1,11 +1,12 @@
-"""End-to-end integration test: wire all five subsystems together."""
+"""End-to-end integration test: wire the encoding/memory/action subsystems
+together (generation via NCA/DiT was removed as an unwired, superseded
+experiment -- see LookupDecoder in src/decoder for the production path)."""
 
 import torch
 from src.vsa import VSA, AssociativeStore, HopfieldNet
 from src.clonal import ClonalPool
 from src.immune import SelfMonitor
 from src.basal import GoNoGoActorCritic
-from src.nca import NCACell, NCA, CoarseConditioner
 
 
 class TestFullPipeline:
@@ -51,16 +52,6 @@ class TestFullPipeline:
         action, value = agent.act(state)
         assert 0 <= action < n_actions
         assert value.shape == (1,)
-
-    def test_nca_conditioned_on_vsa(self):
-        vsa = VSA(dim=100, device="cpu")
-        cond = CoarseConditioner(vsa_dim=100, grid_h=28, grid_w=28)
-        nca = NCA(NCACell(hidden_dim=8), grid_size=(28, 28), channels=8)
-        v = vsa.make_vector()
-        seed = cond(v)
-        assert seed.shape == (1, 1, 28, 28)
-        result = nca.generate(seed, steps=10)
-        assert result.shape == (1, 8, 28, 28)
 
     def test_continual_learning_no_forgetting(self):
         vsa = VSA(dim=100, device="cpu")
