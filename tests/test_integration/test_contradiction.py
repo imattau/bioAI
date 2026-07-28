@@ -6,6 +6,12 @@ class TestContradiction:
     DIM = 1000
 
     def setup_method(self):
+        # Unseeded, test_novel_query_rejected occasionally fails: two random
+        # vectors at dim=1000 have similarity noise with std ~0.03-0.06, so a
+        # fresh random novel query exceeds the 0.1 "should be near zero"
+        # threshold by chance in roughly 1 of 6-10 runs. Fix the seed for a
+        # deterministic, reproducible pass with margin.
+        torch.manual_seed(1)
         self.vsa = VSA(dim=self.DIM, device="cpu")
 
         self.role_subject = self.vsa.make_vector()
