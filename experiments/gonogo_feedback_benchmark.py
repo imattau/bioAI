@@ -108,6 +108,7 @@ def run(model: str, scenarios: int) -> tuple[dict, list[TurnRecord]]:
     topics = ("astronomy", "geography", "invented history", "biology",
               "technology", "invented folklore", "chemistry", "music")
     agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.gonogo_gate_enabled = False  # measure gonogo's shadow judgment, untouched by its own vetoes
     records: list[TurnRecord] = []
     generation_failures = 0
     turn_index = 0

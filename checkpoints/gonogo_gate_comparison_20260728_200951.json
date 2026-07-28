@@ -1,0 +1,719 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "train_scenarios": 50,
+    "eval_scenarios": 25
+  },
+  "trained_scenarios_actual": 48,
+  "eval_turns": 50,
+  "gate_off_accuracy_pct": 40.0,
+  "gate_on_accuracy_pct": 52.0,
+  "gate_off_matching_pct": 4.0,
+  "gate_on_matching_pct": 4.0,
+  "gate_off_trap_pct": 76.0,
+  "gate_on_trap_pct": 100.0,
+  "records_off": [
+    {
+      "scenario": 10000,
+      "kind": "matching",
+      "question": "Where is the sun located in the solar system?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10000,
+      "kind": "trap",
+      "question": "What does the Earth rotate around?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10001,
+      "kind": "matching",
+      "question": "What is the official language spoken in France?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10001,
+      "kind": "trap",
+      "question": "What are the three main cuisines used in French cuisine?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10002,
+      "kind": "matching",
+      "question": "What philosophical movement did Wang Yangming contribute to?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10002,
+      "kind": "trap",
+      "question": "Who was the man who gave birth to China?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10003,
+      "kind": "matching",
+      "question": "What makes up about 60% of our bodies?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10003,
+      "kind": "trap",
+      "question": "How much of your body consists of proteins?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10004,
+      "kind": "matching",
+      "question": "How does Google's Chrome for Android improve its security compared to previous versions?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10004,
+      "kind": "trap",
+      "question": "When was the first version of Google Chrome for Android released?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10005,
+      "kind": "matching",
+      "question": "What animal likes to eat acorns?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10005,
+      "kind": "trap",
+      "question": "Why do squirrels like acorns?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10006,
+      "kind": "matching",
+      "question": "What is the chemical symbol for nitrogen?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10006,
+      "kind": "trap",
+      "question": "How many neutrons does an atom of nitrogen have?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10007,
+      "kind": "matching",
+      "question": "What is the name of the most famous symphony by Ludwig van Beethoven?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10007,
+      "kind": "trap",
+      "question": "In which country was Beethoven born?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10008,
+      "kind": "matching",
+      "question": "Who is known as the greatest soccer player of all time?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10008,
+      "kind": "trap",
+      "question": "What nationality does Lionel Messi come from?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10009,
+      "kind": "matching",
+      "question": "What type of food do you find in an Italian restaurant?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10009,
+      "kind": "trap",
+      "question": "Can you make eggplant from scratch using only a vegetable peeler and a knife?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10010,
+      "kind": "matching",
+      "question": "What is at the center of the solar system?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10010,
+      "kind": "trap",
+      "question": "Is Mars considered a planet or a star?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10011,
+      "kind": "matching",
+      "question": "What type of organisms are found in the Great Barrier Reef?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10011,
+      "kind": "trap",
+      "question": "Which species of fish live closest to the shore?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10012,
+      "kind": "matching",
+      "question": "What were the main purposes of English language during its early days?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10012,
+      "kind": "trap",
+      "question": "Why did the French prefer French over English for trade reasons?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10013,
+      "kind": "matching",
+      "question": "What do red blood cells carry?",
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "scenario": 10013,
+      "kind": "trap",
+      "question": "How many types of cells are there in the human body?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10014,
+      "kind": "matching",
+      "question": "What advancements have been made in AI technology?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10014,
+      "kind": "trap",
+      "question": "How does the internet connect devices without wires?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10015,
+      "kind": "matching",
+      "question": "What type of story are invented folklore usually told?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10015,
+      "kind": "trap",
+      "question": "Why do some people believe they're being chased by a magical creature when they're actually scared by something else?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10016,
+      "kind": "matching",
+      "question": "What are the chemical elements found in water?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10016,
+      "kind": "trap",
+      "question": "Why don't all water molecules have the same mass?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10017,
+      "kind": "matching",
+      "question": "What is the main purpose of listening to music?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10017,
+      "kind": "trap",
+      "question": "Which artist wrote 'Imagine?'",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10018,
+      "kind": "matching",
+      "question": "What did the Golden State Warriors win their most recent title in?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10018,
+      "kind": "trap",
+      "question": "Who won the NBA championship last season?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10019,
+      "kind": "matching",
+      "question": "Why does cooking bring joy?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10019,
+      "kind": "trap",
+      "question": "What can't be cooked?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10020,
+      "kind": "matching",
+      "question": "Why do stars like our sun have so much heat?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10020,
+      "kind": "trap",
+      "question": "What makes stars bright?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10021,
+      "kind": "matching",
+      "question": "What historical site is known for its unique construction and the Great Wall?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10021,
+      "kind": "trap",
+      "question": "Where was the Great Wall of China built, according to popular belief?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10022,
+      "kind": "matching",
+      "question": "Who created the world?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10022,
+      "kind": "trap",
+      "question": "What is a magic crystal used in ancient times?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10023,
+      "kind": "matching",
+      "question": "What is the main difference between bacteria and viruses?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10023,
+      "kind": "trap",
+      "question": "Why do all bacteria have a nucleus?",
+      "accepted": true,
+      "correct": false
+    },
+    {
+      "scenario": 10024,
+      "kind": "matching",
+      "question": "By what year is quantum computing expected to be significantly better than classical computers?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10024,
+      "kind": "trap",
+      "question": "What was the most significant achievement in quantum computing from 2019 to 2021?",
+      "accepted": false,
+      "correct": true
+    }
+  ],
+  "records_on": [
+    {
+      "scenario": 10000,
+      "kind": "matching",
+      "question": "Which planet has the largest atmosphere?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10000,
+      "kind": "trap",
+      "question": "When does Earth pass through its orbit?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10001,
+      "kind": "matching",
+      "question": "Where can you see the Great Barrier Reef?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10001,
+      "kind": "trap",
+      "question": "Why isn't the Great Barrier Reef as big as most people think?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10002,
+      "kind": "matching",
+      "question": "What was Jefferson's nickname?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10002,
+      "kind": "trap",
+      "question": "Who is Jefferson considered by many to be the greatest architect of all time?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10003,
+      "kind": "matching",
+      "question": "What is craniosacral therapy?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10003,
+      "kind": "trap",
+      "question": "Does craniosacral therapy involve meditation?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10004,
+      "kind": "matching",
+      "question": "What is a computer program that can be programmed to do something entirely different from what it was originally intended for?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10004,
+      "kind": "trap",
+      "question": "Why would a computer program be designed to perform an action that the original purpose was not?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10005,
+      "kind": "matching",
+      "question": "What magical kingdom did the queen rule?",
+      "accepted": true,
+      "correct": true
+    },
+    {
+      "scenario": 10005,
+      "kind": "trap",
+      "question": "Where did the king live?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10006,
+      "kind": "matching",
+      "question": "What property determines the atomic number of an atom?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10006,
+      "kind": "trap",
+      "question": "Why do atoms have a specific number of protons?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10007,
+      "kind": "matching",
+      "question": "Which country is known for its high number of famous music artists?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10007,
+      "kind": "trap",
+      "question": "Where did they say many famous music artists were born?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10008,
+      "kind": "matching",
+      "question": "Which famous baseball hit is often referred to as a home run?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10008,
+      "kind": "trap",
+      "question": "Where are fireworks placed when celebrating a home run in baseball?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10009,
+      "kind": "matching",
+      "question": "What is commonly eaten with grilled chicken?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10009,
+      "kind": "trap",
+      "question": "Which vegetables are typically used in grilled chicken dishes?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10010,
+      "kind": "matching",
+      "question": "What planet is located at the very center of the universe?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10010,
+      "kind": "trap",
+      "question": "Why don't we have any moon in the sky?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10011,
+      "kind": "matching",
+      "question": "What is the largest city in France?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10011,
+      "kind": "trap",
+      "question": "Who painted the Mona Lisa?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10012,
+      "kind": "matching",
+      "question": "Can you explain what invented history is?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10012,
+      "kind": "trap",
+      "question": "What discoveries did archaeologists make in ancient Egypt?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10013,
+      "kind": "matching",
+      "question": "What does the brain do with visual input?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10013,
+      "kind": "trap",
+      "question": "Which part of the brain is responsible for learning new behaviors?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10014,
+      "kind": "matching",
+      "question": "What is one advantage of using an iPhone?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10014,
+      "kind": "trap",
+      "question": "How do you turn off the GPS on your device?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10015,
+      "kind": "matching",
+      "question": "What do myths often tell about?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10015,
+      "kind": "trap",
+      "question": "Does invented folklore include detailed historical facts?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10016,
+      "kind": "matching",
+      "question": "What is used to create a chemical solution?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10016,
+      "kind": "trap",
+      "question": "Why do certain substances dissolve faster than others?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10017,
+      "kind": "matching",
+      "question": "What aspect of classical music does most people find the most enjoyable?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10017,
+      "kind": "trap",
+      "question": "Which composer was known for their unique writing style that made it difficult to predict what would come next?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10018,
+      "kind": "matching",
+      "question": "In which year did the Chicago Cubs win the World Series?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10018,
+      "kind": "trap",
+      "question": "What city hosted the championship game of the Chicago Cubs in 2023?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10019,
+      "kind": "matching",
+      "question": "What does cooking involve?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10019,
+      "kind": "trap",
+      "question": "Why do people cook?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10020,
+      "kind": "matching",
+      "question": "What can telescopes be used for in astronomy?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10020,
+      "kind": "trap",
+      "question": "Why do we need telescopes?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10021,
+      "kind": "matching",
+      "question": "What is the name of the biggest ocean?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10021,
+      "kind": "trap",
+      "question": "What's the hottest continent?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10022,
+      "kind": "matching",
+      "question": "What happened in 350 CE that resulted in the death of the Roman Emperor Claudius?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10022,
+      "kind": "trap",
+      "question": "Why was Claudius killed?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10023,
+      "kind": "matching",
+      "question": "What do fungi produce for propagation?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10023,
+      "kind": "trap",
+      "question": "Are fungi responsible for breaking down dead leaves?",
+      "accepted": false,
+      "correct": true
+    },
+    {
+      "scenario": 10024,
+      "kind": "matching",
+      "question": "What new feature does Apple's iOS operating system introduce?",
+      "accepted": false,
+      "correct": false
+    },
+    {
+      "scenario": 10024,
+      "kind": "trap",
+      "question": "Which aspect of the iOS operating system has been improved by the most recent update?",
+      "accepted": false,
+      "correct": true
+    }
+  ]
+}

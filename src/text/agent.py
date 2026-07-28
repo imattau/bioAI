@@ -48,14 +48,17 @@ class BioAIDialogueAgent:
         self._gonogo_optimizer = torch.optim.AdamW(self.gonogo.parameters(), lr=1e-3)
         # Off by default: see _retrieve_context / record_feedback. gonogo
         # computes a real decision every question turn regardless (visible
-        # as gonogo_go/gonogo_action on the result), but there is no
-        # ambient ground-truth signal in ordinary conversation to safely
-        # let an untrained network start overriding the calibrated
-        # threshold rule's accept/reject behavior from turn one -- several
-        # existing tests depend on that rule's deterministic output.
-        # Enabling the gate only makes sense once record_feedback has
-        # actually trained it on real outcomes.
-        self.gonogo_gate_enabled = False
+        # as gonogo_go/gonogo_action on the result). Enabled by default as
+        # of experiments/gonogo_gate_comparison.py: a trained agent forked
+        # into gate-off/gate-on copies and evaluated on identical held-out
+        # scenarios showed the gate strictly helping (40%->52% overall
+        # accuracy, 76%->100% on trap questions, no change on matching
+        # questions -- consistent with veto-only: it suppresses wrong
+        # acceptances but can never rescue a wrongly-rejected match). A
+        # freshly constructed, untrained network vetoes close to randomly
+        # until record_feedback has trained it on real outcomes; set this
+        # to False to opt back out of that behavior during early training.
+        self.gonogo_gate_enabled = True
         self._last_gonogo_decision: dict | None = None
         # Fixed, reproducible from vsa_dim alone (same seed every
         # construction/load -- no persistence needed): gonogo's state must
@@ -940,6 +943,7 @@ class BioAIDialogueAgent:
             "clonal": self.clonal.get_state(),
             "gonogo_state_dict": self.gonogo.state_dict(),
             "gonogo_gate_enabled": self.gonogo_gate_enabled,
+            "gonogo_epsilon": self._gonogo_epsilon,
             "decoder": self.decoder.get_state(),
             "history": history,
             "text_index_keys": list(self._text_index.keys()),
@@ -1004,6 +1008,7 @@ class BioAIDialogueAgent:
         _gonogo_axis_gen = torch.Generator().manual_seed(20260728)
         agent._gonogo_score_axis = torch.randn(vsa.dim, generator=_gonogo_axis_gen)
         agent._gonogo_margin_axis = torch.randn(vsa.dim, generator=_gonogo_axis_gen)
+        agent._gonogo_epsilon = state.get("gonogo_epsilon", 0.15)
         agent.history = state["history"]
         agent._text_index = dict(zip(state["text_index_keys"],
                                       state["text_index_values"]))

@@ -35,14 +35,14 @@ def test_gonogo_decision_computed_on_every_question_turn():
     assert result["gonogo_go"] in (True, False)
 
 
-def test_gate_disabled_by_default_never_changes_outcome():
-    """With the gate off (the default), gonogo's decision is computed and
+def test_gate_disabled_never_changes_outcome():
+    """With the gate explicitly off, gonogo's decision is computed and
     visible but must never affect accepted/response, even when forced to
     say NoGo -- several existing tests depend on the deterministic
     threshold rule's output, which an untrained network must not disturb.
     """
     agent = BioAIDialogueAgent(vsa_dim=64)
-    assert not agent.gonogo_gate_enabled
+    agent.gonogo_gate_enabled = False
     agent.process_turn("The capital of France is Paris and it is beautiful.")
     user_vec = agent.encoder.encode("What is the capital of France?")
 

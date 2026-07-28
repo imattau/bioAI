@@ -8,6 +8,10 @@ from src.vsa import VSA
 class TestDialogueWithAgent:
     def setup_method(self):
         self.agent = BioAIDialogueAgent(vsa_dim=1000)
+        # These tests check the deterministic threshold/margin retrieval
+        # rule itself, not gonogo -- an untrained gonogo network vetoes
+        # close to randomly, which would make this class flaky.
+        self.agent.gonogo_gate_enabled = False
 
     def test_first_turn_no_context(self):
         result = self.agent.process_turn("hello")
