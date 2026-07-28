@@ -118,6 +118,34 @@ makes a decision but doesn't yet learn from it. `tests/test_basal/test_odyssey_a
 bandit-style task remains a separate, simpler validation of the same
 underlying actor-critic mechanics.
 
+**`experiments/gonogo_feedback_benchmark.py`** is that external caller,
+and it found two real bugs in the (2) wiring by actually training it,
+not just calling it once:
+
+1. gonogo's state was the raw encoded *query text* — unique per question,
+   carrying no information about *retrieval quality*. Training on one
+   question's outcome had no way to transfer to a different question, so
+   agreement with ground truth got *worse* over a run (60% early → 40%
+   late), not better. Fixed: state is now retrieval quality (score,
+   margin) embedded via two fixed random axes, decoupled from question
+   content — the correct inductive bias, since "should I trust this
+   match" depends on match quality, not topic.
+2. `GoNoGoActorCritic.act()` has no exploration floor (unlike
+   `RelevanceSelector`, which needed one for exactly this reason — see
+   `RELATIONAL_MEMORY.md` §2.7), so it can get permanently stuck favoring
+   one action from an unlucky initialization. Fixed with the same
+   epsilon-greedy floor.
+
+Honest result after both fixes: learning is real but not yet reliably
+convergent at the tested sample sizes (~40-60 LLM-generated scenarios) —
+runs show improving agreement (e.g. 23%→51%, 58%→69%) as often as flat or
+noisy ones, likely some combination of small sample, a genuinely noisy
+"correct" label (imperfect substring-match ground truth), and no further
+hyperparameter tuning attempted. Both fixes were necessary and are
+confirmed correct in isolation (regression tests in
+`tests/test_text/test_gonogo_wiring.py`); full convergence at practical
+scenario counts is an open question, not yet resolved.
+
 ### 5. Generation (§3.5 — developmental/NCA)
 
 **Design**: Neural Cellular Automata, coarse-to-fine unfolding conditioned

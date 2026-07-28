@@ -57,6 +57,28 @@ class BioAIDialogueAgent:
         # actually trained it on real outcomes.
         self.gonogo_gate_enabled = False
         self._last_gonogo_decision: dict | None = None
+        # Fixed, reproducible from vsa_dim alone (same seed every
+        # construction/load -- no persistence needed): gonogo's state must
+        # encode retrieval QUALITY (score, margin), not the query's
+        # semantic content. The raw query vector is unique per question and
+        # carries no information about how good the match was, so a policy
+        # trained on it can't generalize "trust high-confidence matches"
+        # across different topics -- confirmed empirically via
+        # experiments/gonogo_feedback_benchmark.py, where using the raw
+        # query vector as state made gonogo's agreement with ground truth
+        # *worse* over a training run (40% late vs 60% early), not better.
+        _gonogo_axis_gen = torch.Generator().manual_seed(20260728)
+        self._gonogo_score_axis = torch.randn(vsa_dim, generator=_gonogo_axis_gen)
+        self._gonogo_margin_axis = torch.randn(vsa_dim, generator=_gonogo_axis_gen)
+        # gonogo.act() has no exploration floor of its own (unlike
+        # RelevanceSelector, src/basal/relevance.py), so it can get
+        # permanently stuck favoring one action from an unlucky
+        # initialization -- the same failure mode found and fixed for
+        # RelevanceSelector (RELATIONAL_MEMORY.md SS2.7), confirmed here too:
+        # two otherwise-identical gonogo_feedback_benchmark.py runs showed
+        # wildly different learning curves (58%->69% agreement vs a stuck
+        # 48%->52%) before this was added.
+        self._gonogo_epsilon = 0.15
         self.history: list[dict] = []
         self._monitor_calibrated = False
         self.turn_count = 0
@@ -329,17 +351,27 @@ class BioAIDialogueAgent:
             and margin >= self._retrieval_margin
         )
 
-        # gonogo makes a real Go/NoGo decision every question turn (state =
-        # the query vector) regardless of the gate below -- it's always
-        # exercised, always visible on the result, and always trainable via
-        # record_feedback. Whether it actually CHANGES the outcome is
-        # gated separately (gonogo_gate_enabled): with no ambient
-        # ground-truth signal in ordinary conversation, an untrained
-        # network vetoing turns at random would just be noise, not
-        # learning -- see the comment in __init__.
-        gonogo_action, _ = self.gonogo.act(user_vec)
+        # gonogo makes a real Go/NoGo decision every question turn regardless
+        # of the gate below -- it's always exercised, always visible on the
+        # result, and always trainable via record_feedback. Whether it
+        # actually CHANGES the outcome is gated separately
+        # (gonogo_gate_enabled): with no ambient ground-truth signal in
+        # ordinary conversation, an untrained network vetoing turns at
+        # random would just be noise, not learning -- see __init__.
+        #
+        # State is retrieval QUALITY (score, margin embedded via two fixed
+        # random axes), not the query's semantic content -- see __init__
+        # for why the latter doesn't generalize.
+        gonogo_state = (
+            best_score * self._gonogo_score_axis
+            + margin * self._gonogo_margin_axis
+        )
+        if torch.rand(1).item() < self._gonogo_epsilon:
+            gonogo_action = torch.randint(0, 4, (1,)).item()
+        else:
+            gonogo_action, _ = self.gonogo.act(gonogo_state)
         gonogo_go = gonogo_action in (0, 1)
-        self._last_gonogo_decision = {"state": user_vec.detach(), "action": gonogo_action}
+        self._last_gonogo_decision = {"state": gonogo_state.detach(), "action": gonogo_action}
         accepted = heuristic_accepted
         if self.gonogo_gate_enabled and heuristic_accepted and not gonogo_go:
             # NoGo can only veto an already-accepted candidate (suppress),
@@ -868,6 +900,9 @@ class BioAIDialogueAgent:
         agent._gonogo_optimizer = torch.optim.AdamW(agent.gonogo.parameters(), lr=1e-3)
         agent.gonogo_gate_enabled = state.get("gonogo_gate_enabled", False)
         agent._last_gonogo_decision = None
+        _gonogo_axis_gen = torch.Generator().manual_seed(20260728)
+        agent._gonogo_score_axis = torch.randn(vsa.dim, generator=_gonogo_axis_gen)
+        agent._gonogo_margin_axis = torch.randn(vsa.dim, generator=_gonogo_axis_gen)
         agent.history = state["history"]
         agent._text_index = dict(zip(state["text_index_keys"],
                                       state["text_index_values"]))

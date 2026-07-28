@@ -1,0 +1,1098 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "scenarios": 60
+  },
+  "summary": {
+    "requested_scenarios": 60,
+    "generation_failures": 0,
+    "total_question_turns": 120,
+    "heuristic_correct_pct": 56.666666666666664,
+    "gonogo_agreement_early_pct": 23.076923076923077,
+    "gonogo_agreement_late_pct": 51.282051282051285,
+    "gonogo_agreement_overall_pct": 42.3728813559322,
+    "window_size": 39
+  },
+  "records": [
+    {
+      "index": 0,
+      "kind": "matching",
+      "question": "What is the name of the planet that is closest to the Sun?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 1,
+      "kind": "trap",
+      "question": "What color is the Sun?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 2,
+      "kind": "matching",
+      "question": "What is the largest city in France?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 3,
+      "kind": "trap",
+      "question": "Where does the Eiffel Tower stand?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 4,
+      "kind": "matching",
+      "question": "Who led the Continental Army during the Revolutionary War?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 5,
+      "kind": "trap",
+      "question": "When did the American Revolution take place?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 6,
+      "kind": "matching",
+      "question": "Why do bacteria lack nuclei?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 7,
+      "kind": "trap",
+      "question": "How many cells does a bacterium contain?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 8,
+      "kind": "matching",
+      "question": "What innovative technology has disrupted traditional customer service?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 9,
+      "kind": "trap",
+      "question": "Does ChatGPT provide real-time customer service?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 10,
+      "kind": "matching",
+      "question": "What did the Wraith have that humans lacked?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 11,
+      "kind": "trap",
+      "question": "Why couldn't the Wraith be fully human?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 12,
+      "kind": "matching",
+      "question": "What is the main function of ammonia in the human body?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 13,
+      "kind": "trap",
+      "question": "Which element does ammonia contain that is not found in any other known substance?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 14,
+      "kind": "matching",
+      "question": "What was one of the main instruments in the baroque era?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 15,
+      "kind": "trap",
+      "question": "When playing a trumpet, what does it do that a flute doesn't?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 16,
+      "kind": "matching",
+      "question": "What is the average length of a day on the Earth?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 17,
+      "kind": "trap",
+      "question": "Where can you find an asteroid that is not part of our solar system?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 18,
+      "kind": "matching",
+      "question": "What is the largest country in Europe?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 19,
+      "kind": "trap",
+      "question": "Which river flows through France?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 20,
+      "kind": "matching",
+      "question": "What is Tutankhamun's role in Egyptian history?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 21,
+      "kind": "trap",
+      "question": "How did Tutankhamun's reign differ from other pharaohs' rule?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 22,
+      "kind": "matching",
+      "question": "What does DNA consist of?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 23,
+      "kind": "trap",
+      "question": "Where are all the DNA molecules located in the body?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 24,
+      "kind": "matching",
+      "question": "When did the first internet connection occur?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 25,
+      "kind": "trap",
+      "question": "Why didn't the original internet connection happen until the 1970s?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 26,
+      "kind": "matching",
+      "question": "Who is Alarion\u2019s apprentice in Eldoria?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 27,
+      "kind": "trap",
+      "question": "Why was Alarion chosen to be Draconus\u2019 apprentice?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 28,
+      "kind": "matching",
+      "question": "What does the pH scale show?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 29,
+      "kind": "trap",
+      "question": "What does the pH scale tell us about acids and bases?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 30,
+      "kind": "matching",
+      "question": "What music genre was developed in America?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 31,
+      "kind": "trap",
+      "question": "When did jazz become very popular?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 32,
+      "kind": "matching",
+      "question": "When does the moon rise and set?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 33,
+      "kind": "trap",
+      "question": "How many moons are visible from Earth at any given time?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 34,
+      "kind": "matching",
+      "question": "What is the largest city in Canada?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 35,
+      "kind": "trap",
+      "question": "Why do Canadians celebrate Thanksgiving every year?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 36,
+      "kind": "matching",
+      "question": "What event took place in 2050 that led to aliens visiting Earth?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 37,
+      "kind": "trap",
+      "question": "What technology did aliens use to monitor their visitors from the year 2050?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 38,
+      "kind": "matching",
+      "question": "What are some bacteria that don't require oxygen?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 39,
+      "kind": "trap",
+      "question": "Do bacteria require oxygen to thrive?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 40,
+      "kind": "matching",
+      "question": "What is another example of a limitation of AI in the field of natural language processing?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 41,
+      "kind": "trap",
+      "question": "Can an AI model learn to predict future stock prices based solely on historical data?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 42,
+      "kind": "matching",
+      "question": "What is the name of the Wicked Witch of the West?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 43,
+      "kind": "trap",
+      "question": "Where does the Wicked Witch of the West typically reside?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 44,
+      "kind": "matching",
+      "question": "What is the boiling point of water?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 45,
+      "kind": "trap",
+      "question": "Why does water boil at 100 degrees Celsius?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 46,
+      "kind": "matching",
+      "question": "What is one of the most famous songs by The Beatles?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 47,
+      "kind": "trap",
+      "question": "Where was the first studio album for The Beatles recorded?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 48,
+      "kind": "matching",
+      "question": "What is it called when we see the sun setting?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 49,
+      "kind": "trap",
+      "question": "Why don't we always get sunlight during a full moon?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 50,
+      "kind": "matching",
+      "question": "What is the capital of New Zealand?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": null,
+      "gonogo_agrees": null
+    },
+    {
+      "index": 51,
+      "kind": "trap",
+      "question": "Is New Zealand part of the United States of America?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 52,
+      "kind": "matching",
+      "question": "What is the name of the earliest exploratory voyage that led to the discovery of the Americas?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 53,
+      "kind": "trap",
+      "question": "Who established the Spanish Empire?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 54,
+      "kind": "matching",
+      "question": "What are bacteria made of?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 55,
+      "kind": "trap",
+      "question": "How many types of bacteria can be identified?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 56,
+      "kind": "matching",
+      "question": "What is a significant application of AI in healthcare?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 57,
+      "kind": "trap",
+      "question": "How does AI influence business decision-making?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 58,
+      "kind": "matching",
+      "question": "What does the 'Magic Mirror' in invented folklore allow the viewer to do?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 59,
+      "kind": "trap",
+      "question": "Is there anything you cannot tell from the 'Magic Mirror'?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 60,
+      "kind": "matching",
+      "question": "What is the boiling point of water?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": null,
+      "gonogo_agrees": null
+    },
+    {
+      "index": 61,
+      "kind": "trap",
+      "question": "Why is water not flammable?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 62,
+      "kind": "matching",
+      "question": "What was the Louvre Museum founded by?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 63,
+      "kind": "trap",
+      "question": "How many artists did the Louvre have in its collection?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 64,
+      "kind": "matching",
+      "question": "Where did the Crab Nebula explode?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 65,
+      "kind": "trap",
+      "question": "What's the distance from Earth to the Crab Nebula?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 66,
+      "kind": "matching",
+      "question": "How long is the Great Wall of China?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 67,
+      "kind": "trap",
+      "question": "What does the Great Wall of China protect?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 68,
+      "kind": "matching",
+      "question": "What made some inventions in the past possible?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 69,
+      "kind": "trap",
+      "question": "Why did the invention that allowed for mass production of cars fail to become a standard?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 70,
+      "kind": "matching",
+      "question": "What percentage of the human body is made up of water?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 71,
+      "kind": "trap",
+      "question": "Which substance is primarily used in medicine to prevent dehydration?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 72,
+      "kind": "matching",
+      "question": "What are some of the most important features of the latest smartphone?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 73,
+      "kind": "trap",
+      "question": "Why did you choose to buy this smartphone?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 74,
+      "kind": "matching",
+      "question": "Why does Little Red Riding Hood always cross the woods?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 75,
+      "kind": "trap",
+      "question": "What type of animals do you find in the forest, but not in your backyard?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 76,
+      "kind": "matching",
+      "question": "What role does the periodic table play in the study of elements?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 77,
+      "kind": "trap",
+      "question": "What can we infer from looking at the periodic table if it were perfect?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 78,
+      "kind": "matching",
+      "question": "Who founded New Orleans jazz?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 79,
+      "kind": "trap",
+      "question": "What instrument is used most frequently by jazz musicians?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 80,
+      "kind": "matching",
+      "question": "Which star is considered to be the sun?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 81,
+      "kind": "trap",
+      "question": "What planet orbits around the Sun and is known for its moons?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 82,
+      "kind": "matching",
+      "question": "Which city in France is known as the 'City of Light'?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 83,
+      "kind": "trap",
+      "question": "What famous landmark is located outside Paris? (This question answers about a different part of France, not Paris itself.)",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 84,
+      "kind": "matching",
+      "question": "Who was the King of The Invented Kingdom?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 85,
+      "kind": "trap",
+      "question": "How old was Sir Merlin when he became the King of The Invented Kingdom?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 86,
+      "kind": "matching",
+      "question": "Where does chlorophyll come from?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 87,
+      "kind": "trap",
+      "question": "What happens when plants take up water?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 88,
+      "kind": "matching",
+      "question": "What does an iPhone do? What are some of its key features?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 89,
+      "kind": "trap",
+      "question": "Can you tell me about the operating system on an iPhone? How does it differ from other mobile devices?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 90,
+      "kind": "matching",
+      "question": "What is the name of the magical tree mentioned in the folklore?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 91,
+      "kind": "trap",
+      "question": "Where can you find a tree that grants wishes by climbing its branches and offering sacrifices?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 92,
+      "kind": "matching",
+      "question": "What are some characteristics of water?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 93,
+      "kind": "trap",
+      "question": "Why do plants absorb water from the soil?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 94,
+      "kind": "matching",
+      "question": "Who popularized jazz during its early days?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 95,
+      "kind": "trap",
+      "question": "What instrument was commonly used by ragtime musicians to imitate the sound of fiddles?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 96,
+      "kind": "matching",
+      "question": "How far is the Sun from Earth?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 97,
+      "kind": "trap",
+      "question": "What's the mass of the Earth?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 98,
+      "kind": "matching",
+      "question": "What is the largest city in Canada?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 99,
+      "kind": "trap",
+      "question": "Where did the Titanic sink?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 100,
+      "kind": "matching",
+      "question": "Who was the first African American woman to serve as an official in any branch of government in the United States?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 101,
+      "kind": "trap",
+      "question": "Why didn't she become a higher-ranking official, like President or Minister, after serving?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 102,
+      "kind": "matching",
+      "question": "What is the percentage of water in the human body?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 103,
+      "kind": "trap",
+      "question": "How many bones are in your body?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 104,
+      "kind": "matching",
+      "question": "What year did John McCarthy and Marvin Minsky introduce the concept of 'artificial intelligence'?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 105,
+      "kind": "trap",
+      "question": "Who are the two individuals credited with introducing the concept of 'artificial intelligence'?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 106,
+      "kind": "matching",
+      "question": "What did the Blue Dragon possess according to legend?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 107,
+      "kind": "trap",
+      "question": "Could any humans have access to this lost treasure?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 108,
+      "kind": "matching",
+      "question": "What is the temperature at which water changes from a liquid to a solid?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 109,
+      "kind": "trap",
+      "question": "Why do you need heat to turn ice into water?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 110,
+      "kind": "matching",
+      "question": "Which composer believed their work had divine inspiration?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 111,
+      "kind": "trap",
+      "question": "Who believed their work was more human than divine?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 112,
+      "kind": "matching",
+      "question": "What planet is our closest neighbor to the Sun?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 113,
+      "kind": "trap",
+      "question": "Who discovered Earth orbiting around the Sun?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 114,
+      "kind": "matching",
+      "question": "What city serves as the capital of France?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 115,
+      "kind": "trap",
+      "question": "How many continents does the Earth have?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 116,
+      "kind": "matching",
+      "question": "What type of literary genre does Invented History belong to?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 117,
+      "kind": "trap",
+      "question": "Why do people enjoy reading historical fiction but not factual ones?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 118,
+      "kind": "matching",
+      "question": "Where are all the neurons located in the human body?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 119,
+      "kind": "trap",
+      "question": "What does the brain do primarily?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    }
+  ]
+}

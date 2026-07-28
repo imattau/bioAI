@@ -1,0 +1,162 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "scenarios": 8
+  },
+  "summary": {
+    "requested_scenarios": 8,
+    "generation_failures": 0,
+    "total_question_turns": 16,
+    "heuristic_correct_pct": 62.5,
+    "gonogo_agreement_early_pct": 60.0,
+    "gonogo_agreement_late_pct": 40.0,
+    "gonogo_agreement_overall_pct": 43.75,
+    "window_size": 5
+  },
+  "records": [
+    {
+      "index": 0,
+      "kind": "matching",
+      "question": "Which of these is an example of a solar system body?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 1,
+      "kind": "trap",
+      "question": "What does the term 'asteroid' refer to?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 2,
+      "kind": "matching",
+      "question": "What length of road is the longest in the United States?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 3,
+      "kind": "trap",
+      "question": "Which ancient civilization built a wall that was the tallest?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 4,
+      "kind": "matching",
+      "question": "What are the key themes of invented history?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 5,
+      "kind": "trap",
+      "question": "Which era does invented history primarily focus on?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 6,
+      "kind": "matching",
+      "question": "How much of your body weight is made up of water?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 7,
+      "kind": "trap",
+      "question": "When was the first man to walk on the moon?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 8,
+      "kind": "matching",
+      "question": "What's the biggest phone ever made?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 9,
+      "kind": "trap",
+      "question": "When did smartphones first become popular?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 10,
+      "kind": "matching",
+      "question": "What is the name of the mythical creature mentioned in the fact?",
+      "accepted": false,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 11,
+      "kind": "trap",
+      "question": "What is another way that this mythical creature can communicate with spirits?",
+      "accepted": true,
+      "correct": false,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 12,
+      "kind": "matching",
+      "question": "What is the atomic number of an atom of hydrogen?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": true
+    },
+    {
+      "index": 13,
+      "kind": "trap",
+      "question": "What is the mass of an atom of oxygen?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": true,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 14,
+      "kind": "matching",
+      "question": "Which composer is known for their complex harmonic structures in many of their compositions?",
+      "accepted": true,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": false
+    },
+    {
+      "index": 15,
+      "kind": "trap",
+      "question": "What did the composer use to compose most of their music?",
+      "accepted": false,
+      "correct": true,
+      "gonogo_go": false,
+      "gonogo_agrees": true
+    }
+  ]
+}
