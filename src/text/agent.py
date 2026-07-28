@@ -22,6 +22,7 @@ from src.text.vsa_sequence_ranker import (
     SemanticChunkVSASequenceEncoder,
     VSASequenceRanker,
 )
+from src.text.ecology import ResponseEcosystem
 
 
 RELATIONAL_VSA_DIM = 2000
@@ -117,6 +118,7 @@ class BioAIDialogueAgent:
         self.candidate_generator = FixedSpliceCandidateGenerator()
         self.candidate_scorer = SequenceCandidateScorer()
         self.sequence_ranker: VSASequenceRanker | None = None
+        self.response_ecosystem: ResponseEcosystem | None = None
 
     def enable_semantic_retrieval(
         self,
@@ -145,6 +147,18 @@ class BioAIDialogueAgent:
 
     def enable_vsa_sequence_ranking(self, dimension: int = 512):
         self.sequence_ranker = VSASequenceRanker(dimension=dimension)
+
+    def enable_ecological_generation(
+        self,
+        survivors_per_niche: int = 2,
+        max_rounds: int = 3,
+    ):
+        self.response_ecosystem = ResponseEcosystem(
+            candidate_generator=self.candidate_generator,
+            scorer=self.candidate_scorer,
+            survivors_per_niche=survivors_per_niche,
+            max_rounds=max_rounds,
+        )
 
     def enable_semantic_sequence_ranking(
         self,
@@ -782,6 +796,16 @@ class BioAIDialogueAgent:
             response = "I'll remember that."
         elif not retrieval["accepted"]:
             response = "I don't have a sufficiently relevant memory for that."
+        elif self.response_ecosystem is not None:
+            evidence = [
+                candidate["text"] for candidate in retrieval["candidates"]
+            ]
+            result = self.response_ecosystem.generate(
+                user_input, evidence, self.chunk_composer, self.sequence_ranker,
+                fallback=context,
+            )
+            response = result.response
+            synthesized = True
         elif self.chunk_composer is not None:
             evidence = [
                 candidate["text"] for candidate in retrieval["candidates"]
@@ -818,11 +842,12 @@ class BioAIDialogueAgent:
         elif not retrieval["accepted"]:
             response_mode = "abstention"
         elif self.response_generator is None:
-            response_mode = (
-                "learned_chunk_composition"
-                if self.chunk_composer is not None
-                else "retrieved_memory"
-            )
+            if self.response_ecosystem is not None:
+                response_mode = "ecological_generation"
+            elif self.chunk_composer is not None:
+                response_mode = "learned_chunk_composition"
+            else:
+                response_mode = "retrieved_memory"
         else:
             response_mode = getattr(
                 self.response_generator, "last_mode", "grounded_generation"
@@ -970,6 +995,13 @@ class BioAIDialogueAgent:
                 self.sequence_ranker.get_state()
                 if self.sequence_ranker is not None else None
             ),
+            "response_ecosystem": (
+                {
+                    "survivors_per_niche": self.response_ecosystem.survivors_per_niche,
+                    "max_rounds": self.response_ecosystem.max_rounds,
+                }
+                if self.response_ecosystem is not None else None
+            ),
         }
         torch.save(state, path)
 
@@ -1075,6 +1107,16 @@ class BioAIDialogueAgent:
                 sequence_state, embedder=sequence_embedder
             )
             if sequence_state else None
+        )
+        ecosystem_state = state.get("response_ecosystem")
+        agent.response_ecosystem = (
+            ResponseEcosystem(
+                candidate_generator=agent.candidate_generator,
+                scorer=agent.candidate_scorer,
+                survivors_per_niche=ecosystem_state.get("survivors_per_niche", 2),
+                max_rounds=ecosystem_state.get("max_rounds", 3),
+            )
+            if ecosystem_state is not None else None
         )
         if agent._monitor_calibrated:
             agent.monitor.calibrated = True
