@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 from src.vsa import VSA, VSAHashStore, HopfieldNet
+from src.vsa.relational import RelationalEncoder, RelationalMemory
 from src.clonal import ClonalPool
 from src.immune import SelfMonitor
 from src.basal import GoNoGoActorCritic
@@ -21,6 +22,16 @@ from src.text.vsa_sequence_ranker import (
     SemanticChunkVSASequenceEncoder,
     VSASequenceRanker,
 )
+
+
+RELATIONAL_VSA_DIM = 2000
+
+
+def _new_relational_memory() -> RelationalMemory:
+    return RelationalMemory(
+        RelationalEncoder(VSA(dim=RELATIONAL_VSA_DIM, device="cpu")),
+        dim=RELATIONAL_VSA_DIM,
+    )
 
 
 class BioAIDialogueAgent:
@@ -45,6 +56,20 @@ class BioAIDialogueAgent:
         self._retrieval_margin: float = 0.1
         self.library = TokenLibrary(vector_cache_size=1024)
         self.consolidation = ConsolidationMemory()
+        # Independent of vsa_dim (which is sometimes set very small, e.g. 64,
+        # for the bag-of-words text encoder/novelty-detection path): reliable
+        # VSA bind/unbind needs enough dimensionality to keep crosstalk down
+        # (see RELATIONAL_MEMORY.md), so relational memory gets its own VSA.
+        self.relational = _new_relational_memory()
+        # Provenance for relational triples, kept outside RelationalMemory
+        # entirely rather than as a VSA context role: a context role shares
+        # the entity-vector namespace used for decode candidates (by design,
+        # for cross-role vocabulary sharing — see RelationalEncoder.filler),
+        # so binding a sentence-id string in as context would leak raw id
+        # strings into subject/object candidate lists. This is plain lookup
+        # metadata, never something a query should be conditioned on or a
+        # decode should ever return.
+        self._relational_sources: dict[tuple[str, str, str], list[int]] = {}
         self._hot_memory_capacity = 200
         self._history_capacity = 1000
         self.semantic_encoder: SemanticVSAEncoder | None = None
@@ -126,6 +151,13 @@ class BioAIDialogueAgent:
             user_text, semantic_vector=semantic_vector
         )
         self.consolidation.observe_relation(user_text, sentence_id)
+        for subject, relation, obj in ConsolidationMemory.extract_relations(user_text):
+            self.relational.store_triple(subject, relation, obj)
+            source_ids = self._relational_sources.setdefault(
+                (subject, relation, obj), []
+            )
+            if sentence_id not in source_ids:
+                source_ids.append(sentence_id)
         if semantic_vector is not None:
             for term in self.library.semantic_terms(user_text):
                 posting = self.library.semantic_postings[term]
@@ -295,6 +327,147 @@ class BioAIDialogueAgent:
             ],
         }
 
+    @staticmethod
+    def _parse_multi_clue_identity_question(text: str) -> list[tuple[str, str]] | None:
+        """'Who/what is X [and [is] Y ...]?' -> [("is", x), ("is", y), ...].
+
+        A bounded, explicit extension of ConsolidationMemory's "is" relation
+        vocabulary to support genuinely multi-clue identification questions —
+        the one question shape that actually fits RelationalMemory.resolve()'s
+        design (intersecting independent evidence about the same unknown
+        SUBJECT). "What is X's Y" (unknown OBJECT, handled separately via
+        parse_relation_query) doesn't fit resolve()'s intersection at all,
+        since the tied candidates there are alternative values of one
+        (subject, relation) pair, not one entity's membership across several
+        different relations — see RELATIONAL_MEMORY.md SS2.4/SS6.
+        """
+        query = text.strip().rstrip("?.!")
+        match = re.match(r"^(?:who|what)\s+is\s+(.+)$", query, flags=re.IGNORECASE)
+        if not match:
+            return None
+        clauses = re.split(r"\s+and\s+(?:is\s+)?", match.group(1))
+        values = [ConsolidationMemory._normalise(clause) for clause in clauses]
+        values = [value for value in values if value]
+        return [("is", value) for value in values] if len(values) > 1 else None
+
+    def _relational_source_ids(self, subject: str, relation: str, obj: str) -> list[int]:
+        return list(self._relational_sources.get((subject, relation, obj), []))
+
+    def _relational_result(self, known: dict, missing_role: str, answer: str) -> dict:
+        full = dict(known)
+        full[missing_role] = answer
+        source_ids = self._relational_source_ids(
+            full["subject"], full["relation"], full["object"]
+        )
+        text = (
+            self.library.texts[source_ids[0]] if source_ids
+            else f"{full['subject']} {full['relation']} {full['object']}."
+        )
+        return {
+            "accepted": True,
+            "memory_id": source_ids[0] if source_ids else None,
+            "source_ids": source_ids,
+            "text": text,
+            "score": 1.0,
+            "margin": 1.0,
+            "relational": True,
+            "ambiguous": False,
+            "candidates": [
+                {"id": sid, "text": self.library.texts[sid], "score": 1.0}
+                for sid in source_ids
+            ],
+        }
+
+    @staticmethod
+    def _ambiguous_relational_result(candidates: list[str]) -> dict:
+        listing = candidates[0] if len(candidates) == 1 else (
+            ", ".join(candidates[:-1]) + " or " + candidates[-1]
+        )
+        return {
+            "accepted": True,
+            "memory_id": None,
+            "source_ids": [],
+            "text": (
+                f"It could be {listing} — I don't have enough information "
+                f"to be sure."
+            ),
+            "score": 0.5,
+            "margin": 0.0,
+            "relational": True,
+            "ambiguous": True,
+            "ambiguous_candidates": candidates,
+            "candidates": [],
+        }
+
+    def _answer_relational_query(self, user_input: str) -> dict | None:
+        """Answer a question directly from relational memory when possible.
+
+        Multi-clue identity questions ("who is X and is Y") use resolve() to
+        intersect independent evidence about the same unknown subject.
+        Single-relation questions ("what is X's Y") use complete_detailed
+        directly — resolve() doesn't apply to that shape (see
+        _parse_multi_clue_identity_question). Returns None when the question
+        doesn't parse into a relational query at all, falling through to
+        ordinary retrieval. Ambiguity is surfaced honestly (named candidates)
+        rather than silently guessed, per RELATIONAL_MEMORY.md SS2.2.
+        """
+        clues = self._parse_multi_clue_identity_question(user_input)
+        if clues:
+            queries = [
+                ({"relation": relation, "object": obj}, None)
+                for relation, obj in clues
+            ]
+            # top_k=2: intersection across steps only narrows anything when
+            # each step's candidate list actually excludes the losers. The
+            # library default (5) can exceed the total entity vocabulary in
+            # a small/young memory, in which case every step's "top-5" is
+            # just "everything" and intersecting them narrows nothing even
+            # when the underlying scores are clearly separated.
+            trace = self.relational.resolve(queries, top_k=2)
+            if trace.resolved:
+                # Cite the last clue: in "X and also Y" phrasing that's
+                # typically the newly-added, most specific piece of
+                # evidence — any true clue about the resolved entity would
+                # be a correct citation, this is just a readability choice.
+                relation, obj = clues[-1]
+                return self._relational_result(
+                    {"relation": relation, "object": obj},
+                    "subject",
+                    trace.final_candidates[0],
+                )
+            if trace.final_candidates:
+                return self._ambiguous_relational_result(trace.final_candidates)
+            return None
+
+        parsed = ConsolidationMemory.parse_relation_query(user_input)
+        if parsed is None:
+            return None
+        subject, relation = parsed
+        net = self.relational.nets.get(relation)
+        if net is None or len(net) == 0:
+            return None
+        # Hopfield recall always returns *some* nearest-pattern guess, even
+        # for a subject that was never actually stored (e.g. "who is X" is
+        # genuinely ambiguous between "describe X" and "which entity has
+        # property X" — parse_relation_query always takes the former
+        # reading, so a property phrase like "a mammal" can land here as a
+        # literal, never-asserted "subject"). Refuse to answer rather than
+        # let a soft nearest-match masquerade as real knowledge.
+        if not any(s == subject for s, r, _, _ in self.relational.triples):
+            return None
+        result = self.relational.complete_detailed(
+            {"subject": subject, "relation": relation}
+        )
+        if result.best is None:
+            return None
+        if not result.ambiguous:
+            return self._relational_result(
+                {"subject": subject, "relation": relation}, "object", result.best
+            )
+        return self._ambiguous_relational_result(
+            [name for name, _ in result.candidates]
+        )
+
     def process_turn(self, user_input: str, ctx_cache: bool = True) -> dict:
         self.turn_count += 1
         user_vec = self.encoder.encode(user_input)
@@ -324,7 +497,11 @@ class BioAIDialogueAgent:
                     ],
                 }
             else:
-                retrieval = self._retrieve_context(user_input, user_vec)
+                relational_answer = self._answer_relational_query(user_input)
+                if relational_answer is not None:
+                    retrieval = relational_answer
+                else:
+                    retrieval = self._retrieve_context(user_input, user_vec)
         else:
             retrieval = {
                 "accepted": False,
@@ -391,6 +568,11 @@ class BioAIDialogueAgent:
             )
         if retrieval.get("reasoning") is not None:
             response_mode = "consolidated_reasoning"
+        elif retrieval.get("relational"):
+            response_mode = (
+                "relational_ambiguous" if retrieval.get("ambiguous")
+                else "relational_reasoning"
+            )
 
         source_ids = retrieval.get(
             "source_ids",
@@ -418,6 +600,8 @@ class BioAIDialogueAgent:
             "retrieval_margin": retrieval["margin"],
             "retrieval_candidates": retrieval["candidates"],
             "reasoning": retrieval.get("reasoning"),
+            "ambiguous": retrieval.get("ambiguous", False),
+            "ambiguous_candidates": retrieval.get("ambiguous_candidates", []),
             "drift_detected": novelty["novel"],
             "energy_z": novelty["energy_z"],
             "clonal_created": novelty["clonal_created"],
@@ -464,6 +648,8 @@ class BioAIDialogueAgent:
             "text_index_values": list(self._text_index.values()),
             "token_library": self.library.get_state(),
             "consolidation": self.consolidation.get_state(),
+            "relational": self.relational.get_state(),
+            "relational_sources": list(self._relational_sources.items()),
             "hot_memory_capacity": self._hot_memory_capacity,
             "history_capacity": self._history_capacity,
             "semantic_model": self.semantic_model,
@@ -531,6 +717,15 @@ class BioAIDialogueAgent:
         agent.consolidation = ConsolidationMemory.from_state(
             state.get("consolidation", {})
         )
+        relational_state = state.get("relational")
+        agent.relational = (
+            RelationalMemory.from_state(relational_state)
+            if relational_state is not None
+            else _new_relational_memory()
+        )
+        agent._relational_sources = {
+            tuple(key): ids for key, ids in state.get("relational_sources", [])
+        }
         agent._hot_memory_capacity = state.get("hot_memory_capacity", 200)
         agent._history_capacity = state.get("history_capacity", 1000)
         agent.semantic_model = state.get("semantic_model")
