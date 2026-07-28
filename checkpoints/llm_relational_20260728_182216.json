@@ -1,0 +1,431 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "scenarios": 15
+  },
+  "summary": {
+    "requested_scenarios": 15,
+    "generation_failures": 1,
+    "total_checks": 57,
+    "overall_pass_pct": 100.0,
+    "by_kind": {
+      "capital": {
+        "n": 15,
+        "pass_pct": 100.0
+      },
+      "collision_ambiguous": {
+        "n": 14,
+        "pass_pct": 100.0
+      },
+      "collision_resolved_explicit": {
+        "n": 14,
+        "pass_pct": 100.0
+      },
+      "collision_escalated": {
+        "n": 14,
+        "pass_pct": 100.0
+      }
+    }
+  },
+  "results": [
+    {
+      "kind": "capital",
+      "detail": "Korea -> Seoul",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Korea is Seoul."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Lion/Zebra share [Big, Carnivorous], unique [Golden mane]/[Striped coat]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be lion or zebra \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Lion/Zebra share [Big, Carnivorous], unique [Golden mane]/[Striped coat]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Lion is Golden mane."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Lion/Zebra share [Big, Carnivorous], unique [Golden mane]/[Striped coat]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Lion is Golden mane."
+    },
+    {
+      "kind": "capital",
+      "detail": "Australia -> Sydney",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Australia is Sydney."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Blender/Mixing Bowl share [functional, sturdy], unique [spherical bowl shape]/[powerful motor drive]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be blender or mixing bowl \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Blender/Mixing Bowl share [functional, sturdy], unique [spherical bowl shape]/[powerful motor drive]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Blender is spherical bowl shape."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Blender/Mixing Bowl share [functional, sturdy], unique [spherical bowl shape]/[powerful motor drive]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Mixing Bowl is powerful motor drive."
+    },
+    {
+      "kind": "capital",
+      "detail": "Argentina -> Buenos Aires",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Argentina is Buenos Aires."
+    },
+    {
+      "kind": "capital",
+      "detail": "United Kingdom -> London",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of United Kingdom is London."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Mercedes-Benz/Volkswagen share [automobile, compact], unique [luxury]/[sporty]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be mercedes benz or volkswagen \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Mercedes-Benz/Volkswagen share [automobile, compact], unique [luxury]/[sporty]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Mercedes-Benz is luxury."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Mercedes-Benz/Volkswagen share [automobile, compact], unique [luxury]/[sporty]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Volkswagen is sporty."
+    },
+    {
+      "kind": "capital",
+      "detail": "Germany -> Berlin",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Germany is Berlin."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "NBA Team/Cleveland Cavaliers share [both teams are in the NBA, both teams play in the Western Conference], unique [NBA is owned by the United States of America]/[Cleveland Cavaliers was founded in 1875]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be cleveland cavaliers or nba team \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "NBA Team/Cleveland Cavaliers share [both teams are in the NBA, both teams play in the Western Conference], unique [NBA is owned by the United States of America]/[Cleveland Cavaliers was founded in 1875]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "NBA Team is NBA is owned by the United States of America."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "NBA Team/Cleveland Cavaliers share [both teams are in the NBA, both teams play in the Western Conference], unique [NBA is owned by the United States of America]/[Cleveland Cavaliers was founded in 1875]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Cleveland Cavaliers is Cleveland Cavaliers was founded in 1875."
+    },
+    {
+      "kind": "capital",
+      "detail": "Kazakhstan -> Astana",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Kazakhstan is Astana."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Software Engineer/Data Scientist share [analytical skills, problem-solving abilities], unique [requires a strong foundation in computer science]/[often collaborates with business analysts to solve complex problems]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be data scientist or software engineer \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Software Engineer/Data Scientist share [analytical skills, problem-solving abilities], unique [requires a strong foundation in computer science]/[often collaborates with business analysts to solve complex problems]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Software Engineer is requires a strong foundation in computer science."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Software Engineer/Data Scientist share [analytical skills, problem-solving abilities], unique [requires a strong foundation in computer science]/[often collaborates with business analysts to solve complex problems]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Software Engineer is requires a strong foundation in computer science."
+    },
+    {
+      "kind": "capital",
+      "detail": "Germany -> Berlin",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Germany is Berlin."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Earth/Mercury share [has a moon, is a terrestrial planet], unique [is the closest planet to the sun]/[has no atmosphere]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be earth or mercury \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Earth/Mercury share [has a moon, is a terrestrial planet], unique [is the closest planet to the sun]/[has no atmosphere]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Earth is is the closest planet to the sun."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Earth/Mercury share [has a moon, is a terrestrial planet], unique [is the closest planet to the sun]/[has no atmosphere]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Earth is is the closest planet to the sun."
+    },
+    {
+      "kind": "capital",
+      "detail": "Tanzania -> Dar es Salaam",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Tanzania is Dar es Salaam."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Apple/Banana share [sweet, red], unique [tasty]/[yellow]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be apple or banana \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Apple/Banana share [sweet, red], unique [tasty]/[yellow]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Apple is tasty."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Apple/Banana share [sweet, red], unique [tasty]/[yellow]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Apple is tasty."
+    },
+    {
+      "kind": "capital",
+      "detail": "El Salvador -> San Salvador",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of El Salvador is San Salvador."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "dog/bird share [wings, feathers], unique [doggytail]/[sparrowtail]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be bird or dog \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "dog/bird share [wings, feathers], unique [doggytail]/[sparrowtail]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "dog is doggytail."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "dog/bird share [wings, feathers], unique [doggytail]/[sparrowtail]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "bird is sparrowtail."
+    },
+    {
+      "kind": "capital",
+      "detail": "Japan -> Tokyo",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Japan is Tokyo."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "oven/mixer share [powerful, mechanical], unique [high capacity]/[slow-speed]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be mixer or oven \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "oven/mixer share [powerful, mechanical], unique [high capacity]/[slow-speed]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "oven is high capacity."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "oven/mixer share [powerful, mechanical], unique [high capacity]/[slow-speed]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "oven is high capacity."
+    },
+    {
+      "kind": "capital",
+      "detail": "Bulgaria -> Sofia",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Bulgaria is Sofia."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Guitar/Violin share [stringed instrument, wooden body], unique [Fretted]/[Bow]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be guitar or violin \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Guitar/Violin share [stringed instrument, wooden body], unique [Fretted]/[Bow]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Guitar is Fretted."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Guitar/Violin share [stringed instrument, wooden body], unique [Fretted]/[Bow]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Violin is Bow."
+    },
+    {
+      "kind": "capital",
+      "detail": "Spartania -> Capital City",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Spartania is Capital City."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Honda Civic/Toyota Camry share [car, automobile], unique [compact]/[luxury]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be honda civic or toyota camry \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Honda Civic/Toyota Camry share [car, automobile], unique [compact]/[luxury]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Honda Civic is compact."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Honda Civic/Toyota Camry share [car, automobile], unique [compact]/[luxury]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Honda Civic is compact."
+    },
+    {
+      "kind": "capital",
+      "detail": "Huanghua -> Yuyuan",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Huanghua is Yuyuan."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Netherlands vs England/United States vs Japan share [Sports match, High stakes], unique [Strength of team]/[Rivalry in league]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be netherlands vs england or united states vs japan \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Netherlands vs England/United States vs Japan share [Sports match, High stakes], unique [Strength of team]/[Rivalry in league]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Netherlands vs England is Strength of team."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Netherlands vs England/United States vs Japan share [Sports match, High stakes], unique [Strength of team]/[Rivalry in league]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Netherlands vs England is Strength of team."
+    },
+    {
+      "kind": "capital",
+      "detail": "Algeria -> Algiers",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Algeria is Algiers."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Software Engineer/Data Scientist share [Analytical skills, Problem-solving capabilities], unique [Excellent communication]/[Strong coding experience]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be data scientist or software engineer \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Software Engineer/Data Scientist share [Analytical skills, Problem-solving capabilities], unique [Excellent communication]/[Strong coding experience]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Software Engineer is Excellent communication."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Software Engineer/Data Scientist share [Analytical skills, Problem-solving capabilities], unique [Excellent communication]/[Strong coding experience]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Data Scientist is Strong coding experience."
+    },
+    {
+      "kind": "capital",
+      "detail": "Japan -> Tokyo",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "The capital of Japan is Tokyo."
+    },
+    {
+      "kind": "collision_ambiguous",
+      "detail": "Venus/Neptune share [has moons, atmosphere has nitrogen], unique [day length is about 243 days]/[temperature averages -10\u00b0C to +50\u00b0C]",
+      "passed": true,
+      "response_mode": "relational_ambiguous",
+      "response": "It could be neptune or venus \u2014 I don't have enough information to be sure."
+    },
+    {
+      "kind": "collision_resolved_explicit",
+      "detail": "Venus/Neptune share [has moons, atmosphere has nitrogen], unique [day length is about 243 days]/[temperature averages -10\u00b0C to +50\u00b0C]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Venus is day length is about 243 days."
+    },
+    {
+      "kind": "collision_escalated",
+      "detail": "Venus/Neptune share [has moons, atmosphere has nitrogen], unique [day length is about 243 days]/[temperature averages -10\u00b0C to +50\u00b0C]",
+      "passed": true,
+      "response_mode": "relational_reasoning",
+      "response": "Venus is day length is about 243 days."
+    }
+  ]
+}

@@ -327,8 +327,7 @@ class BioAIDialogueAgent:
             ],
         }
 
-    @staticmethod
-    def _parse_multi_clue_identity_question(text: str) -> list[tuple[str, str]] | None:
+    def _parse_multi_clue_identity_question(self, text: str) -> list[tuple[str, str]] | None:
         """'Who/what is X [and [is] Y ...]?' -> [("is", x), ("is", y), ...].
 
         A bounded, explicit extension of ConsolidationMemory's "is" relation
@@ -340,15 +339,57 @@ class BioAIDialogueAgent:
         since the tied candidates there are alternative values of one
         (subject, relation) pair, not one entity's membership across several
         different relations — see RELATIONAL_MEMORY.md SS2.4/SS6.
+
+        Splitting purely on the word "and" is ambiguous: a property's own
+        text can itself contain "and" (e.g. an LLM-generated fact "Dog is
+        loyal and affectionate." — found via
+        experiments/llm_relational_benchmark.py, hand-crafted examples never
+        exercised this). Naively splitting on every "and" wrongly cuts that
+        into two clues ("loyal", "affectionate"), neither of which exactly
+        matches the stored value, falling back to noisy vector similarity
+        instead of exact ground truth and sometimes landing on a wrong
+        answer. Fixed with a known-value merge pass, not smarter grammar:
+        after the naive split, adjacent pieces are greedily re-joined
+        (longest span first) whenever the merged text exactly matches a
+        value already recorded under relation "is" in
+        self.relational.triples — using the actual stored vocabulary to
+        correct the segmentation (the same idea as dictionary-based/
+        maximum-munch tokenization, or gazetteer-based named entity
+        recognition, applied to clue boundaries instead of word or entity
+        boundaries). This only recognizes clues that match something
+        already stored — it can't discover a genuinely novel multi-word
+        property it's never seen — which is the right scope here: the
+        point is to recognize which previously-asserted facts a question
+        refers to, not to parse free-form grammar.
         """
         query = text.strip().rstrip("?.!")
         match = re.match(r"^(?:who|what)\s+is\s+(.+)$", query, flags=re.IGNORECASE)
         if not match:
             return None
-        clauses = re.split(r"\s+and\s+(?:is\s+)?", match.group(1))
-        values = [ConsolidationMemory._normalise(clause) for clause in clauses]
-        values = [value for value in values if value]
-        return [("is", value) for value in values] if len(values) > 1 else None
+        pieces = re.split(r"\s+and\s+(?:is\s+)?", match.group(1))
+        pieces = [ConsolidationMemory._normalise(piece) for piece in pieces]
+        pieces = [piece for piece in pieces if piece]
+        if not pieces:
+            return None
+
+        known_values = {
+            obj for _, relation, obj, _ in self.relational.triples
+            if relation == "is"
+        }
+        merged: list[str] = []
+        i = 0
+        while i < len(pieces):
+            for j in range(len(pieces), i, -1):
+                candidate = " and ".join(pieces[i:j])
+                if candidate in known_values:
+                    merged.append(candidate)
+                    i = j
+                    break
+            else:
+                merged.append(pieces[i])
+                i += 1
+
+        return [("is", value) for value in merged] if len(merged) > 1 else None
 
     def _relational_source_ids(self, subject: str, relation: str, obj: str) -> list[int]:
         return list(self._relational_sources.get((subject, relation, obj), []))

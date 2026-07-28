@@ -146,3 +146,44 @@ def test_ambiguous_candidates_exclude_unrelated_entities():
 
     assert result["response_mode"] == "relational_ambiguous"
     assert set(result["ambiguous_candidates"]) == {"a planet", "a dwarf planet"}
+
+
+def test_multi_clue_property_containing_and_is_not_split():
+    """Regression test (found via experiments/llm_relational_benchmark.py,
+    not a hand-crafted example): a property whose own text contains the
+    word "and" (e.g. "loyal and affectionate") must not be split into two
+    separate clues just because naive "and"-splitting can't tell a
+    conjunction from the word "and" occurring inside a value. The known-
+    value merge pass in _parse_multi_clue_identity_question should re-join
+    the over-split pieces using the actual stored vocabulary.
+    """
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.process_turn("Dog is four legs.")
+    agent.process_turn("Cat is four legs.")
+    agent.process_turn("Dog is loyal and affectionate.")
+
+    clues = agent._parse_multi_clue_identity_question(
+        "Who is four legs and is loyal and affectionate?"
+    )
+    assert clues == [("is", "four legs"), ("is", "loyal and affectionate")]
+
+    result = agent.process_turn(
+        "Who is four legs and is loyal and affectionate?"
+    )
+    assert result["response_mode"] == "relational_reasoning"
+    assert result["response"] == "Dog is loyal and affectionate."
+
+
+def test_multi_clue_unknown_property_falls_back_to_word_split():
+    """When the property text isn't a previously-stored value at all (so
+    there's no known vocabulary to merge against), splitting still falls
+    back to the naive word-level behavior rather than failing outright --
+    the merge pass can only correct segmentation using what's actually
+    recorded, it can't discover a novel multi-word property it's never
+    seen (documented limitation, not a bug).
+    """
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    clues = agent._parse_multi_clue_identity_question(
+        "Who is brand new and is never seen before?"
+    )
+    assert clues == [("is", "brand new"), ("is", "never seen before")]

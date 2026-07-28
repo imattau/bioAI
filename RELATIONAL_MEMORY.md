@@ -368,6 +368,50 @@ membership across several relations, so `resolve()`/`resolve_auto`'s
 intersection mechanism doesn't apply to it regardless of selection
 strategy.
 
+### 2.9 LLM-driven validation, and a real parsing bug it found (`commit next`)
+
+Everything in §2.1-2.8 had been validated against hand-crafted examples
+only. `experiments/llm_relational_benchmark.py` closes that gap: an LLM
+(via Ollama) generates *content* (entities, properties, countries) through
+constrained JSON prompts, and sentences are assembled programmatically in
+the exact forms `extract_relations` needs — free-form LLM prose almost
+never matches those patterns verbatim (confirmed separately:
+`experiments/llm_conversation_benchmark.py`'s own output had 0/10
+LLM-generated facts trigger the relational path at all). Each scenario
+tests confident single-fact retrieval, genuine ambiguity surfacing,
+explicit multi-clue resolution, and the §2.8 `resolve_auto` escalation
+path, using a fresh agent per scenario to keep measurements isolated.
+
+This surfaced a real bug, not a hypothetical one: `_parse_multi_clue_identity_question`
+split purely on the word "and", which can't distinguish "the conjunction
+between two clues" from "the word 'and' occurring inside a property's own
+text" — an LLM generated the property "loyal and affectionate", which got
+wrongly split into two clues ("loyal", "affectionate"), neither of which
+exactly matched the stored value, falling through to noisy vector
+similarity and landing on a wrong answer. Fixed with a known-value merge
+pass: after the naive split, adjacent pieces are greedily re-joined
+(longest span first) whenever the merged text exactly matches a value
+already recorded under relation `"is"` in `self.relational.triples` — the
+same idea as dictionary-based/maximum-munch tokenization or gazetteer-based
+named entity recognition, applied to clue boundaries using the actual
+stored vocabulary instead of trying to parse grammar. This can only
+recognize clues that match something already stored (it can't discover a
+genuinely novel multi-word property it's never seen), which is the right
+scope: the point is recognizing which previously-asserted facts a question
+refers to, not free-form parsing.
+
+Also found and fixed during this validation: the benchmark script itself
+had a comparison bug (plain `.lower()` instead of the agent's own
+normalization), producing a false-negative "failure" on
+`"Mercedes-Benz"` vs. the correctly-stored `"mercedes benz"` — a reminder
+that test-harness bugs can look identical to product bugs until you check
+which side of the comparison is wrong.
+
+Current result: 100% pass rate across 57 checks (15 LLM-generated
+scenarios), with malformed LLM generations (occasional nested-JSON
+non-compliance) correctly rejected as generation failures rather than
+silently coerced into garbage entity/property names.
+
 ## 3. Comparison against `ConsolidationMemory` (empirically tested)
 
 `src/text/agent.py`'s actual live relational reasoning today is
