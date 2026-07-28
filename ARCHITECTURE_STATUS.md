@@ -194,12 +194,31 @@ on the VSA memory store, preferred specifically because it's non-attention,
 non-token-parallel, structurally compatible with the rest of the
 architecture.
 
-**Actual**: nothing. As of the 2026-07-28 cleanup, `src/nca/` and
+**Actual**: still effectively nothing, though this needs one correction.
+As of the 2026-07-28 cleanup, `src/nca/` and
 `src/decoder/{dit,diffusion,sampler,decoder}.py` no longer exist in this
-codebase. Requirement 7 (extended generation) has no implementation at
-all right now — every response `BioAIDialogueAgent` produces is either a
-verbatim retrieved sentence or a fixed template string ("I'll remember
-that."), never a generated one.
+codebase. But `src/text/response_candidates.py`
+(`FixedSpliceCandidateGenerator`, `SequenceCandidateScorer`) plus
+`src/text/chunk_composer.py`'s `LearnedChunkComposer` do form a real,
+already-wired composition path (`process_turn`, `src/text/agent.py:784-800`,
+opt-in via `enable_chunk_composition()`): retrieved memories get split into
+sentence-level splices plus one learned chunk-recombination candidate (up
+to 24 total), a scorer ranks them once, and the top-ranked candidate is
+returned. That's genuine composition — the response can differ from any
+single stored sentence — so "every response is either verbatim or a fixed
+template" overstates it when this path is enabled (which it isn't by
+default). The honest description: **composition exists, but open-ended
+generation — synthesizing a claim not present verbatim in any single
+source — does not.** It runs exactly once (generate → rank → take the top
+candidate; no iteration, no candidate ever modifies another, no answer
+shape survives being outscored once), and `self.gonogo` doesn't touch this
+path at all (confirmed: it's called only in `_retrieve_context`, never in
+or near the 784-800 block). A "Response Ecosystem" design — a bounded
+population of response organisms competing across a few generations, in
+niches that preserve different answer shapes rather than only the single
+highest-scoring text — is planned as the replacement generation direction
+for requirement 7; see the plan referenced in this branch's history for
+details. Until that lands, requirement 7 remains open.
 
 What used to be there, and why it was removed:
 

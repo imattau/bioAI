@@ -777,6 +777,7 @@ class BioAIDialogueAgent:
             user_input, user_vec, long_term=(intent == "statement")
         )
 
+        synthesized = False
         if intent == "statement":
             response = "I'll remember that."
         elif not retrieval["accepted"]:
@@ -798,6 +799,7 @@ class BioAIDialogueAgent:
             response = (
                 ranked_candidates[0]["text"] if ranked_candidates else context
             )
+            synthesized = True
         elif self.response_generator is not None:
             response = self.response_generator(
                 user_input,
@@ -807,6 +809,7 @@ class BioAIDialogueAgent:
                     "score": retrieval["score"],
                 }],
             )
+            synthesized = True
         else:
             response = context
 
@@ -847,9 +850,7 @@ class BioAIDialogueAgent:
 
         return {
             "response": response,
-            "response_generated": (
-                retrieval["accepted"] and self.response_generator is not None
-            ),
+            "response_generated": synthesized,
             "response_mode": response_mode,
             "sources": sources,
             "intent": intent,
