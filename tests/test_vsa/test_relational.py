@@ -131,3 +131,63 @@ def test_unique_query_not_flagged_ambiguous():
     result = memory.complete_detailed({"relation": "chases", "object": "mouse"})
     assert result.best == "cat"
     assert not result.ambiguous
+
+
+def test_context_disambiguates_collision():
+    """A (relation, object) collision that's ambiguous on its own becomes
+    resolvable once a discriminating context role is bound into both
+    storage and query — analogous to more context narrowing an LLM's
+    next-token distribution.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=2000)
+
+    memory.store_triple("cat", "chases", "mouse", context={"scene": "kitchen"})
+    memory.store_triple("dog", "chases", "mouse", context={"scene": "garden"})
+
+    # Without context: genuinely ambiguous, two stored matches.
+    known = {"relation": "chases", "object": "mouse"}
+    assert len(memory.ground_truth_ambiguity(known)) == 2
+    assert memory.complete_detailed(known).ambiguous
+
+    # With the right context: uniquely determined.
+    assert memory.ground_truth_ambiguity(known, context={"scene": "kitchen"}) == [
+        ("cat", "chases", "mouse")
+    ]
+    result = memory.complete_detailed(known, context={"scene": "kitchen"})
+    assert result.best == "cat"
+    assert not result.ambiguous
+
+    result = memory.complete_detailed(known, context={"scene": "garden"})
+    assert result.best == "dog"
+    assert not result.ambiguous
+
+
+def test_context_does_not_help_when_shared():
+    """Context only disambiguates when it actually differs between the
+    colliding triples — no amount of conditioning manufactures information
+    that was never captured.
+    """
+    vsa = VSA(dim=2000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=2000)
+
+    memory.store_triple("cat", "chases", "mouse", context={"scene": "kitchen"})
+    memory.store_triple("dog", "chases", "mouse", context={"scene": "kitchen"})
+
+    known = {"relation": "chases", "object": "mouse"}
+    matches = memory.ground_truth_ambiguity(known, context={"scene": "kitchen"})
+    assert {s for s, _, _ in matches} == {"cat", "dog"}
+    assert memory.complete_detailed(known, context={"scene": "kitchen"}).ambiguous
+
+
+def test_store_and_complete_without_context_unaffected():
+    """Context is opt-in — omitting it entirely must behave exactly as before."""
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    s, r, o = memory.complete({"relation": "chases", "object": "mouse"})
+    assert s == "cat"
