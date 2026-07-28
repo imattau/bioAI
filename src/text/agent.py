@@ -464,8 +464,19 @@ class BioAIDialogueAgent:
             return self._relational_result(
                 {"subject": subject, "relation": relation}, "object", result.best
             )
+        # Ground truth, not result.candidates: complete_detailed's top-k
+        # candidate list is drawn from the whole shared entity-vector
+        # namespace (every entity ever seen, across every relation), so an
+        # unrelated low-score entity can still make the top-k in a small
+        # vocabulary and get named as a plausible answer alongside the real
+        # ones. The literal stored triples are exact and can't contain that
+        # noise — same principle as resolve()'s ground-truth-exact final
+        # candidates (RELATIONAL_MEMORY.md SS2.4).
+        ground_truth = self.relational.ground_truth_ambiguity(
+            {"subject": subject, "relation": relation}
+        )
         return self._ambiguous_relational_result(
-            [name for name, _ in result.candidates]
+            sorted({obj for _, _, obj in ground_truth})
         )
 
     def process_turn(self, user_input: str, ctx_cache: bool = True) -> dict:

@@ -102,3 +102,24 @@ def test_relational_survives_save_load_and_accepts_new_facts():
         assert result["response"] == "Dog is a mammal"
     finally:
         path.unlink(missing_ok=True)
+
+
+def test_ambiguous_candidates_exclude_unrelated_entities():
+    """Regression test: complete_detailed's top-k candidates are drawn from
+    the whole shared entity-vector namespace (every entity ever seen, across
+    every relation), so an unrelated low-score entity from a completely
+    different relation could ride along into the top-k in a small
+    vocabulary and get named as a plausible answer. The candidates shown to
+    the user must come from ground_truth_ambiguity (the literal stored
+    triples), which can't contain that noise.
+    """
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.process_turn("The capital of France is Paris")
+    agent.process_turn("The capital of Japan is Tokyo")
+    agent.process_turn("Pluto is a planet")
+    agent.process_turn("Pluto is a dwarf planet")
+
+    result = agent.process_turn("What is Pluto?")
+
+    assert result["response_mode"] == "relational_ambiguous"
+    assert set(result["ambiguous_candidates"]) == {"a planet", "a dwarf planet"}
