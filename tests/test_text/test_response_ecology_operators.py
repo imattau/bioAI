@@ -87,6 +87,16 @@ def test_realiser_empty_propositions_gives_empty_string():
     assert PropositionRealiser.realise(()) == ""
 
 
+def test_realiser_capitalizes_every_clause_not_just_the_first():
+    props = (
+        Proposition("wombats", "is", "marsupials", 0, "x"),
+        Proposition("wombats", "in", "australia", 1, "y"),
+    )
+    text = PropositionRealiser.realise(props)
+    assert ". Wombats" in text
+    assert ". wombats" not in text
+
+
 # ── recombination / compatibility ───────────────────────────────────────
 
 def _organism(propositions, source_ids):
@@ -270,6 +280,45 @@ def test_ecosystem_composes_across_sources_via_recombination():
     all_text = " ".join(o.text.lower() for o in result.niche_winners.values())
     assert "wombats" in all_text
     assert "paris" in all_text
+
+
+def test_ecosystem_final_winner_prefers_supported_proposition_count():
+    """Regression test for a real bug found while building Phase 3's
+    benchmark: comparing raw niche_score across niches with different
+    weight vectors is apples-to-oranges, so the short "direct" niche's
+    single-fact answer almost always won the overall comparison even when
+    an "integrative"/"explanatory" niche_winner correctly composed both
+    known facts. The final `winner`/`response` must prefer whichever
+    survivor's realised text actually asserts more of the evidence's known
+    propositions, not just whichever niche happened to score highest on
+    its own internal scale."""
+    eco = ResponseEcosystem(max_rounds=4)
+    prompt = "What do you know about wombats?"
+    evidence = ["Wombats are marsupials.", "Wombats are in Australia."]
+    result = eco.generate(prompt, evidence)
+    text = result.response.lower()
+    assert "marsupials" in text
+    assert "australia" in text
+
+
+def test_ecosystem_recombines_even_when_genotype_organisms_lose_their_niche_slot():
+    """Regression test for a real bug found while building Phase 3's
+    benchmark: two short, single-proposition organisms about the same
+    subject (one per source) can both lose their niche slot to already-
+    good raw candidates in the same niche before ever getting a chance to
+    recombine -- silently defeating Phase 2's whole point for exactly the
+    short, one-fact-per-source case it's meant to help with. Genotype
+    organisms must get to participate in reproduction regardless of
+    whether they won a niche slot that round."""
+    eco = ResponseEcosystem(max_rounds=4, survivors_per_niche=2)
+    prompt = "What do you know about wombats?"
+    evidence = ["Wombats are marsupials.", "Wombats are in Australia."]
+    result = eco.generate(prompt, evidence)
+    multi_proposition_winner = any(
+        len(organism.propositions) >= 2
+        for organism in result.niche_winners.values()
+    )
+    assert multi_proposition_winner
 
 
 def test_ecosystem_relational_memory_threaded_through_agent():

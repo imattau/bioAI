@@ -54,5 +54,9 @@ class PropositionRealiser:
                 template.format(subject=subject, relation=relation, object=objects)
             )
 
+        clauses = [
+            clause[:1].upper() + clause[1:] if clause else clause
+            for clause in clauses
+        ]
         text = ". ".join(clauses)
-        return text[:1].upper() + text[1:] + "." if text else ""
+        return text + "." if text else ""

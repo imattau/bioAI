@@ -47,6 +47,30 @@ from .proposition_extractor import extract_propositions
 _STABLE_ROUNDS_TO_STOP = 2
 
 
+def _supported_proposition_count(text: str, all_propositions: list) -> int:
+    """How many of the evidence's known propositions this organism's
+    *realised text* actually asserts -- computed the same way for every
+    organism kind (raw candidate or proposition genotype) by re-extracting
+    from the text itself, not by reading `organism.propositions` (which is
+    always empty for Phase-1-style raw candidates even when their text
+    happens to state the same facts). Used to pick the final winner across
+    niches; see the response-ecosystem plan's Phase 3 finding: comparing
+    raw `niche_score` across niches with different weight vectors is
+    apples-to-oranges and let a short "direct" answer win even when an
+    "integrative"/"explanatory" niche winner correctly composed more of
+    the evidence."""
+    if not all_propositions or not text:
+        return 0
+    asserted = {
+        (prop.subject, prop.relation, prop.object)
+        for prop in extract_propositions([text])
+    }
+    known = {
+        (prop.subject, prop.relation, prop.object) for prop in all_propositions
+    }
+    return len(asserted & known)
+
+
 @dataclass
 class EcosystemResult:
     response: str
@@ -106,6 +130,7 @@ class ResponseEcosystem:
         scorer: SequenceCandidateScorer | None = None,
         survivors_per_niche: int = 2,
         max_rounds: int = 3,
+        enable_synthesis: bool = True,
     ):
         self.candidate_generator = (
             candidate_generator or FixedSpliceCandidateGenerator()
@@ -113,6 +138,13 @@ class ResponseEcosystem:
         self.scorer = scorer or SequenceCandidateScorer()
         self.survivors_per_niche = survivors_per_niche
         self.max_rounds = max_rounds
+        # False reproduces Phase 1 exactly: ecological *selection* only,
+        # over FixedSpliceCandidateGenerator's existing candidates, no
+        # proposition genotype or mutation/recombination. Exists so
+        # experiments/ecology_benchmark.py can isolate that data point from
+        # full Phase 2 synthesis in the same class, rather than needing a
+        # second, drifting implementation to compare against.
+        self.enable_synthesis = enable_synthesis
 
     def generate(
         self,
@@ -124,14 +156,17 @@ class ResponseEcosystem:
         fallback: str = "",
     ) -> EcosystemResult:
         candidates = self.candidate_generator.generate(prompt, evidence, composer)
-        propositions = extract_propositions(evidence)
+        propositions = (
+            extract_propositions(evidence) if self.enable_synthesis else []
+        )
 
         population = seed_population(
             prompt, candidates, evidence, self.scorer, sequence_ranker
         )
-        population += seed_proposition_population(
-            prompt, propositions, evidence, self.scorer, sequence_ranker
-        )
+        if self.enable_synthesis:
+            population += seed_proposition_population(
+                prompt, propositions, evidence, self.scorer, sequence_ranker
+            )
         population = [
             organism for organism in population if survives_predation(organism)
         ]
@@ -145,10 +180,28 @@ class ResponseEcosystem:
         stable_rounds = 0
         for round_index in range(1, self.max_rounds):
             survivors = select_survivors(population, self.survivors_per_niche)
-            offspring = _reproduce(
-                survivors, propositions, prompt, evidence, self.scorer,
-                sequence_ranker, relational_memory, round_index,
-            )
+            if self.enable_synthesis:
+                # Genotype organisms are breeding stock, not just competing
+                # finalists: a short single-proposition organism can easily
+                # lose its niche slot to an already-good raw candidate
+                # before ever getting a chance to recombine with another
+                # source's genotype organism -- which would silently defeat
+                # the whole point of Phase 2 for exactly the short,
+                # single-fact-per-source scenarios it's meant to help with.
+                # So every surviving genotype organism still in the
+                # population gets to participate in reproduction this
+                # round, whether or not it won a niche slot.
+                survivor_ids = {id(organism) for organism in survivors}
+                reproduction_pool = survivors + [
+                    organism for organism in population
+                    if organism.propositions and id(organism) not in survivor_ids
+                ]
+                offspring = _reproduce(
+                    reproduction_pool, propositions, prompt, evidence,
+                    self.scorer, sequence_ranker, relational_memory, round_index,
+                )
+            else:
+                offspring = []
             population = deduplicate_population(survivors + offspring)
             population_sizes.append(len(population))
 
@@ -171,7 +224,12 @@ class ResponseEcosystem:
                 niche_winners[organism.niche] = organism
 
         winner = max(
-            survivors, key=lambda organism: organism.niche_score, default=None
+            survivors,
+            key=lambda organism: (
+                _supported_proposition_count(organism.text, propositions),
+                organism.niche_score,
+            ),
+            default=None,
         )
         response = winner.text if winner is not None else fallback
         return EcosystemResult(
