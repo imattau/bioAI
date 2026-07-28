@@ -138,14 +138,18 @@ def test_does_not_yet_replicate_transitive_chaining():
     )
 
 
-# ── NOT (yet) available at all: persistence ──────────────────────────────
-# Mirrors test_relations_survive_agent_save_load. ConsolidationMemory has
-# get_state/from_state; RelationalMemory/RelationalEncoder currently don't,
-# so wiring this into BioAIDialogueAgent.save/load would silently drop all
-# relational memory on every load until this is built.
+# ── Now available: persistence ────────────────────────────────────────
+# Mirrors test_relations_survive_agent_save_load. This gap is closed —
+# RelationalMemory/RelationalEncoder now have get_state/from_state (see
+# tests/test_vsa/test_relational.py::test_persistence_round_trip for the
+# full round-trip check), and BioAIDialogueAgent.save/load persists
+# self.relational. Kept here (rather than deleted) as the corresponding
+# "replicated" entry to the original gap this file documented.
 
-def test_persistence_not_yet_available():
+def test_persistence_now_available():
     memory = _memory()
-    assert not hasattr(memory, "get_state")
-    assert not hasattr(RelationalMemory, "from_state")
-    assert not hasattr(memory.encoder, "get_state")
+    memory.store_triple("france", "capital", "paris")
+    restored = RelationalMemory.from_state(memory.get_state())
+    assert restored.complete_detailed(
+        {"subject": "france", "relation": "capital"}
+    ).best == "paris"

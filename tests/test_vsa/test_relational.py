@@ -301,3 +301,37 @@ def test_resolve_requires_at_least_one_query():
 
     with pytest.raises(ValueError):
         memory.resolve([])
+
+
+def test_persistence_round_trip():
+    vsa = VSA(dim=1000)
+    encoder = RelationalEncoder(vsa)
+    memory = RelationalMemory(encoder, dim=1000)
+
+    memory.store_triple("cat", "chases", "mouse")
+    memory.store_triple("dog", "chases", "mouse", context={"scene": "garden"})
+    memory.store_triple("dog", "fears", "water")
+
+    restored = RelationalMemory.from_state(memory.get_state())
+
+    # Same completions, including ambiguity, after restore.
+    before = memory.complete_detailed({"relation": "chases", "object": "mouse"})
+    after = restored.complete_detailed({"relation": "chases", "object": "mouse"})
+    assert after.ambiguous == before.ambiguous
+    assert set(after.candidates) == set(before.candidates)
+
+    # ground_truth_ambiguity / context still work post-restore.
+    assert restored.ground_truth_ambiguity(
+        {"relation": "chases", "object": "mouse"}, context={"scene": "garden"}
+    ) == [("dog", "chases", "mouse")]
+
+    # A fact stored before restore is still confidently retrievable.
+    result = restored.complete_detailed({"subject": "dog", "relation": "fears"})
+    assert result.best == "water"
+    assert not result.ambiguous
+
+    # New facts can still be stored and queried after restore (nets/store
+    # aren't frozen read-only copies).
+    restored.store_triple("fox", "fears", "water")
+    result = restored.complete_detailed({"subject": "fox", "relation": "fears"})
+    assert result.best == "water"

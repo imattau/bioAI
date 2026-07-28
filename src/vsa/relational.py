@@ -163,6 +163,28 @@ class RelationalEncoder:
         fields.update(context or {})
         return self.encode(fields)
 
+    def get_state(self) -> dict:
+        # float16 on disk, float32 in memory (see from_state) — halves save
+        # size for what can otherwise be a large, ever-growing vocabulary of
+        # entity/relation vectors, matching the convention already used for
+        # VSAEncoder's word_cache/pos_vectors in BioAIDialogueAgent.save.
+        return {
+            "dim": self.vsa.dim,
+            "device": self.vsa.device,
+            "role_vectors": {k: v.to(torch.float16) for k, v in self.role_vectors.items()},
+            "entity_vectors": {k: v.to(torch.float16) for k, v in self.entity_vectors.items()},
+            "relation_vectors": {k: v.to(torch.float16) for k, v in self.relation_vectors.items()},
+        }
+
+    @classmethod
+    def from_state(cls, state: dict) -> "RelationalEncoder":
+        vsa = VSA(dim=state["dim"], device=state.get("device"))
+        encoder = cls(vsa)
+        encoder.role_vectors = {k: v.to(torch.float32) for k, v in state["role_vectors"].items()}
+        encoder.entity_vectors = {k: v.to(torch.float32) for k, v in state["entity_vectors"].items()}
+        encoder.relation_vectors = {k: v.to(torch.float32) for k, v in state["relation_vectors"].items()}
+        return encoder
+
 
 @dataclass
 class CompletionResult:
@@ -378,6 +400,20 @@ class RelationalMemory:
         evidence the moment it thinks it has an answer would silently miss a
         later query that actually conflicts with that answer, which is
         exactly the blind spot this method exists to avoid.
+
+        `final_candidates`/`resolved` prefer an exact ground-truth
+        intersection (reading the literal stored triples, no VSA/Hopfield
+        involved) over the VSA-based per-step intersection above, whenever
+        every step in the chain has at least one ground-truth match — the
+        same "ground truth overrides score heuristics" principle
+        complete_detailed already applies to `ambiguous`. This matters
+        because top_k truncates each step's candidate list, so a real
+        candidate can be dropped from the *approximate* intersection by
+        chance even when the exact combination is genuinely and uniquely
+        recorded in memory; falling back to the VSA-based result only when
+        ground truth can't settle it (some step matches nothing on record,
+        i.e. real inference beyond memorized facts is needed) keeps
+        `resolve()` exact whenever an exact answer exists.
         """
         if not queries:
             raise ValueError("resolve() requires at least one query")
@@ -435,7 +471,11 @@ class RelationalMemory:
             ))
             survivors = new_survivors
 
-        final = sorted(survivors) if survivors else []
+        ground_truth_survivors = self._ground_truth_intersection(role, queries)
+        final = (
+            sorted(ground_truth_survivors) if ground_truth_survivors is not None
+            else (sorted(survivors) if survivors else [])
+        )
         return ResolutionTrace(
             role=role,
             steps=trace_steps,
@@ -443,6 +483,35 @@ class RelationalMemory:
             resolved=len(final) == 1,
             contradictory=any_contradiction,
         )
+
+    def _ground_truth_intersection(
+        self, role: str, queries: list[tuple[dict[str, str], dict[str, str] | None]]
+    ) -> set[str] | None:
+        """Exact intersection of ground-truth values for `role` across every
+        query, or None if any query has no ground-truth match at all (in
+        which case the answer, if any, requires real VSA-based inference
+        rather than exact lookup — see resolve()'s docstring).
+
+        Mirrors resolve()'s own contradiction-preserving rule: if a step's
+        ground-truth values would empty the running pool entirely, that
+        step is conflicting evidence and is skipped rather than collapsing
+        prior progress to nothing.
+        """
+        idx = TARGET_ROLES.index(role)
+        survivors: set[str] | None = None
+        for known, context in queries:
+            values = {
+                triple[idx] for triple in self.ground_truth_ambiguity(known, context)
+            }
+            if not values:
+                return None
+            if survivors is None:
+                survivors = values
+            else:
+                intersected = survivors & values
+                if intersected:
+                    survivors = intersected
+        return survivors
 
     def ground_truth_ambiguity(
         self, known: dict[str, str], context: dict[str, str] | None = None
@@ -480,3 +549,42 @@ class RelationalMemory:
     @property
     def size(self) -> int:
         return len(self.store)
+
+    def get_state(self) -> dict:
+        # store_keys isn't persisted: AssociativeStore just holds the same
+        # pattern vectors as self.nets (it's a diagnostic/exact_lookup
+        # helper, not used by complete_detailed/resolve), so persisting it
+        # too would double the save size for nothing — from_state rebuilds
+        # it from triples instead. Patterns go to disk as float16 (halves
+        # size again), matching RelationalEncoder.get_state.
+        return {
+            "dim": self.dim,
+            "hopfield_beta": self.hopfield_beta,
+            "ambiguity_margin": self.ambiguity_margin,
+            "encoder": self.encoder.get_state(),
+            "nets": {
+                relation: [p.to(torch.float16) for p in net.patterns]
+                for relation, net in self.nets.items()
+            },
+            "triples": self.triples,
+        }
+
+    @classmethod
+    def from_state(cls, state: dict) -> "RelationalMemory":
+        encoder = RelationalEncoder.from_state(state["encoder"])
+        memory = cls(
+            encoder,
+            dim=state["dim"],
+            hopfield_beta=state.get("hopfield_beta", 50.0),
+            ambiguity_margin=state.get("ambiguity_margin", DEFAULT_AMBIGUITY_MARGIN),
+        )
+        for relation, patterns in state["nets"].items():
+            memory._net_for(relation).set_state(
+                [p.to(torch.float32) for p in patterns]
+            )
+        memory.triples = [
+            (s, r, o, dict(ctx)) for s, r, o, ctx in state["triples"]
+        ]
+        for s, r, o, ctx in memory.triples:
+            memory.store.insert(encoder.encode_triple(s, r, o, ctx))
+        return memory
