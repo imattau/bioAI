@@ -368,7 +368,7 @@ membership across several relations, so `resolve()`/`resolve_auto`'s
 intersection mechanism doesn't apply to it regardless of selection
 strategy.
 
-### 2.9 LLM-driven validation, and a real parsing bug it found (`commit next`)
+### 2.9 LLM-driven validation, and a real parsing bug it found (`commit 988ba98`)
 
 Everything in §2.1-2.8 had been validated against hand-crafted examples
 only. `experiments/llm_relational_benchmark.py` closes that gap: an LLM
