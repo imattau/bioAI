@@ -1,0 +1,324 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "lessons": 30,
+    "holdout": 15
+  },
+  "lessons_taught": 30,
+  "frames_learned": 7,
+  "distinct_frames_by_relation": {
+    "is": 2,
+    "in": 5,
+    "capital": 0,
+    "capital_of": 0
+  },
+  "holdout_evaluated": 9,
+  "generation_success_rate": 1.0,
+  "no_library_overlap_rate": 1.0,
+  "propositions_match_rate": 1.0,
+  "native_generation_proof_rate": 1.0,
+  "acquisition_records": [
+    {
+      "index": 0,
+      "subject": "buses",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Buses is transportation."
+    },
+    {
+      "index": 1,
+      "subject": "bunnies",
+      "relation_family": "in",
+      "template": "{subject} are in {object}.",
+      "sentence": "Bunnies are in lawn."
+    },
+    {
+      "index": 2,
+      "subject": "apples",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Apples was fruit."
+    },
+    {
+      "index": 3,
+      "subject": "puzzle",
+      "relation_family": "in",
+      "template": "{subject} lies within {object}.",
+      "sentence": "Puzzle lies within box."
+    },
+    {
+      "index": 4,
+      "subject": "bunnies",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Bunnies is rabbit family."
+    },
+    {
+      "index": 5,
+      "subject": "books",
+      "relation_family": "in",
+      "template": "{subject} is in {object}.",
+      "sentence": "Books is in library."
+    },
+    {
+      "index": 6,
+      "subject": "mammals",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Mammals was animal kingdom."
+    },
+    {
+      "index": 7,
+      "subject": "wombats",
+      "relation_family": "in",
+      "template": "{subject} is located in {object}.",
+      "sentence": "Wombats is located in mountain."
+    },
+    {
+      "index": 8,
+      "subject": "birds",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Birds is avian group."
+    },
+    {
+      "index": 9,
+      "subject": "baskets",
+      "relation_family": "in",
+      "template": "{subject} sits in {object}.",
+      "sentence": "Baskets sits in basketry workshop."
+    },
+    {
+      "index": 10,
+      "subject": "bunnies",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Bunnies was animal."
+    },
+    {
+      "index": 11,
+      "subject": "tiger",
+      "relation_family": "in",
+      "template": "{subject} are in {object}.",
+      "sentence": "Tiger are in cub."
+    },
+    {
+      "index": 12,
+      "subject": "beefcake",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Beefcake is deliciousness."
+    },
+    {
+      "index": 13,
+      "subject": "wombats",
+      "relation_family": "in",
+      "template": "{subject} lies within {object}.",
+      "sentence": "Wombats lies within savanna."
+    },
+    {
+      "index": 14,
+      "subject": "baskets",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Baskets was food."
+    },
+    {
+      "index": 15,
+      "subject": "wombats",
+      "relation_family": "in",
+      "template": "{subject} is in {object}.",
+      "sentence": "Wombats is in forest."
+    },
+    {
+      "index": 16,
+      "subject": "fish",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Fish is ocean."
+    },
+    {
+      "index": 17,
+      "subject": "lamb",
+      "relation_family": "in",
+      "template": "{subject} is located in {object}.",
+      "sentence": "Lamb is located in mountain."
+    },
+    {
+      "index": 18,
+      "subject": "fish",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Fish was sea."
+    },
+    {
+      "index": 19,
+      "subject": "lions",
+      "relation_family": "in",
+      "template": "{subject} sits in {object}.",
+      "sentence": "Lions sits in carnivorous primate territories."
+    },
+    {
+      "index": 20,
+      "subject": "chickens",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Chickens is flock."
+    },
+    {
+      "index": 21,
+      "subject": "wombs",
+      "relation_family": "in",
+      "template": "{subject} are in {object}.",
+      "sentence": "Wombs are in gymnasium."
+    },
+    {
+      "index": 22,
+      "subject": "bottles",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Bottles was beverages."
+    },
+    {
+      "index": 23,
+      "subject": "puppies",
+      "relation_family": "in",
+      "template": "{subject} lies within {object}.",
+      "sentence": "Puppies lies within park."
+    },
+    {
+      "index": 24,
+      "subject": "wombats",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Wombats is vertebrates."
+    },
+    {
+      "index": 25,
+      "subject": "wolves",
+      "relation_family": "in",
+      "template": "{subject} is in {object}.",
+      "sentence": "Wolves is in park."
+    },
+    {
+      "index": 26,
+      "subject": "bottles",
+      "relation_family": "is",
+      "template": "{subject} was {object}.",
+      "sentence": "Bottles was drinks."
+    },
+    {
+      "index": 27,
+      "subject": "butterflies",
+      "relation_family": "in",
+      "template": "{subject} is located in {object}.",
+      "sentence": "Butterflies is located in forest."
+    },
+    {
+      "index": 28,
+      "subject": "dandelions",
+      "relation_family": "is",
+      "template": "{subject} is {object}.",
+      "sentence": "Dandelions is plant."
+    },
+    {
+      "index": 29,
+      "subject": "honeybees",
+      "relation_family": "in",
+      "template": "{subject} sits in {object}.",
+      "sentence": "Honeybees sits in hive."
+    }
+  ],
+  "holdout_records": [
+    {
+      "index": 10000,
+      "subject": "cookies",
+      "relation": "is",
+      "target_object": "food",
+      "generated_text": "Cookies is food.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10001,
+      "subject": "bookstore",
+      "relation": "in",
+      "target_object": "library",
+      "generated_text": "Bookstore is in library.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10003,
+      "subject": "coke",
+      "relation": "in",
+      "target_object": "beverage",
+      "generated_text": "Coke lies within beverage.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10004,
+      "subject": "broom",
+      "relation": "is",
+      "target_object": "cabinets",
+      "generated_text": "Broom is cabinets.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10007,
+      "subject": "bees",
+      "relation": "in",
+      "target_object": "hive",
+      "generated_text": "Bees is in hive.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10009,
+      "subject": "pandas",
+      "relation": "in",
+      "target_object": "data scientist",
+      "generated_text": "Pandas sits in data scientist.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10011,
+      "subject": "dolphin",
+      "relation": "in",
+      "target_object": "ocean",
+      "generated_text": "Dolphin is located in ocean.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10012,
+      "subject": "crustaceans",
+      "relation": "is",
+      "target_object": "shell",
+      "generated_text": "Crustaceans was shell.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    },
+    {
+      "index": 10014,
+      "subject": "bunny",
+      "relation": "is",
+      "target_object": "animal",
+      "generated_text": "Bunny is animal.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true
+    }
+  ]
+}

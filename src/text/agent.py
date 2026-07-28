@@ -23,7 +23,8 @@ from src.text.vsa_sequence_ranker import (
     VSASequenceRanker,
 )
 from src.text.ecology import ResponseEcosystem
-from src.text.ecology.frame_extractor import FrameLibrary
+from src.text.ecology.frame_extractor import FrameLibrary, extract_frame
+from src.text.ecology.proposition_extractor import extract_propositions
 
 
 RELATIONAL_VSA_DIM = 2000
@@ -152,7 +153,14 @@ class BioAIDialogueAgent:
         if self.chunk_composer is None:
             self.enable_chunk_composition()
         self.chunk_composer.learn(prompt, response)
-        self.frame_library.observe(response)
+        for sentence in self.candidate_generator._sentences(response):
+            self.frame_library.observe(sentence)
+        for prop in extract_propositions([response]):
+            frame = extract_frame(prop.source_text)
+            self.relational.store_triple(
+                prop.subject, prop.relation, prop.object,
+                frame=frame.template if frame is not None else None,
+            )
 
     def enable_vsa_sequence_ranking(self, dimension: int = 512):
         self.sequence_ranker = VSASequenceRanker(dimension=dimension)

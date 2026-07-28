@@ -40,6 +40,38 @@ def test_agent_exposes_learned_composer():
     assert agent.chunk_composer.pairs == 1
 
 
+def test_learn_conversation_populates_frame_library_and_relational_memory():
+    """Phase 4: learn_conversation should feed the frame/proposition
+    machinery, not just chunk_composer -- otherwise the LLM-teacher
+    acquisition loop has no way to build up either structure."""
+    agent = BioAIDialogueAgent(vsa_dim=1000)
+    agent.learn_conversation(
+        "Tell me about France.", "The capital of France is Paris."
+    )
+    assert ("france", "capital", "paris", {
+        "frame": "The capital of [SUBJECT] is [OBJECT]"
+    }) in agent.relational.triples
+    assert agent.relational.recall_frame(
+        {"subject": "france", "relation": "capital"}
+    ) == "The capital of [SUBJECT] is [OBJECT]"
+    assert (
+        "The capital of [SUBJECT] is [OBJECT]" in agent.frame_library.frames
+    )
+
+
+def test_learn_conversation_handles_unparseable_response_gracefully():
+    """A response with no extractable copula must not raise -- it just
+    contributes nothing to relational memory/frame_library, same
+    degrade-gracefully behavior as extract_propositions/extract_frame."""
+    agent = BioAIDialogueAgent(vsa_dim=64)
+    agent.learn_conversation(
+        "How do wombats care for their young?",
+        "Marsupials carry their young in a pouch.",
+    )
+    assert agent.relational.triples == []
+    assert agent.frame_library.frames == {}
+
+
 def test_chunk_composed_response_reports_response_generated():
     """Regression test: response_generated used to be true only when
     response_generator was set, so a turn answered via chunk_composer
