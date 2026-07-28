@@ -10,6 +10,16 @@ theoretically) rather than merely suspected. Written 2026-07-28, on branch
 `src/vsa/relational.py` and wiring it into `src/text/agent.py` (see
 `RELATIONAL_MEMORY.md` for the detailed working log of that subsystem).
 
+**Updated same day** after a cleanup pass (commit `748498e`) removed code
+that this status check had identified as unwired: the generation subsystem
+(`src/nca/*`, `src/decoder/{dit,diffusion,sampler,decoder}.py`) and the
+orphaned `NegativeSelectionDetector`/`DetectorEnsemble`. Sections 3 and 5
+below now describe the codebase after that removal, not before it — a
+prior version of this document described those components as present but
+unwired; they are no longer present at all. See that commit message for
+the full audit (each removed component confirmed via grep to have zero
+callers outside its own test file, before deletion).
+
 ## The core thesis
 
 Transformers trained by backprop have specific, structural failure modes:
@@ -76,16 +86,30 @@ multi-step evidence intersection), grid-cell structure exists separately
 non-destructive) and negative selection (detect internal states that don't
 match a learned "self" baseline).
 
-**Actual**: more built than expected. `src/clonal/` (`ClonalModule`,
-`ClonalPool`) implements cloning on novel input. `src/immune/` has *two*
-separate mechanisms: `SelfMonitor` (Hopfield energy-based drift detection,
-directly wired into `BioAIDialogueAgent`'s novelty check in this session's
-work) and a separate `NegativeSelectionDetector`/`DetectorEnsemble` in
-`detector.py` matching the doc's negative-selection description, not
-touched or verified this session. Whether these two pieces are actually
-integrated with each other (danger-theory-style contextual gating, per
-§3.3's "gate on contextual harm signals, not just pattern mismatch") is
-unconfirmed without reading `detector.py`'s call sites more closely.
+**Actual**: `src/clonal/` (`ClonalModule`, `ClonalPool`) implements cloning
+on novel input — cosine-affinity-threshold matching, Gaussian-noise
+mutation, and a per-module local gradient update (not backprop across the
+whole network), wired into `BioAIDialogueAgent._detect_novelty`.
+`src/immune/` now contains exactly one mechanism: `SelfMonitor` (Hopfield
+energy-based drift detection), which is what `_detect_novelty` actually
+calls — recall a query through the Hopfield net, score its energy
+z-score against a calibrated baseline, and treat high-z as anomalous
+enough to trigger `ClonalPool.process()`.
+
+A `NegativeSelectionDetector`/`DetectorEnsemble` (one-class-SVM-based,
+matching this section's own suggested implementation almost verbatim)
+used to exist in `detector.py`, but was removed in a 2026-07-28 cleanup
+after a full-repo grep audit found it had zero callers anywhere — not
+`agent.py`, not any experiment script, only its own test file. It wasn't
+a case of "built but not yet wired in" the way (4)'s `self.gonogo` was
+before this session — it was never called by anything. `SelfMonitor`
+already covers this section's actual functional claim (§4: "negative
+selection computes its check as a pattern-completion query... using the
+same machinery as ordinary retrieval") more directly than the removed
+sklearn detector would have, since it reuses the Hopfield net directly
+rather than a separate model. Danger-theory-style contextual gating
+(§3.3's "gate on harm signals, not just novelty") remains unimplemented —
+`_detect_novelty` gates on energy anomaly alone.
 
 ### 4. Action selection (§3.4 — basal ganglia)
 
@@ -170,15 +194,46 @@ on the VSA memory store, preferred specifically because it's non-attention,
 non-token-parallel, structurally compatible with the rest of the
 architecture.
 
-**Actual**: `src/nca/` has `CoarseConditioner` and `cell.py`, matching the
-coarse-to-fine description. But `src/decoder/dit.py` also has a
-`VSAConditionedDiT` — a diffusion transformer conditioned on VSA vectors.
-This is a notable divergence: the design argues NCA is preferred *because*
-it avoids attention, but a DiT internally uses self-attention. Not yet
-investigated closely enough to know whether this is a pragmatic fallback
-(pure NCA text generation not yet good enough) or a parallel approach being
-explored alongside NCA — worth reading `dit.py` and its training code
-before drawing conclusions.
+**Actual**: nothing. As of the 2026-07-28 cleanup, `src/nca/` and
+`src/decoder/{dit,diffusion,sampler,decoder}.py` no longer exist in this
+codebase. Requirement 7 (extended generation) has no implementation at
+all right now — every response `BioAIDialogueAgent` produces is either a
+verbatim retrieved sentence or a fixed template string ("I'll remember
+that."), never a generated one.
+
+What used to be there, and why it was removed:
+
+- `src/decoder/dit.py`'s `VSAConditionedDiT` (a diffusion transformer
+  conditioned on VSA vectors) was a genuine divergence from the design's
+  own stated preference for NCA specifically *because* it avoids
+  attention — DiT internally uses self-attention. Its own training
+  script (`experiments/train_decoder.py`) documented the outcome plainly:
+  near-zero training loss but only ~6% exact-match accuracy (see
+  `checkpoints/decoder-training-autopsy.md`), a worse and more expensive
+  result than deterministic exact-match retrieval. Never called by
+  `agent.py`.
+- `src/nca/` (`NCACell`, `NCA`, `CoarseConditioner`) matched the *shape*
+  of a Growing Neural Cellular Automata API (a cell, a step loop, a
+  coarse conditioner projecting a VSA vector to a grid) but not its
+  substance. Checked against the actual research (Mordvintsev et al.,
+  "Growing Neural Cellular Automata," Distill 2020): the implementation
+  had the stochastic per-cell update (`fire_rate` masking) correct, but
+  used learned 3×3 convs where the paper uses fixed Sobel-filter
+  perception, had no alive-masking/cell-death mechanism (the actual
+  growth mechanism — without it this is a recurrent filter over a
+  fixed-size grid, not something that grows from a seed), and had no
+  training loop at all, let alone the damage/persistence sample-pool
+  curriculum that produces the paper's headline self-repair behavior.
+  It was never trained, so it could not have exhibited growth or
+  self-repair even in principle. `maze_data.py`'s synthetic target
+  shapes (checkerboard, stripes, etc.) were never consumed by any
+  training script — only by that module's own now-removed test.
+
+`LookupDecoder` (`src/decoder/lookup_decoder.py`) is the only remaining
+component in `src/decoder/`, and it isn't a generator either — it's
+deterministic Hopfield-cleaned exact-match retrieval over ingested
+sentences, the same category of mechanism as `RelationalMemory` and
+`ConsolidationMemory`, not an answer to requirement 7.
 
 ## How the pieces actually connect
 
@@ -227,4 +282,11 @@ about the architecture in the abstract.
   and a prioritized next-steps list.
 - `BENCHMARK_SUMMARY.md` — quantitative results across earlier benchmark
   phases (needle-in-haystack retrieval, concept drift, contradiction
-  detection, distractor resistance, NCA sequence generation).
+  detection, distractor resistance, NCA sequence generation). Its NCA
+  section describes code (`src/nca/maze_data.py`) that no longer exists
+  as of the 2026-07-28 cleanup above — read it as a historical record of
+  that earlier benchmark run, not a description of the current codebase.
+- `checkpoints/decoder-training-autopsy.md` — postmortem on the removed
+  diffusion decoder (`VSAConditionedDiT`): what was tried, why it
+  underperformed `LookupDecoder`, kept as the historical record of that
+  decision even though the code it discusses is gone.
