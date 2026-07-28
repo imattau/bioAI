@@ -327,7 +327,7 @@ within a small trial budget, across independent selectors") rather than
 "always converges," because the latter would misrepresent what a real
 bandit mechanism actually guarantees.
 
-### 2.8 Wiring `resolve_auto` into `BioAIDialogueAgent` (`commit next`)
+### 2.8 Wiring `resolve_auto` into `BioAIDialogueAgent` (`commit 16084b7`)
 
 `_answer_relational_query`'s multi-clue branch (§2.5) now escalates to
 `resolve_auto` when the user's explicitly stated clues alone leave the
