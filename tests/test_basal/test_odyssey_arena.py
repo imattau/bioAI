@@ -46,6 +46,13 @@ class TestOdysseyArena:
     TOTAL_STEPS = 1000
 
     def setup_method(self):
+        # This class's tests are otherwise unseeded, so their bandit-recovery
+        # thresholds passed or failed depending on whatever global RNG state
+        # unrelated preceding tests happened to leave behind. Fixing the seed
+        # here (rather than per-test) also makes _state_base deterministic,
+        # which per-test seeding alone would not (it's drawn in setup_method,
+        # before any per-test seed call would run).
+        torch.manual_seed(0)
         self.vsa_state = VSA(dim=self.STATE_DIM, device="cpu")
         self.vsa_hop = VSA(dim=self.HOPFIELD_DIM, device="cpu")
         self._state_base = self.vsa_state.make_vector()
@@ -89,11 +96,6 @@ class TestOdysseyArena:
         return rewards
 
     def test_reward_rate_recovers_after_drift(self):
-        # Unseeded, this test's exploration/recovery is genuinely stochastic
-        # and fails outright (~0.2-0.3 reward rate) on an unlucky draw in
-        # roughly 1 of 5 runs. Fix the seed for a deterministic, reproducible
-        # pass rather than relying on chance.
-        torch.manual_seed(0)
         env = DriftingBandit(n_arms=self.N_ARMS)
         agent = GoNoGoActorCritic(input_dim=self.STATE_DIM, n_actions=self.N_ARMS)
         optim = torch.optim.AdamW(agent.parameters(), lr=1e-3)
