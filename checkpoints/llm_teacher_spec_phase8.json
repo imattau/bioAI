@@ -1,0 +1,288 @@
+{
+  "lessons": [
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "cherry blossoms",
+      "category": "flower",
+      "place": "blossom field",
+      "property": "smell"
+    },
+    {
+      "kind": "country",
+      "subject": "russia",
+      "category": "country",
+      "place": "eastern europe",
+      "capital_city": "moscow"
+    },
+    {
+      "kind": "animal",
+      "subject": "elephants",
+      "category": "wildlife",
+      "place": "Greece",
+      "property": "long tusks"
+    },
+    {
+      "kind": "animal",
+      "subject": "bacteria",
+      "category": "microorganisms",
+      "place": "laboratory",
+      "property": "enzymes"
+    },
+    {
+      "kind": "country",
+      "subject": "netherlands",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "amsterdam"
+    },
+    {
+      "kind": "animal",
+      "subject": "cactus",
+      "category": "plant",
+      "place": "desert",
+      "property": "spines"
+    },
+    {
+      "kind": "animal",
+      "subject": "coconuts",
+      "category": "food",
+      "place": "island",
+      "property": "tropical"
+    },
+    {
+      "kind": "country",
+      "subject": "germany",
+      "category": "country",
+      "place": "eastern europe",
+      "capital_city": "berlin"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "vertebrates",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "country",
+      "subject": "canada",
+      "category": "country",
+      "place": "north america",
+      "capital_city": "ottawa"
+    },
+    {
+      "kind": "animal",
+      "subject": "giraffe",
+      "category": "large mammals",
+      "place": "arctic regions",
+      "property": "long neck"
+    },
+    {
+      "kind": "animal",
+      "subject": "bunny",
+      "category": "mammal",
+      "place": "garden",
+      "property": "fluffy fur"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "bison",
+      "category": "animal",
+      "place": "American Plains",
+      "property": "long neck"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "tropical rainforests",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombat",
+      "category": "mammal",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "country",
+      "subject": "japan",
+      "category": "country",
+      "place": "eastern asia",
+      "capital_city": "tokyo"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "wildlife habitat",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "wheat",
+      "category": "food",
+      "place": "farmland",
+      "property": "round grains"
+    },
+    {
+      "kind": "country",
+      "subject": "canada",
+      "category": "country",
+      "place": "north america",
+      "capital_city": "ottawa"
+    },
+    {
+      "kind": "animal",
+      "subject": "puppies",
+      "category": "dogs",
+      "place": "park",
+      "property": "friendly"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "mouse",
+      "category": "animal",
+      "place": "lab",
+      "property": "gray fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "forest",
+      "property": "soft fur"
+    }
+  ],
+  "holdout": [
+    {
+      "kind": "animal",
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "forest",
+      "property": "colorful"
+    },
+    {
+      "kind": "animal",
+      "subject": "lizards",
+      "category": "reptiles",
+      "place": "forest",
+      "property": "long legs"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "cups",
+      "category": "drinking equipment",
+      "place": "restaurant kitchen",
+      "property": "small round objects"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "cows",
+      "category": "herds",
+      "place": "meadow",
+      "property": "long horns"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "mushroom",
+      "category": "fungus",
+      "place": "forest",
+      "property": "spore"
+    },
+    {
+      "kind": "animal",
+      "subject": "mammals",
+      "category": "animal kingdom",
+      "place": "wildlife preserve",
+      "property": "fur"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "vertebrates",
+      "place": "deserts",
+      "property": "long tails"
+    },
+    {
+      "kind": "animal",
+      "subject": "cows",
+      "category": "herds",
+      "place": "farms",
+      "property": "curly horns"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    }
+  ],
+  "adversarial_a": [],
+  "adversarial_b": []
+}

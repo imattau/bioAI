@@ -237,6 +237,52 @@ def test_realiser_no_article_for_in_or_capital_relations():
     assert " an australia" not in text.lower()
 
 
+# ── Phase 8: possessive pronoun for "capital" ───────────────────────────
+
+def test_realiser_keeps_full_noun_phrase_when_capital_has_no_prior_mention():
+    """No earlier compound clause introduced "france" -- a pronoun here
+    would have no antecedent, so "capital" keeps its full noun-phrase
+    template exactly as before Phase 8."""
+    props = (Proposition("france", "capital", "paris", 0, "x"),)
+    text = PropositionRealiser.realise(props)
+    assert text == "The capital of france is paris."
+
+
+def test_realiser_uses_possessive_pronoun_for_capital_after_prior_clause():
+    """"france" was already introduced by an earlier is/in/has compound
+    clause for the same subject -- "capital" now refers back to it with a
+    possessive pronoun instead of repeating the full noun phrase."""
+    props = (
+        Proposition("france", "is", "country", 0, "x"),
+        Proposition("france", "capital", "paris", 1, "y"),
+    )
+    text = PropositionRealiser.realise(props)
+    assert text == "France is a country. Its capital is paris."
+    assert "the capital of" not in text.lower()
+
+
+def test_realiser_uses_plural_possessive_pronoun_for_capital():
+    props = (
+        Proposition("islands", "is", "country", 0, "x"),
+        Proposition("islands", "capital", "paris", 1, "y"),
+    )
+    text = PropositionRealiser.realise(props)
+    assert text == "Islands are a country. Their capital is paris."
+
+
+def test_realiser_country_is_in_clauses_still_compound_merge():
+    """Phase 8 only changes "capital"'s rendering -- is/in for a country
+    subject still merge into one compound clause exactly as any other
+    subject's is/in/has propositions do (this phase doesn't touch that
+    path)."""
+    props = (
+        Proposition("france", "is", "country", 0, "x"),
+        Proposition("france", "in", "western europe", 1, "y"),
+    )
+    text = PropositionRealiser.realise(props)
+    assert text == "France is a country and is in western europe."
+
+
 # ── recombination / compatibility ───────────────────────────────────────
 
 def _organism(propositions, source_ids):

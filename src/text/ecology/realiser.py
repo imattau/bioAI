@@ -45,11 +45,26 @@ Phase 7 adds two more real generation improvements:
   Not applied to subjects: this curriculum's subjects are always taught
   as plural nouns (a real, disclosed scope limit, not an oversight).
 
+Phase 8 adds possessive-pronoun substitution for "capital", scoped
+narrowly: compound-clause merging (above) already means the same
+subject's "is"/"in"/"has" facts always merge into one clause, so general
+nominative "it"/"they" substitution has no use case in this curriculum --
+the only pronoun ever needed is possessive ("its"/"their capital"), and
+only when that subject was already introduced by an earlier compound
+clause in the same `realise()` call (otherwise a pronoun would have no
+antecedent, which is wrong, not just unhelpful -- the same category of
+constraint every other exemption in this file already follows). When the
+subject was NOT already introduced, "capital" keeps its full noun-phrase
+template ("The capital of [SUBJECT] is [OBJECT]") exactly as before.
+"capital_of" (subject is the city, not the country) is a structurally
+different problem -- the pronoun would apply to the object, not the
+subject -- and stays out of scope.
+
 Every subject and object string still comes straight from a
 `Proposition`'s fields, so all factual content stays traceable to a
 source proposition regardless of which phrasing path rendered it -- only
-grammatical connectives, learned frames, agreement, articles, and
-compound "and" joins are synthesized.
+grammatical connectives, learned frames, agreement, articles, pronouns,
+and compound "and" joins are synthesized.
 """
 
 from __future__ import annotations
@@ -85,6 +100,11 @@ _ARTICLE_RELATIONS = frozenset({"is", "has"})
 _AGREEMENT_EXEMPT_RELATIONS = frozenset({"capital_of"})
 
 _SUBJECT_PLACEHOLDER = "[SUBJECT] "
+
+# Substituted for "The capital of [SUBJECT] is [OBJECT]" when [SUBJECT]
+# was already introduced earlier in the same realise() call -- see the
+# module docstring's Phase 8 note.
+_CAPITAL_POSSESSIVE_TEMPLATE = "[POSSESSIVE] capital is [OBJECT]"
 
 
 def _with_article(phrase: str) -> str:
@@ -137,14 +157,26 @@ class PropositionRealiser:
                 objects_list = [_with_article(obj) for obj in objects_list]
             objects = " and ".join(objects_list)
 
-            frame = (
-                frame_library.select_frame(relation)
-                if frame_library is not None else None
-            )
-            template = (
-                frame.template if frame is not None
-                else _RELATION_TEMPLATES.get(relation, f"[SUBJECT] {relation} [OBJECT]")
-            )
+            if relation == "capital" and subject in compound_slot_for_subject:
+                # Grammatical necessity, not a phrasing preference -- an
+                # already-introduced subject takes a pronoun regardless
+                # of whether frame_library has learned some other full
+                # noun-phrase wording for "capital"; a learned frame here
+                # would just repeat the noun phrase this branch exists to
+                # avoid.
+                possessive = "their" if is_plural_noun(subject) else "its"
+                template = _CAPITAL_POSSESSIVE_TEMPLATE.replace(
+                    "[POSSESSIVE]", possessive
+                )
+            else:
+                frame = (
+                    frame_library.select_frame(relation)
+                    if frame_library is not None else None
+                )
+                template = (
+                    frame.template if frame is not None
+                    else _RELATION_TEMPLATES.get(relation, f"[SUBJECT] {relation} [OBJECT]")
+                )
             if relation not in _AGREEMENT_EXEMPT_RELATIONS:
                 template = apply_subject_verb_agreement(template, subject)
 

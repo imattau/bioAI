@@ -17,6 +17,17 @@ curriculum ("relational language: multiple paraphrases of one relation")
 plus Phase 6 item 3 (multi-proposition generation), built together since
 they share the same content shape.
 
+Phase 8 adds a second lesson kind, "country" (roughly 1 in 3 lessons),
+alongside the original "animal" kind: country lessons teach "is"
+(category, fixed as "country" -- not worth an LLM call to confirm what's
+definitionally true), "in" (a continent/region), and "capital" (capital
+city), instead of "is"/"in"/"has". This gives Phase 8's possessive-pronoun
+substitution in PropositionRealiser (a "capital" clause after an earlier
+compound is/in clause for the same subject renders "Its capital is
+Paris." instead of "The capital of France is Paris.") real content to
+exercise -- the prior "animal" curriculum never taught "capital" at all
+(`distinct_frames_by_relation` always showed 0 for it).
+
 Native-generation proof: for a disjoint set of held-out subjects, the LLM
 generates content that is NEVER converted into an English sentence or
 shown to the agent as text -- only as bare (subject, relation, object)
@@ -91,6 +102,32 @@ _LEADING_ARTICLE_RE = re.compile(r"^(?:a|an|the)\s+")
 def _strip_article(text: str) -> str:
     return _LEADING_ARTICLE_RE.sub("", text)
 
+
+# Phase 8's possessive-pronoun rendering for "capital" ("Its capital is
+# Paris." instead of "The capital of France is Paris.") is a real,
+# disclosed extraction gap, not a bug to hide: `extract_propositions`
+# processes one sentence at a time with no cross-sentence discourse
+# state (paragraph-level discourse tracking was explicitly named
+# out-of-scope for this phase, see the plan), so it recovers
+# ("its capital", "is", "paris") -- wrong subject, wrong relation label --
+# instead of ("france", "capital", "paris"). This benchmark, unlike
+# extract_propositions in general, DOES know the one subject a given
+# holdout item concerns (`target_propositions` is built for exactly one
+# subject), so resolving the pronoun back to it here is safe and doesn't
+# require general coreference resolution -- the same narrowly-scoped,
+# benchmark-local fix `_strip_article` above already established the
+# precedent for.
+_POSSESSIVE_CAPITAL_SUBJECT_RE = re.compile(r"^(?:its|their)\s+capital$", re.IGNORECASE)
+
+
+def _resolve_possessive_capital(propositions: list[Proposition], subject: str) -> list[Proposition]:
+    return [
+        Proposition(subject=subject, relation="capital", object=p.object,
+                    source_id=p.source_id, source_text=p.source_text)
+        if _POSSESSIVE_CAPITAL_SUBJECT_RE.match(p.subject) else p
+        for p in propositions
+    ]
+
 _IS_TEMPLATES = (
     "{subject} is {object}.",
     "{subject} are {object}.",
@@ -108,13 +145,59 @@ _HAS_TEMPLATES = (
     "{subject} has {object}.",
     "{subject} have {object}.",
 )
-_RELATIONS = ("is", "in", "has")
+# Both variants match ConsolidationMemory's "capital" pattern
+# (`^(?:the\s+)?capital\s+of\s+(.+?)\s+is\s+(.+)$`), so taught sentences
+# round-trip to (subject=country, relation="capital", object=capital_city)
+# -- NOT the inverted "capital_of" relation, and not the plain "is"
+# catch-all (which would wrongly capture "france's capital" as the
+# subject if a possessive phrasing were used instead).
+_CAPITAL_TEMPLATES = (
+    "The capital of {subject} is {object}.",
+    "Capital of {subject} is {object}.",
+)
+_ANIMAL_RELATIONS = ("is", "in", "has")
+_COUNTRY_RELATIONS = ("is", "in", "capital")
 
 
-def generate_lesson_content(model: str, index: int) -> dict:
-    """One LLM call per lesson: a subject plus a category/place/property
-    triple, all about that one subject -- enough to teach 3 propositions
-    (is/in/has) from a single generation call rather than 3."""
+def _relations_for_kind(kind: str) -> tuple[str, ...]:
+    return _COUNTRY_RELATIONS if kind == "country" else _ANIMAL_RELATIONS
+
+
+def generate_lesson_content(model: str, index: int, kind: str = "animal") -> dict:
+    """One LLM call per lesson: a subject plus a triple of facts about it
+    -- enough to teach 3 propositions from a single generation call rather
+    than 3. "animal" kind teaches is/in/has (category/place/property);
+    "country" kind teaches is/in/capital (fixed "country" category/
+    region/capital city) -- see module docstring for why."""
+    if kind == "country":
+        response = ollama.chat(model, messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Output exactly one JSON object with keys \"subject\", "
+                    "\"place\", \"capital_city\". \"subject\" is the plain "
+                    "name of a real country (1-2 words, e.g. \"france\"). "
+                    "\"place\" is a plain noun phrase (1-3 words) naming "
+                    "the continent or region the country is in (e.g. "
+                    "\"western europe\"). \"capital_city\" is that "
+                    "country's real capital city, a plain 1-2 word name. "
+                    "Every value must be a plain string with no "
+                    "punctuation and none of the words \"is\", \"are\", "
+                    "\"was\", \"were\", \"has\", \"have\", \"and\", "
+                    "\"or\". Output only the JSON object, nothing else."
+                ),
+            },
+            {"role": "user", "content": f"Item number: {index}."},
+        ], options={"temperature": 0.9, "num_predict": 100})
+        data = _extract_json(response["message"]["content"])
+        return {
+            "kind": "country",
+            "subject": _as_plain_phrase(data["subject"], "subject"),
+            "category": "country",
+            "place": _as_plain_phrase(data["place"], "place"),
+            "capital_city": _as_plain_phrase(data["capital_city"], "capital_city"),
+        }
+
     response = ollama.chat(model, messages=[
         {
             "role": "system",
@@ -139,6 +222,7 @@ def generate_lesson_content(model: str, index: int) -> dict:
     ], options={"temperature": 0.9, "num_predict": 100})
     data = _extract_json(response["message"]["content"])
     return {
+        "kind": "animal",
         "subject": _as_plain_phrase(data["subject"], "subject"),
         "category": _as_plain_phrase(data["category"], "category"),
         "place": _as_plain_phrase(data["place"], "place"),
@@ -147,11 +231,17 @@ def generate_lesson_content(model: str, index: int) -> dict:
 
 
 def _templates_for(relation: str) -> tuple[str, ...]:
-    return {"is": _IS_TEMPLATES, "in": _IN_TEMPLATES, "has": _HAS_TEMPLATES}[relation]
+    return {
+        "is": _IS_TEMPLATES, "in": _IN_TEMPLATES, "has": _HAS_TEMPLATES,
+        "capital": _CAPITAL_TEMPLATES,
+    }[relation]
 
 
 def _object_for(relation: str, content: dict) -> str:
-    return {"is": content["category"], "in": content["place"], "has": content["property"]}[relation]
+    return {
+        "is": content["category"], "in": content["place"],
+        "has": content.get("property"), "capital": content.get("capital_city"),
+    }[relation]
 
 
 @dataclass
@@ -166,7 +256,7 @@ def teach_lesson(
 ) -> AcquisitionRecord:
     subject_text = content["subject"].capitalize()
     sentences = []
-    for relation_index, relation in enumerate(_RELATIONS):
+    for relation_index, relation in enumerate(_relations_for_kind(content["kind"])):
         templates = _templates_for(relation)
         template = templates[(index + relation_index) % len(templates)]
         obj = _object_for(relation, content)
@@ -192,7 +282,7 @@ def target_propositions(subject: str, content: dict) -> tuple[Proposition, ...]:
             object=_norm(_object_for(relation, content)),
             source_id=-1, source_text="",
         )
-        for relation in _RELATIONS
+        for relation in _relations_for_kind(content["kind"])
     )
 
 
@@ -234,6 +324,7 @@ def evaluate_holdout(
         )
 
         recovered = extract_propositions([generated_text]) if generated_text else []
+        recovered = _resolve_possessive_capital(recovered, subject)
         recovered_triples = {
             (p.subject, p.relation, _strip_article(p.object)) for p in recovered
         }
@@ -305,11 +396,18 @@ def run_adversarial_pairs(
     return results
 
 
-def generate_contents(model: str, n: int, start_index: int) -> list[dict]:
+def generate_contents(
+    model: str, n: int, start_index: int, kind: str | None = None,
+) -> list[dict]:
+    """`kind=None` alternates roughly 1-in-3 "country" lessons among
+    "animal" ones; pass an explicit kind to force every item to it (used
+    for the adversarial-pairs content, which relies on the "has"
+    relation existing on every item)."""
     contents = []
     for index in range(start_index, start_index + n):
+        item_kind = kind if kind is not None else ("country" if index % 3 == 0 else "animal")
         try:
-            contents.append(generate_lesson_content(model, index))
+            contents.append(generate_lesson_content(model, index, kind=item_kind))
         except Exception as exc:  # noqa: BLE001 -- generation can fail many ways
             print(f"  [item {index}] generation failed: {exc}")
     return contents
@@ -327,8 +425,10 @@ def run(
     else:
         lesson_contents = generate_contents(model, n_lessons, start_index=0)
         holdout_contents = generate_contents(model, n_holdout, start_index=10_000)
-        adversarial_a = generate_contents(model, n_adversarial, start_index=20_000)
-        adversarial_b = generate_contents(model, n_adversarial, start_index=30_000)
+        # Forced to "animal": run_adversarial_pairs compares "has"
+        # properties, which only "animal"-kind content has.
+        adversarial_a = generate_contents(model, n_adversarial, start_index=20_000, kind="animal")
+        adversarial_b = generate_contents(model, n_adversarial, start_index=30_000, kind="animal")
 
     agent = BioAIDialogueAgent(vsa_dim=64)
     start = time.perf_counter()
@@ -390,13 +490,15 @@ def run(
         "holdout_records": [asdict(r) for r in holdout_results],
     }
 
-    if paraphrase_samples and acquisition_records:
+    animal_indices = [i for i, c in enumerate(lesson_contents) if c["kind"] == "animal"]
+    if paraphrase_samples and animal_indices:
         richest_relation = max(
             ("is", "in", "has"),
             key=lambda r: len(agent.frame_library.frames_for_relation(r)),
         )
-        sample_record = acquisition_records[0]
-        sample_content = lesson_contents[0]
+        sample_index = animal_indices[0]
+        sample_record = acquisition_records[sample_index]
+        sample_content = lesson_contents[sample_index]
         result["paraphrase_diversity"] = measure_paraphrase_diversity(
             agent.frame_library, richest_relation, sample_record.subject,
             _norm(_object_for(richest_relation, sample_content)),

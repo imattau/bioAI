@@ -1,0 +1,325 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "lessons": 26,
+    "holdout": 14
+  },
+  "lessons_taught": 26,
+  "acquisition_latency_seconds": 0.1735335390549153,
+  "holdout_latency_seconds": 0.20803939178586006,
+  "frames_learned": 13,
+  "distinct_frames_by_relation": {
+    "is": 4,
+    "in": 5,
+    "has": 2,
+    "capital": 2,
+    "capital_of": 0
+  },
+  "holdout_evaluated": 7,
+  "generation_success_rate": 1.0,
+  "no_library_overlap_rate": 1.0,
+  "propositions_match_rate": 1.0,
+  "mean_propositions_recovered": 3.0,
+  "native_generation_proof_rate": 1.0,
+  "acquisition_records": [
+    {
+      "index": 0,
+      "subject": "france",
+      "sentences": [
+        "France is country.",
+        "France are in western europe.",
+        "The capital of France is paris."
+      ]
+    },
+    {
+      "index": 1,
+      "subject": "cherry blossoms",
+      "sentences": [
+        "Cherry blossoms are flower.",
+        "Cherry blossoms is located in blossom field.",
+        "Cherry blossoms have smell."
+      ]
+    },
+    {
+      "index": 2,
+      "subject": "russia",
+      "sentences": [
+        "Russia was country.",
+        "Russia lies within eastern europe.",
+        "The capital of Russia is moscow."
+      ]
+    },
+    {
+      "index": 3,
+      "subject": "elephants",
+      "sentences": [
+        "Elephants were wildlife.",
+        "Elephants sits in Greece.",
+        "Elephants have long tusks."
+      ]
+    },
+    {
+      "index": 4,
+      "subject": "bacteria",
+      "sentences": [
+        "Bacteria is microorganisms.",
+        "Bacteria is in laboratory.",
+        "Bacteria has enzymes."
+      ]
+    },
+    {
+      "index": 5,
+      "subject": "netherlands",
+      "sentences": [
+        "Netherlands are country.",
+        "Netherlands are in western europe.",
+        "Capital of Netherlands is amsterdam."
+      ]
+    },
+    {
+      "index": 6,
+      "subject": "cactus",
+      "sentences": [
+        "Cactus was plant.",
+        "Cactus is located in desert.",
+        "Cactus has spines."
+      ]
+    },
+    {
+      "index": 7,
+      "subject": "coconuts",
+      "sentences": [
+        "Coconuts were food.",
+        "Coconuts lies within island.",
+        "Coconuts have tropical."
+      ]
+    },
+    {
+      "index": 8,
+      "subject": "germany",
+      "sentences": [
+        "Germany is country.",
+        "Germany sits in eastern europe.",
+        "The capital of Germany is berlin."
+      ]
+    },
+    {
+      "index": 9,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats are vertebrates.",
+        "Wombats is in wilderness.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 10,
+      "subject": "canada",
+      "sentences": [
+        "Canada was country.",
+        "Canada are in north america.",
+        "The capital of Canada is ottawa."
+      ]
+    },
+    {
+      "index": 11,
+      "subject": "giraffe",
+      "sentences": [
+        "Giraffe were large mammals.",
+        "Giraffe is located in arctic regions.",
+        "Giraffe have long neck."
+      ]
+    },
+    {
+      "index": 12,
+      "subject": "bunny",
+      "sentences": [
+        "Bunny is mammal.",
+        "Bunny lies within garden.",
+        "Bunny has fluffy fur."
+      ]
+    },
+    {
+      "index": 13,
+      "subject": "france",
+      "sentences": [
+        "France are country.",
+        "France sits in western europe.",
+        "Capital of France is paris."
+      ]
+    },
+    {
+      "index": 14,
+      "subject": "bison",
+      "sentences": [
+        "Bison was animal.",
+        "Bison is in American Plains.",
+        "Bison has long neck."
+      ]
+    },
+    {
+      "index": 15,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammals.",
+        "Wombats are in tropical rainforests.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 16,
+      "subject": "france",
+      "sentences": [
+        "France is country.",
+        "France is located in western europe.",
+        "The capital of France is paris."
+      ]
+    },
+    {
+      "index": 17,
+      "subject": "wombat",
+      "sentences": [
+        "Wombat are mammal.",
+        "Wombat lies within Australia.",
+        "Wombat have sharp teeth."
+      ]
+    },
+    {
+      "index": 18,
+      "subject": "japan",
+      "sentences": [
+        "Japan was country.",
+        "Japan sits in eastern asia.",
+        "The capital of Japan is tokyo."
+      ]
+    },
+    {
+      "index": 19,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammal.",
+        "Wombats is in wildlife habitat.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 20,
+      "subject": "wheat",
+      "sentences": [
+        "Wheat is food.",
+        "Wheat are in farmland.",
+        "Wheat has round grains."
+      ]
+    },
+    {
+      "index": 21,
+      "subject": "canada",
+      "sentences": [
+        "Canada are country.",
+        "Canada is located in north america.",
+        "Capital of Canada is ottawa."
+      ]
+    },
+    {
+      "index": 22,
+      "subject": "puppies",
+      "sentences": [
+        "Puppies was dogs.",
+        "Puppies lies within park.",
+        "Puppies has friendly."
+      ]
+    },
+    {
+      "index": 23,
+      "subject": "france",
+      "sentences": [
+        "France were country.",
+        "France sits in western europe.",
+        "Capital of France is paris."
+      ]
+    },
+    {
+      "index": 24,
+      "subject": "mouse",
+      "sentences": [
+        "Mouse is animal.",
+        "Mouse is in lab.",
+        "Mouse has gray fur."
+      ]
+    },
+    {
+      "index": 25,
+      "subject": "butterflies",
+      "sentences": [
+        "Butterflies are insects.",
+        "Butterflies are in forest.",
+        "Butterflies have soft fur."
+      ]
+    }
+  ],
+  "holdout_records": [
+    {
+      "index": 0,
+      "subject": "butterfly",
+      "generated_text": "Butterfly is an insect and is located in forest and has a colorful.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 1,
+      "subject": "lizards",
+      "generated_text": "Lizards were reptiles and are located in forest and have long legs.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 3,
+      "subject": "cups",
+      "generated_text": "Cups are a drinking equipment and lie within restaurant kitchen and have small round objects.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 5,
+      "subject": "cows",
+      "generated_text": "Cows were herds and lie within meadow and have long horns.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 8,
+      "subject": "mushroom",
+      "generated_text": "Mushroom was a fungus and lies within forest and has a spore.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 9,
+      "subject": "mammals",
+      "generated_text": "Mammals were an animal kingdom and sit in wildlife preserve and have a fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 12,
+      "subject": "cows",
+      "generated_text": "Cows are herds and are in farms and have curly horns.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    }
+  ]
+}
