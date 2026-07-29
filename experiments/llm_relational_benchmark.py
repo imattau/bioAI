@@ -49,7 +49,7 @@ from src.text.consolidation import ConsolidationMemory
 # punctuation ConsolidationMemory strips at storage time (e.g. "Mercedes-Benz"
 # is stored/returned as "mercedes benz"), so a plain .lower() comparison
 # produces false-negative "failures" that aren't actually bugs in the agent.
-_norm = ConsolidationMemory._normalise
+_norm = ConsolidationMemory.normalise
 
 
 def _extract_json(text: str) -> dict:

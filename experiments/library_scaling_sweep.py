@@ -40,7 +40,7 @@ import random
 from datetime import datetime
 from pathlib import Path
 
-from llm_teacher_curriculum import _RELATIONS, _norm, _object_for, run
+from llm_teacher_curriculum import _norm, _object_for, run
 
 from src.text import BioAIDialogueAgent
 

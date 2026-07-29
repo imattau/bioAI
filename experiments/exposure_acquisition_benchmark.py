@@ -86,7 +86,7 @@ from src.text.ecology.proposition_parser import PropositionParser
 
 from ecology_benchmark import _as_plain_phrase, _extract_json
 
-_norm = ConsolidationMemory._normalise
+_norm = ConsolidationMemory.normalise
 
 # Local, benchmark-only comparison helper -- NOT a change to any
 # production extractor. Same class of issue Phase 7's `_strip_article`

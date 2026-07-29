@@ -1,0 +1,1035 @@
+{
+  "lessons": [
+    {
+      "kind": "country",
+      "subject": "india",
+      "category": "country",
+      "place": "south asia",
+      "capital_city": "new delhi"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "desert",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "cups",
+      "category": "container items",
+      "place": "kitchen",
+      "property": "round"
+    },
+    {
+      "kind": "country",
+      "subject": "canada",
+      "category": "country",
+      "place": "north america",
+      "capital_city": "ottawa"
+    },
+    {
+      "kind": "animal",
+      "subject": "fish",
+      "category": "aquatic creatures",
+      "place": "ocean",
+      "property": "swim"
+    },
+    {
+      "kind": "animal",
+      "subject": "elephant",
+      "category": "mammal",
+      "place": "garden",
+      "property": "large body"
+    },
+    {
+      "kind": "country",
+      "subject": "japan",
+      "category": "country",
+      "place": "eastern asia",
+      "capital_city": "tokyo"
+    },
+    {
+      "kind": "animal",
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "kind": "animal",
+      "subject": "bikes",
+      "category": "vehicles",
+      "place": "parking lot",
+      "property": "smooth tires"
+    },
+    {
+      "kind": "animal",
+      "subject": "bottles",
+      "category": "containers",
+      "place": "store",
+      "property": "closable"
+    },
+    {
+      "kind": "animal",
+      "subject": "apples",
+      "category": "fruits",
+      "place": "tree",
+      "property": "sweet"
+    },
+    {
+      "kind": "country",
+      "subject": "france",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "paris"
+    },
+    {
+      "kind": "animal",
+      "subject": "mouse",
+      "category": "pet",
+      "place": "living room",
+      "property": "soft fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "turtles",
+      "category": "marine life",
+      "place": "ocean floor",
+      "property": "large shell"
+    },
+    {
+      "kind": "animal",
+      "subject": "shark",
+      "category": "fish",
+      "place": "ocean",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "toilet roll",
+      "category": "toiletry items",
+      "place": "home bathroom",
+      "property": "wet"
+    },
+    {
+      "kind": "country",
+      "subject": "russia",
+      "category": "country",
+      "place": "eastern europe",
+      "capital_city": "moscow"
+    },
+    {
+      "kind": "animal",
+      "subject": "wheat",
+      "category": "food grain",
+      "place": "field",
+      "property": "harvested"
+    },
+    {
+      "kind": "animal",
+      "subject": "birds",
+      "category": "avian species",
+      "place": "wildlife habitat",
+      "property": "large wings"
+    },
+    {
+      "kind": "country",
+      "subject": "united kingdom",
+      "category": "country",
+      "place": "europe",
+      "capital_city": "london"
+    },
+    {
+      "kind": "animal",
+      "subject": "lamb",
+      "category": "animal",
+      "place": "saddlebag",
+      "property": "smooth fleece"
+    },
+    {
+      "kind": "animal",
+      "subject": "giraffe",
+      "category": "animal",
+      "place": "Jungle",
+      "property": "long neck"
+    },
+    {
+      "kind": "animal",
+      "subject": "penguin",
+      "category": "aquatic birds",
+      "place": "Antarctica",
+      "property": "webbed feet"
+    },
+    {
+      "kind": "animal",
+      "subject": "bats",
+      "category": "animal",
+      "place": "bat colony",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "elephants",
+      "category": "large mammals",
+      "place": "central Africa",
+      "property": "long necks"
+    },
+    {
+      "kind": "country",
+      "subject": "united states",
+      "category": "country",
+      "place": "north america",
+      "capital_city": "washington dc"
+    },
+    {
+      "kind": "animal",
+      "subject": "beetle",
+      "category": "insects",
+      "place": "underground",
+      "property": "spiny"
+    },
+    {
+      "kind": "animal",
+      "subject": "giraffes",
+      "category": "mammals",
+      "place": "southern Africa",
+      "property": "long neck"
+    },
+    {
+      "kind": "animal",
+      "subject": "mushrooms",
+      "category": "vegetable",
+      "place": "forest",
+      "property": "shiny"
+    },
+    {
+      "kind": "animal",
+      "subject": "bicycle",
+      "category": "transportation vehicle",
+      "place": "roadway",
+      "property": "propeller"
+    },
+    {
+      "kind": "animal",
+      "subject": "honeybees",
+      "category": "insects",
+      "place": "hive",
+      "property": "pollen"
+    },
+    {
+      "kind": "animal",
+      "subject": "cabbage",
+      "category": "vegetable",
+      "place": "farm",
+      "property": "green leaves"
+    },
+    {
+      "kind": "animal",
+      "subject": "pencil",
+      "category": "writing instrument",
+      "place": "desk",
+      "property": "sharp edge"
+    },
+    {
+      "kind": "country",
+      "subject": "germany",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "berlin"
+    },
+    {
+      "kind": "animal",
+      "subject": "bunnies",
+      "category": "mammals",
+      "place": "hilly fields",
+      "property": "long legs"
+    },
+    {
+      "kind": "animal",
+      "subject": "bees",
+      "category": "insects",
+      "place": "hive",
+      "property": "nest"
+    },
+    {
+      "kind": "animal",
+      "subject": "apple",
+      "category": "fruit",
+      "place": "garden",
+      "property": "sweet"
+    },
+    {
+      "kind": "animal",
+      "subject": "baskets",
+      "category": "clothing items",
+      "place": "shopping center",
+      "property": "storage"
+    },
+    {
+      "kind": "animal",
+      "subject": "cricket ball",
+      "category": "sports equipment",
+      "place": "gymnasium",
+      "property": "round"
+    },
+    {
+      "kind": "animal",
+      "subject": "laptop",
+      "category": "electronics",
+      "place": "house",
+      "property": "screen"
+    },
+    {
+      "kind": "animal",
+      "subject": "puppies",
+      "category": "animals",
+      "place": "park",
+      "property": "fluffy fur"
+    },
+    {
+      "kind": "country",
+      "subject": "spain",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "madrid"
+    },
+    {
+      "kind": "animal",
+      "subject": "crabs",
+      "category": "fishes",
+      "place": "ocean",
+      "property": "claws"
+    },
+    {
+      "kind": "animal",
+      "subject": "crayons",
+      "category": "art supplies",
+      "place": "library",
+      "property": "colorful"
+    },
+    {
+      "kind": "animal",
+      "subject": "shells",
+      "category": "aquatic life",
+      "place": "ocean floor",
+      "property": "tough shell"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombs",
+      "category": "organs",
+      "place": "breast",
+      "property": "size"
+    },
+    {
+      "kind": "animal",
+      "subject": "shiny glasses",
+      "category": "artificial lenses",
+      "place": "optical store",
+      "property": "sharp lens"
+    },
+    {
+      "kind": "country",
+      "subject": "usa",
+      "category": "country",
+      "place": "north america",
+      "capital_city": "washington dc"
+    },
+    {
+      "kind": "animal",
+      "subject": "horses",
+      "category": "animals",
+      "place": "meadow",
+      "property": "long ears"
+    },
+    {
+      "kind": "country",
+      "subject": "china",
+      "category": "country",
+      "place": "central asia",
+      "capital_city": "beijing"
+    },
+    {
+      "kind": "animal",
+      "subject": "cactus",
+      "category": "plant",
+      "place": "southwestern desert",
+      "property": "waxy skin"
+    },
+    {
+      "kind": "animal",
+      "subject": "whales",
+      "category": "sea creatures",
+      "place": "ocean",
+      "property": "milk"
+    },
+    {
+      "kind": "animal",
+      "subject": "sushi",
+      "category": "food",
+      "place": "restaurant",
+      "property": "delicious"
+    },
+    {
+      "kind": "animal",
+      "subject": "bubbles",
+      "category": "bubble water",
+      "place": "sink",
+      "property": "round"
+    },
+    {
+      "kind": "animal",
+      "subject": "bison",
+      "category": "animal",
+      "place": "wilderness",
+      "property": "long horns"
+    },
+    {
+      "kind": "animal",
+      "subject": "horseshoe crab",
+      "category": "shellfish",
+      "place": "salt marsh",
+      "property": "squeaky"
+    },
+    {
+      "kind": "animal",
+      "subject": "books",
+      "category": "literature",
+      "place": "library",
+      "property": "binding"
+    },
+    {
+      "kind": "animal",
+      "subject": "pigeons",
+      "category": "bird",
+      "place": "sky",
+      "property": "wings"
+    },
+    {
+      "kind": "country",
+      "subject": "australia",
+      "category": "country",
+      "place": "eastern hemisphere",
+      "capital_city": "canberra"
+    },
+    {
+      "kind": "animal",
+      "subject": "chips",
+      "category": "food",
+      "place": "restaurant",
+      "property": "crisp"
+    },
+    {
+      "kind": "animal",
+      "subject": "pandas",
+      "category": "mammal",
+      "place": "wildlife preserve",
+      "property": "long necks"
+    },
+    {
+      "kind": "animal",
+      "subject": "chickens",
+      "category": "farm animals",
+      "place": "rural farm",
+      "property": "feathers"
+    },
+    {
+      "kind": "animal",
+      "subject": "cubes",
+      "category": "shapes",
+      "place": "the room",
+      "property": "smooth"
+    },
+    {
+      "kind": "animal",
+      "subject": "dolphin",
+      "category": "mammal",
+      "place": "ocean",
+      "property": "gigantic size"
+    },
+    {
+      "kind": "animal",
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "flower garden",
+      "property": "soft"
+    },
+    {
+      "kind": "animal",
+      "subject": "crayfish",
+      "category": "invertebrates",
+      "place": "freshwater streams",
+      "property": "sharp claws"
+    },
+    {
+      "kind": "animal",
+      "subject": "dandelions",
+      "category": "flowers",
+      "place": "meadow",
+      "property": "hollow"
+    },
+    {
+      "kind": "animal",
+      "subject": "panda",
+      "category": "mammal",
+      "place": "mountain",
+      "property": "fluffy fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "guppies",
+      "category": "aquariums",
+      "place": "laboratory",
+      "property": "long neck"
+    },
+    {
+      "kind": "animal",
+      "subject": "sled",
+      "category": "vehicle",
+      "place": "north pole",
+      "property": "driving"
+    },
+    {
+      "kind": "animal",
+      "subject": "sails",
+      "category": "watercraft",
+      "place": "sea",
+      "property": "rigged"
+    },
+    {
+      "kind": "animal",
+      "subject": "lizards",
+      "category": "mammals",
+      "place": "forest",
+      "property": "tail"
+    },
+    {
+      "kind": "animal",
+      "subject": "beasts",
+      "category": "wild animals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "bacteria",
+      "category": "microorganism",
+      "place": "ocean floor",
+      "property": "microscopic"
+    },
+    {
+      "kind": "animal",
+      "subject": "chicken",
+      "category": "bird",
+      "place": "farmyard",
+      "property": "pecking"
+    },
+    {
+      "kind": "country",
+      "subject": "chile",
+      "category": "country",
+      "place": "south america",
+      "capital_city": "santiago"
+    },
+    {
+      "kind": "animal",
+      "subject": "bottle",
+      "category": "container",
+      "place": "house",
+      "property": "lid"
+    },
+    {
+      "kind": "animal",
+      "subject": "cinnamon",
+      "category": "food ingredient",
+      "place": "in a jar",
+      "property": "sweet"
+    },
+    {
+      "kind": "animal",
+      "subject": "cows",
+      "category": "animal",
+      "place": "farmyard",
+      "property": "long horns"
+    },
+    {
+      "kind": "animal",
+      "subject": "coconuts",
+      "category": "fruits",
+      "place": "cocoa plantation",
+      "property": "sweet"
+    },
+    {
+      "kind": "animal",
+      "subject": "trees",
+      "category": "plant life",
+      "place": "forest",
+      "property": "dense canopy"
+    },
+    {
+      "kind": "animal",
+      "subject": "cattle",
+      "category": "animal",
+      "place": "pasture",
+      "property": "curly fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "cigarette",
+      "category": "consumable item",
+      "place": "hand",
+      "property": "lighting"
+    },
+    {
+      "kind": "animal",
+      "subject": "dinosaur",
+      "category": "prehistoric animal",
+      "place": "south america",
+      "property": "feathers"
+    },
+    {
+      "kind": "animal",
+      "subject": "toothpaste",
+      "category": "hygiene items",
+      "place": "household",
+      "property": "paste"
+    },
+    {
+      "kind": "animal",
+      "subject": "chairs",
+      "category": "furniture",
+      "place": "library",
+      "property": "wrist rests"
+    },
+    {
+      "kind": "animal",
+      "subject": "puppy",
+      "category": "pets",
+      "place": "kennel",
+      "property": "fluffy fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "penguins",
+      "category": "birds",
+      "place": "arctic ice",
+      "property": "large wings"
+    },
+    {
+      "kind": "country",
+      "subject": "netherlands",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "amsterdam"
+    },
+    {
+      "kind": "animal",
+      "subject": "mushroom",
+      "category": "fungus",
+      "place": "forest floor",
+      "property": "spores"
+    },
+    {
+      "kind": "animal",
+      "subject": "cat",
+      "category": "animal",
+      "place": "meow spot",
+      "property": "purr"
+    },
+    {
+      "kind": "country",
+      "subject": "portugal",
+      "category": "country",
+      "place": "western europe",
+      "capital_city": "lisbon"
+    },
+    {
+      "kind": "animal",
+      "subject": "carnivorous",
+      "category": "mammal",
+      "place": "desert",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "crocuses",
+      "category": "flower",
+      "place": "meadow",
+      "property": "large flowers"
+    },
+    {
+      "kind": "animal",
+      "subject": "scoops",
+      "category": "food items",
+      "place": "canteen",
+      "property": "tasty"
+    },
+    {
+      "kind": "country",
+      "subject": "poland",
+      "category": "country",
+      "place": "eastern europe",
+      "capital_city": "warsaw"
+    },
+    {
+      "kind": "animal",
+      "subject": "whale",
+      "category": "mammal",
+      "place": "ocean",
+      "property": "blowing bubbles"
+    }
+  ],
+  "holdout": [
+    {
+      "kind": "country",
+      "subject": "italy",
+      "category": "country",
+      "place": "europa",
+      "capital_city": "rome"
+    },
+    {
+      "kind": "animal",
+      "subject": "lollipop",
+      "category": "snack",
+      "place": "store",
+      "property": "round shape"
+    },
+    {
+      "kind": "animal",
+      "subject": "honeybee",
+      "category": "invertebrate animal",
+      "place": "beehive",
+      "property": "honeycomb"
+    },
+    {
+      "kind": "animal",
+      "subject": "magnolias",
+      "category": "plants",
+      "place": "mountainside",
+      "property": "large flowers"
+    },
+    {
+      "kind": "animal",
+      "subject": "book",
+      "category": "literature",
+      "place": "library",
+      "property": "binding"
+    },
+    {
+      "kind": "animal",
+      "subject": "mice",
+      "category": "pet",
+      "place": "home",
+      "property": "furry"
+    },
+    {
+      "kind": "animal",
+      "subject": "squirrel",
+      "category": "mammal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "beach towels",
+      "category": "handmade articles",
+      "place": "Beach house",
+      "property": "light-weight"
+    },
+    {
+      "kind": "animal",
+      "subject": "bears",
+      "category": "mammal family",
+      "place": "bear habitat",
+      "property": "long fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "pizzas",
+      "category": "food",
+      "place": "restaurant",
+      "property": "taste"
+    },
+    {
+      "kind": "animal",
+      "subject": "puppets",
+      "category": "playthings",
+      "place": "stadium",
+      "property": "unique costumes"
+    },
+    {
+      "kind": "animal",
+      "subject": "crystal",
+      "category": "precious stone",
+      "place": "catalyst bay",
+      "property": "glowing"
+    },
+    {
+      "kind": "country",
+      "subject": "mexico",
+      "category": "country",
+      "place": "south america",
+      "capital_city": "mxiko"
+    },
+    {
+      "kind": "animal",
+      "subject": "garden",
+      "category": "landscape",
+      "place": "backyard",
+      "property": "large flowers"
+    },
+    {
+      "kind": "animal",
+      "subject": "whiskers",
+      "category": "cat hair",
+      "place": "feline coat",
+      "property": "fluffy"
+    },
+    {
+      "kind": "animal",
+      "subject": "tuna",
+      "category": "fish",
+      "place": "ocean",
+      "property": "scales"
+    },
+    {
+      "kind": "animal",
+      "subject": "candle",
+      "category": "object",
+      "place": "room",
+      "property": "flame"
+    },
+    {
+      "kind": "animal",
+      "subject": "teapot",
+      "category": "cup",
+      "place": "cabinet",
+      "property": "bottled water"
+    },
+    {
+      "kind": "animal",
+      "subject": "cherry",
+      "category": "fruit",
+      "place": "tree",
+      "property": "round"
+    },
+    {
+      "kind": "animal",
+      "subject": "silk",
+      "category": "textile",
+      "place": "China",
+      "property": "woven"
+    },
+    {
+      "kind": "animal",
+      "subject": "wings",
+      "category": "bird",
+      "place": "airplane",
+      "property": "sharp"
+    },
+    {
+      "kind": "country",
+      "subject": "brazil",
+      "category": "country",
+      "place": "south america",
+      "capital_city": "brasilia"
+    },
+    {
+      "kind": "animal",
+      "subject": "sponges",
+      "category": "animal kingdom",
+      "place": "ocean floor",
+      "property": "soft tissue"
+    },
+    {
+      "kind": "animal",
+      "subject": "car",
+      "category": "automobiles",
+      "place": "parking lot",
+      "property": "wheel"
+    },
+    {
+      "kind": "animal",
+      "subject": "lions",
+      "category": "mammals",
+      "place": "savannah",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "crates",
+      "category": "containers",
+      "place": "warehouse",
+      "property": "empty"
+    },
+    {
+      "kind": "animal",
+      "subject": "sharks",
+      "category": "marine animals",
+      "place": "oceans",
+      "property": "sensitive skin"
+    },
+    {
+      "kind": "animal",
+      "subject": "wombat",
+      "category": "mammal",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "animal",
+      "subject": "dogs",
+      "category": "animal",
+      "place": "park",
+      "property": "short fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "bunny",
+      "category": "reptile",
+      "place": "cage",
+      "property": "fluffy fur"
+    },
+    {
+      "kind": "animal",
+      "subject": "wolves",
+      "category": "canine family",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "kind": "country",
+      "subject": "norway",
+      "category": "country",
+      "place": "scandinavia",
+      "capital_city": "oslo"
+    },
+    {
+      "kind": "animal",
+      "subject": "pigs",
+      "category": "animals",
+      "place": "farms",
+      "property": "large size"
+    },
+    {
+      "kind": "animal",
+      "subject": "dumplings",
+      "category": "food",
+      "place": "home",
+      "property": "flavorful"
+    },
+    {
+      "kind": "animal",
+      "subject": "dew",
+      "category": "water droplet",
+      "place": "environment",
+      "property": "precipitation"
+    },
+    {
+      "kind": "animal",
+      "subject": "shoes",
+      "category": "clothing",
+      "place": "store",
+      "property": "hightie"
+    },
+    {
+      "kind": "animal",
+      "subject": "candy",
+      "category": "sweet treat",
+      "place": "bakery",
+      "property": "tangy"
+    },
+    {
+      "kind": "animal",
+      "subject": "ladybugs",
+      "category": "insects",
+      "place": "honeydew",
+      "property": "round"
+    },
+    {
+      "kind": "animal",
+      "subject": "dog",
+      "category": "canine species",
+      "place": "park",
+      "property": "jumping"
+    },
+    {
+      "kind": "animal",
+      "subject": "sugar cube",
+      "category": "food product",
+      "place": "bakery shelf",
+      "property": "round shape"
+    },
+    {
+      "kind": "animal",
+      "subject": "crows",
+      "category": "bird species",
+      "place": "forest",
+      "property": "sharp beaks"
+    },
+    {
+      "kind": "animal",
+      "subject": "coconut",
+      "category": "fruit",
+      "place": "tree",
+      "property": "rind"
+    },
+    {
+      "kind": "animal",
+      "subject": "cranes",
+      "category": "birds",
+      "place": "sky",
+      "property": "swallow-tailed"
+    },
+    {
+      "kind": "animal",
+      "subject": "toilet",
+      "category": "inanimate object",
+      "place": "restroom",
+      "property": "dirty"
+    },
+    {
+      "kind": "animal",
+      "subject": "carrot",
+      "category": "vegetable",
+      "place": "garden",
+      "property": "juicy"
+    },
+    {
+      "kind": "country",
+      "subject": "cuba",
+      "category": "country",
+      "place": "caribbean island",
+      "capital_city": "haban"
+    },
+    {
+      "kind": "animal",
+      "subject": "crocodyl",
+      "category": "reptile",
+      "place": "pond",
+      "property": "skin"
+    },
+    {
+      "kind": "animal",
+      "subject": "pumpkin",
+      "category": "vegetable",
+      "place": "market",
+      "property": "round"
+    },
+    {
+      "kind": "animal",
+      "subject": "wax",
+      "category": "materials",
+      "place": "manufacturing plant",
+      "property": "soft"
+    },
+    {
+      "kind": "animal",
+      "subject": "toothbrush",
+      "category": "handware",
+      "place": "home",
+      "property": "bristles"
+    }
+  ]
+}

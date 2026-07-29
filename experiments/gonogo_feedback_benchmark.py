@@ -50,7 +50,7 @@ import ollama
 from src.text import BioAIDialogueAgent
 from src.text.consolidation import ConsolidationMemory
 
-_norm = ConsolidationMemory._normalise
+_norm = ConsolidationMemory.normalise
 
 
 def _extract_json(text: str) -> dict:

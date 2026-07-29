@@ -1,0 +1,85 @@
+{
+  "spec_path": "checkpoints/scaling_spec.json",
+  "spec_lessons": 97,
+  "spec_holdout": 50,
+  "results": [
+    {
+      "size": 10,
+      "lessons_taught": 10,
+      "acquisition_latency_seconds": 0.387,
+      "holdout_latency_seconds": 0.218,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.8
+    },
+    {
+      "size": 20,
+      "lessons_taught": 20,
+      "acquisition_latency_seconds": 0.18,
+      "holdout_latency_seconds": 0.008,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.75
+    },
+    {
+      "size": 30,
+      "lessons_taught": 30,
+      "acquisition_latency_seconds": 0.35,
+      "holdout_latency_seconds": 0.008,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.7
+    },
+    {
+      "size": 50,
+      "lessons_taught": 50,
+      "acquisition_latency_seconds": 0.441,
+      "holdout_latency_seconds": 0.008,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.725
+    },
+    {
+      "size": 70,
+      "lessons_taught": 70,
+      "acquisition_latency_seconds": 0.616,
+      "holdout_latency_seconds": 0.008,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.775
+    },
+    {
+      "size": 97,
+      "lessons_taught": 97,
+      "acquisition_latency_seconds": 0.947,
+      "holdout_latency_seconds": 0.009,
+      "holdout_evaluated": 50,
+      "frames_learned": 13,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "native_generation_proof_rate": 1.0,
+      "relational_retrieval_accuracy": 0.775
+    }
+  ]
+}

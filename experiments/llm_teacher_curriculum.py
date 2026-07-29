@@ -83,10 +83,10 @@ from src.text.ecology import PropositionRealiser, Proposition, extract_propositi
 
 from ecology_benchmark import _as_plain_phrase, _extract_json
 
-_norm = ConsolidationMemory._normalise
+_norm = ConsolidationMemory.normalise
 
 # Deliberately local to this benchmark's target-vs-recovered comparison,
-# NOT a change to ConsolidationMemory._normalise itself: that function is
+# NOT a change to ConsolidationMemory.normalise itself: that function is
 # also used for literal storage/display content elsewhere (e.g. "Pluto is
 # a planet" is correctly stored and shown AS "a planet", article
 # included -- tests/test_text/test_relational_agent.py depends on this).
