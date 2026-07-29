@@ -1,0 +1,1288 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "lessons": 56,
+    "holdout": 160
+  },
+  "lessons_taught": 56,
+  "acquisition_latency_seconds": 1.0881668750662357,
+  "holdout_latency_seconds": 0.21299971104599535,
+  "frames_learned": 11,
+  "distinct_frames_by_relation": {
+    "is": 4,
+    "in": 5,
+    "has": 2,
+    "capital": 0,
+    "capital_of": 0
+  },
+  "holdout_evaluated": 84,
+  "generation_success_rate": 1.0,
+  "no_library_overlap_rate": 1.0,
+  "propositions_match_rate": 0.13095238095238096,
+  "mean_propositions_recovered": 1.7261904761904763,
+  "native_generation_proof_rate": 0.13095238095238096,
+  "acquisition_records": [
+    {
+      "index": 0,
+      "subject": "sawdust",
+      "sentences": [
+        "Sawdust is material.",
+        "Sawdust are in tool shed.",
+        "Sawdust has powderlike substance."
+      ]
+    },
+    {
+      "index": 1,
+      "subject": "butterfly",
+      "sentences": [
+        "Butterfly are insect.",
+        "Butterfly is located in tree.",
+        "Butterfly have wings."
+      ]
+    },
+    {
+      "index": 2,
+      "subject": "whales",
+      "sentences": [
+        "Whales was sea mammals.",
+        "Whales lies within ocean.",
+        "Whales has baleen."
+      ]
+    },
+    {
+      "index": 3,
+      "subject": "books",
+      "sentences": [
+        "Books were literature.",
+        "Books sits in library.",
+        "Books have bound."
+      ]
+    },
+    {
+      "index": 4,
+      "subject": "birds",
+      "sentences": [
+        "Birds is avian family.",
+        "Birds is in forest.",
+        "Birds has long beaks."
+      ]
+    },
+    {
+      "index": 5,
+      "subject": "trees",
+      "sentences": [
+        "Trees are plant species.",
+        "Trees are in forest.",
+        "Trees have twisty branches."
+      ]
+    },
+    {
+      "index": 6,
+      "subject": "cattle",
+      "sentences": [
+        "Cattle was animal.",
+        "Cattle is located in village.",
+        "Cattle has milky."
+      ]
+    },
+    {
+      "index": 7,
+      "subject": "butterfly",
+      "sentences": [
+        "Butterfly were invertebrate animals.",
+        "Butterfly lies within flower garden.",
+        "Butterfly have wings."
+      ]
+    },
+    {
+      "index": 8,
+      "subject": "wax",
+      "sentences": [
+        "Wax is material.",
+        "Wax sits in craftroom.",
+        "Wax has smooth texture."
+      ]
+    },
+    {
+      "index": 9,
+      "subject": "dog",
+      "sentences": [
+        "Dog are pet.",
+        "Dog is in yard.",
+        "Dog have tail."
+      ]
+    },
+    {
+      "index": 10,
+      "subject": "elephant",
+      "sentences": [
+        "Elephant was animal kingdom.",
+        "Elephant are in Africa.",
+        "Elephant has long trunk."
+      ]
+    },
+    {
+      "index": 11,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were animals.",
+        "Wombats is located in mountain.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 12,
+      "subject": "baskets",
+      "sentences": [
+        "Baskets is food.",
+        "Baskets lies within market.",
+        "Baskets has filled with fruit."
+      ]
+    },
+    {
+      "index": 13,
+      "subject": "baskets",
+      "sentences": [
+        "Baskets are containers.",
+        "Baskets sits in storefront.",
+        "Baskets have hanging."
+      ]
+    },
+    {
+      "index": 14,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats was mammals.",
+        "Wombats is in underground cave system.",
+        "Wombats has sharp teeth."
+      ]
+    },
+    {
+      "index": 15,
+      "subject": "butterfly",
+      "sentences": [
+        "Butterfly were insect.",
+        "Butterfly are in garden.",
+        "Butterfly have wings."
+      ]
+    },
+    {
+      "index": 16,
+      "subject": "beaks",
+      "sentences": [
+        "Beaks is birds.",
+        "Beaks is located in oceans.",
+        "Beaks has long."
+      ]
+    },
+    {
+      "index": 17,
+      "subject": "books",
+      "sentences": [
+        "Books are literature.",
+        "Books lies within library.",
+        "Books have written."
+      ]
+    },
+    {
+      "index": 18,
+      "subject": "trees",
+      "sentences": [
+        "Trees was plant life.",
+        "Trees sits in forest.",
+        "Trees has large branches."
+      ]
+    },
+    {
+      "index": 19,
+      "subject": "butterflies",
+      "sentences": [
+        "Butterflies were insects.",
+        "Butterflies is in nests.",
+        "Butterflies have wings."
+      ]
+    },
+    {
+      "index": 20,
+      "subject": "whales",
+      "sentences": [
+        "Whales is mammals.",
+        "Whales are in ocean.",
+        "Whales has large."
+      ]
+    },
+    {
+      "index": 21,
+      "subject": "carpenter",
+      "sentences": [
+        "Carpenter are craftsman.",
+        "Carpenter is located in woodshop.",
+        "Carpenter have large tools."
+      ]
+    },
+    {
+      "index": 22,
+      "subject": "carnivorous mammals",
+      "sentences": [
+        "Carnivorous mammals was animal kingdom.",
+        "Carnivorous mammals lies within wilderness.",
+        "Carnivorous mammals has sharp teeth."
+      ]
+    },
+    {
+      "index": 23,
+      "subject": "fish",
+      "sentences": [
+        "Fish were aquatic animals.",
+        "Fish sits in ocean.",
+        "Fish have swimming ability."
+      ]
+    },
+    {
+      "index": 24,
+      "subject": "fish",
+      "sentences": [
+        "Fish is animals.",
+        "Fish is in ocean.",
+        "Fish has tail."
+      ]
+    },
+    {
+      "index": 25,
+      "subject": "whales",
+      "sentences": [
+        "Whales are marine mammals.",
+        "Whales are in oceanic waters.",
+        "Whales have long bodies."
+      ]
+    },
+    {
+      "index": 26,
+      "subject": "shampoo",
+      "sentences": [
+        "Shampoo was cosmetics.",
+        "Shampoo is located in beauty parlor.",
+        "Shampoo has soft hair."
+      ]
+    },
+    {
+      "index": 27,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammals.",
+        "Wombats lies within forest.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 28,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats is mammals.",
+        "Wombats sits in jungle.",
+        "Wombats has sharp teeth."
+      ]
+    },
+    {
+      "index": 29,
+      "subject": "giraffes",
+      "sentences": [
+        "Giraffes are mammals.",
+        "Giraffes is in safari park.",
+        "Giraffes have long neck."
+      ]
+    },
+    {
+      "index": 30,
+      "subject": "bison",
+      "sentences": [
+        "Bison was herbivores.",
+        "Bison are in prairie.",
+        "Bison has stripes."
+      ]
+    },
+    {
+      "index": 31,
+      "subject": "piano",
+      "sentences": [
+        "Piano were musical instrument.",
+        "Piano is located in home.",
+        "Piano have stringed."
+      ]
+    },
+    {
+      "index": 32,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats is mammals.",
+        "Wombats lies within southwestern United States.",
+        "Wombats has sharp teeth."
+      ]
+    },
+    {
+      "index": 33,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats are mammals.",
+        "Wombats sits in desert.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 34,
+      "subject": "wheat",
+      "sentences": [
+        "Wheat was plant.",
+        "Wheat is in field.",
+        "Wheat has stalks."
+      ]
+    },
+    {
+      "index": 35,
+      "subject": "cactus",
+      "sentences": [
+        "Cactus were plant.",
+        "Cactus are in desert.",
+        "Cactus have spiny."
+      ]
+    },
+    {
+      "index": 36,
+      "subject": "butterflies",
+      "sentences": [
+        "Butterflies is insects.",
+        "Butterflies is located in forest.",
+        "Butterflies has wings."
+      ]
+    },
+    {
+      "index": 37,
+      "subject": "gears",
+      "sentences": [
+        "Gears are motors.",
+        "Gears lies within factory.",
+        "Gears have fast."
+      ]
+    },
+    {
+      "index": 38,
+      "subject": "apples",
+      "sentences": [
+        "Apples was fruit.",
+        "Apples sits in tree.",
+        "Apples has ripe."
+      ]
+    },
+    {
+      "index": 39,
+      "subject": "trees",
+      "sentences": [
+        "Trees were vegetation.",
+        "Trees is in forest.",
+        "Trees have green."
+      ]
+    },
+    {
+      "index": 40,
+      "subject": "apple",
+      "sentences": [
+        "Apple is fruit.",
+        "Apple are in garden.",
+        "Apple has sweet."
+      ]
+    },
+    {
+      "index": 41,
+      "subject": "puppies",
+      "sentences": [
+        "Puppies are animals.",
+        "Puppies is located in pet store.",
+        "Puppies have clean paws."
+      ]
+    },
+    {
+      "index": 42,
+      "subject": "apples",
+      "sentences": [
+        "Apples was fruits.",
+        "Apples lies within tree.",
+        "Apples has round."
+      ]
+    },
+    {
+      "index": 43,
+      "subject": "fish",
+      "sentences": [
+        "Fish were aquarium animals.",
+        "Fish sits in public aquarium.",
+        "Fish have gills."
+      ]
+    },
+    {
+      "index": 44,
+      "subject": "chocolate chip cookies",
+      "sentences": [
+        "Chocolate chip cookies is candy items.",
+        "Chocolate chip cookies is in house kitchen.",
+        "Chocolate chip cookies has smooth texture."
+      ]
+    },
+    {
+      "index": 45,
+      "subject": "cattle",
+      "sentences": [
+        "Cattle are herd.",
+        "Cattle are in pastureland.",
+        "Cattle have curved horns."
+      ]
+    },
+    {
+      "index": 46,
+      "subject": "apples",
+      "sentences": [
+        "Apples was fruit.",
+        "Apples is located in garden.",
+        "Apples has sweetness."
+      ]
+    },
+    {
+      "index": 47,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammals.",
+        "Wombats lies within garden.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 48,
+      "subject": "books",
+      "sentences": [
+        "Books is literature.",
+        "Books sits in library.",
+        "Books has binding."
+      ]
+    },
+    {
+      "index": 49,
+      "subject": "butterflies",
+      "sentences": [
+        "Butterflies are insect.",
+        "Butterflies is in forest.",
+        "Butterflies have dainty wings."
+      ]
+    },
+    {
+      "index": 50,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats was mammals.",
+        "Wombats are in wilderness.",
+        "Wombats has sharp teeth."
+      ]
+    },
+    {
+      "index": 51,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammals.",
+        "Wombats is located in forest.",
+        "Wombats have sharp teeth."
+      ]
+    },
+    {
+      "index": 52,
+      "subject": "trees",
+      "sentences": [
+        "Trees is forestry.",
+        "Trees lies within national park.",
+        "Trees has height."
+      ]
+    },
+    {
+      "index": 53,
+      "subject": "carrot",
+      "sentences": [
+        "Carrot are vegetable.",
+        "Carrot sits in field.",
+        "Carrot have sweet."
+      ]
+    },
+    {
+      "index": 54,
+      "subject": "dog",
+      "sentences": [
+        "Dog was animal.",
+        "Dog is in park.",
+        "Dog has long legs."
+      ]
+    },
+    {
+      "index": 55,
+      "subject": "elephants",
+      "sentences": [
+        "Elephants were mammals.",
+        "Elephants are in forest.",
+        "Elephants have long necks."
+      ]
+    }
+  ],
+  "holdout_records": [
+    {
+      "index": 2,
+      "subject": "cows",
+      "generated_text": "Cows were farm animals and are in farmyard and have long horns.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 4,
+      "subject": "toothbrush",
+      "generated_text": "Toothbrush was a household item and is in home and has sharp edges.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 6,
+      "subject": "penguins",
+      "generated_text": "Penguins are a bird family and are in antarctic seas and have webbed feet.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 9,
+      "subject": "cows",
+      "generated_text": "Cows were herds of animals and are in farmlands and have muscular bodies.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 10,
+      "subject": "giraffe",
+      "generated_text": "Giraffe was a herbivore mammal and is located in east africa and has a long neck.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 11,
+      "subject": "bacteria",
+      "generated_text": "Bacteria were microorganisms and lie within cellular ecosystem and have a proteinaceous.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 13,
+      "subject": "barn",
+      "generated_text": "Barn was a housing and sits in farm and has a large.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 14,
+      "subject": "dolphin",
+      "generated_text": "Dolphin was an aquatic mammal and is located in ocean and has sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 16,
+      "subject": "bunnies",
+      "generated_text": "Bunnies are mammals and are in sandy beach and have a long fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 17,
+      "subject": "bottles",
+      "generated_text": "Bottles are containers and are in restaurant and have a cold.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 18,
+      "subject": "penguin",
+      "generated_text": "Penguin was a bird and is in antarctica and has feathers.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 19,
+      "subject": "bottle",
+      "generated_text": "Bottle was a drink and is located in house and has a closed.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 21,
+      "subject": "book",
+      "generated_text": "Book is written works and is in library and has a binding.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 22,
+      "subject": "mammal",
+      "generated_text": "Mammal was a pet and is in human home and has a fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 23,
+      "subject": "honeybees",
+      "generated_text": "Honeybees are bees and are located in hive and have a pollen.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 24,
+      "subject": "car",
+      "generated_text": "Car is an automobile and is in factory and has a wheel.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 25,
+      "subject": "cabbage",
+      "generated_text": "Cabbage is a vegetable and is in farm and has a taste.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 26,
+      "subject": "bees",
+      "generated_text": "Bees are insects and sit in honeycomb and have a pollen.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 27,
+      "subject": "pigeons",
+      "generated_text": "Pigeons were birds and are located in cage and have feathers.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 28,
+      "subject": "wolves",
+      "generated_text": "Wolves are animals and are in forest and have sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 30,
+      "subject": "bottles",
+      "generated_text": "Bottles were containers and are in store and have a liquid.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 31,
+      "subject": "wombat",
+      "generated_text": "Wombat is a mammal and is in forest and has sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 32,
+      "subject": "bees",
+      "generated_text": "Bees are insects and are in honeycomb and have a pollen.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 33,
+      "subject": "bacteria",
+      "generated_text": "Bacteria are microorganisms and are in body fluids and have an acid.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 37,
+      "subject": "book",
+      "generated_text": "Book is readable media and is in library and has covers.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 38,
+      "subject": "bottles",
+      "generated_text": "Bottles are storage containers and are located in laboratory and have a transparent.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 41,
+      "subject": "dresses",
+      "generated_text": "Dresses were clothing items and are in clothing stores and have a sleeveless.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 42,
+      "subject": "pumpkins",
+      "generated_text": "Pumpkins were a vegetable and are located in field and have a round shape.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 43,
+      "subject": "coconut",
+      "generated_text": "Coconut was a food and is in sea and has a rinsed.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 45,
+      "subject": "bees",
+      "generated_text": "Bees are insects and are in hive and have a pollen.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 46,
+      "subject": "lions",
+      "generated_text": "Lions were mammals and sit in africa and have sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 47,
+      "subject": "wombat",
+      "generated_text": "Wombat was a mammal and sits in australia and has sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 48,
+      "subject": "dolphins",
+      "generated_text": "Dolphins are aquatic mammals and sit in ocean and have a tail.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 49,
+      "subject": "lamb",
+      "generated_text": "Lamb is an animal and is in pasture and has a long wool.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 54,
+      "subject": "dove",
+      "generated_text": "Dove is a bird and sits in pond and has a feathered.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 56,
+      "subject": "pencil",
+      "generated_text": "Pencil was a writing utensil and sits in school desk and has a sharp.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 58,
+      "subject": "hedgehog",
+      "generated_text": "Hedgehog is a mammal and lies within cave and has a soft fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 59,
+      "subject": "hedgehog",
+      "generated_text": "Hedgehog is invertebrates and is in underground and has a slow.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 65,
+      "subject": "crickets",
+      "generated_text": "Crickets were insects and lie within farmyard and have a waxy exoskeleton.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 67,
+      "subject": "sloth",
+      "generated_text": "Sloth was a mammal and is located in tree and has a slow movement.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 68,
+      "subject": "bacteria",
+      "generated_text": "Bacteria are microorganisms and lie within laboratory and have an acid resistant.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 69,
+      "subject": "honeybees",
+      "generated_text": "Honeybees were insects and are located in hive and have a pollen.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 72,
+      "subject": "dinosaur",
+      "generated_text": "Dinosaur is a vertebrate animal and is located in ancient world and has a spine.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 74,
+      "subject": "hedgehog",
+      "generated_text": "Hedgehog was a mammal and sits in forest and has a smooth fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 75,
+      "subject": "cows",
+      "generated_text": "Cows are an animal kingdom and are located in farm and have a milk.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 76,
+      "subject": "pigeons",
+      "generated_text": "Pigeons are a bird and are located in sky and have wings.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 77,
+      "subject": "crayons",
+      "generated_text": "Crayons were stationery items and are in school and have a waxy surface.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 78,
+      "subject": "horses",
+      "generated_text": "Horses were an animal and lie within park and have a long hooves.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 79,
+      "subject": "toaster",
+      "generated_text": "Toaster is a cooking appliance and is in kitchen and has a mechanical.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 81,
+      "subject": "panda",
+      "generated_text": "Panda is a mammal and sits in southeastern asia and has a long fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 82,
+      "subject": "wombat",
+      "generated_text": "Wombat is a mammal and is located in australia and has sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 85,
+      "subject": "book",
+      "generated_text": "Book was a text and is in library and has a page.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 86,
+      "subject": "candy cane",
+      "generated_text": "Candy cane is a dessert item and is located in sugar production facility and has a taste.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 91,
+      "subject": "wolves",
+      "generated_text": "Wolves were mammals and are in forest and have sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 93,
+      "subject": "tulip",
+      "generated_text": "Tulip was a flower and lies within garden and has a fragrant.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 97,
+      "subject": "chicken",
+      "generated_text": "Chicken is a bird and is in farmland and has feathers.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 98,
+      "subject": "crab",
+      "generated_text": "Crab is an invertebrate and lies within ocean and has large claws.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 99,
+      "subject": "hedgehog",
+      "generated_text": "Hedgehog is a pet and sits in forest and has a long tail.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 101,
+      "subject": "honeybees",
+      "generated_text": "Honeybees were an animal kingdom and are in farm and have a swarm.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 105,
+      "subject": "squirrel",
+      "generated_text": "Squirrel is a mammal and is located in forest and has sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 106,
+      "subject": "mouse",
+      "generated_text": "Mouse was a pet and is in lab and has a gray fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 109,
+      "subject": "sushi roll",
+      "generated_text": "Sushi roll is a food item and is in restaurant and has a delicious.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 111,
+      "subject": "giant spider",
+      "generated_text": "Giant spider is insects and is located in forest and has wiry legs.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 112,
+      "subject": "garden",
+      "generated_text": "Garden is a landscape and is in central park and has plants.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 115,
+      "subject": "beasts",
+      "generated_text": "Beasts are wild animals and lie within mesopotamia and have sharp teeth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 120,
+      "subject": "horses",
+      "generated_text": "Horses were an animal kingdom and sit in meadow and have a long neck.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 121,
+      "subject": "dirt",
+      "generated_text": "Dirt was a material and is in ground and has a smooth.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 123,
+      "subject": "honeybees",
+      "generated_text": "Honeybees are an insect kingdom and sit in beehive and have a pollen rich.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 124,
+      "subject": "dogs",
+      "generated_text": "Dogs are pet animals and sit in park and have a short fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 126,
+      "subject": "broom",
+      "generated_text": "Broom was a tool and lies within schoolroom and has a wet.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 127,
+      "subject": "chicken",
+      "generated_text": "Chicken was a bird and is located in yard and has wings.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 130,
+      "subject": "crayons",
+      "generated_text": "Crayons were art supplies and sit in schoolroom and have bright colors.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 135,
+      "subject": "penguins",
+      "generated_text": "Penguins are insects and are located in ocean and have long legs.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 136,
+      "subject": "mouse",
+      "generated_text": "Mouse was vertebrates and sits in mouse box and has a soft fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 139,
+      "subject": "car",
+      "generated_text": "Car was automobiles and sits in urban environment and has a steady driving.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 140,
+      "subject": "mouse",
+      "generated_text": "Mouse is an animal and is in house and has a big.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 142,
+      "subject": "crabs",
+      "generated_text": "Crabs are a shellfish and lie within ocean and have sharp claws.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 144,
+      "subject": "bees",
+      "generated_text": "Bees are insects and are in farmyard and have a silk.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 146,
+      "subject": "bottles",
+      "generated_text": "Bottles are containers and are in store and have a clear.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 150,
+      "subject": "chicken",
+      "generated_text": "Chicken is a bird and is in farm and has a warm blooded.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 152,
+      "subject": "turtles",
+      "generated_text": "Turtles are a fish and are located in ocean and have a soft shell.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    },
+    {
+      "index": 153,
+      "subject": "pigs",
+      "generated_text": "Pigs were mammals and are in farm and have a grassy.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 158,
+      "subject": "pencil",
+      "generated_text": "Pencil was a writing tool and sits in school desk and has sharp edges.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 2
+    },
+    {
+      "index": 159,
+      "subject": "chimney",
+      "generated_text": "Chimney was a home appliance and lies within building and has a flat surface.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": false,
+      "propositions_recovered": 1
+    }
+  ]
+}

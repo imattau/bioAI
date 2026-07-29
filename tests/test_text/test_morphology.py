@@ -8,6 +8,7 @@ this specific problem.
 from src.text.ecology.morphology import (
     agree_verb,
     apply_subject_verb_agreement,
+    indefinite_article,
     is_plural_noun,
 )
 
@@ -90,3 +91,25 @@ def test_apply_subject_verb_agreement_no_placeholder():
     assert apply_subject_verb_agreement("no placeholder here", "wombats") == (
         "no placeholder here"
     )
+
+
+# ── Phase 7: indefinite_article ─────────────────────────────────────────
+
+def test_indefinite_article_regular_consonant_and_vowel():
+    assert indefinite_article("wombat") == "a"
+    assert indefinite_article("elephant") == "an"
+
+
+def test_indefinite_article_silent_h_exception():
+    assert indefinite_article("hour") == "an"
+    assert indefinite_article("honest") == "an"
+
+
+def test_indefinite_article_you_sound_exception():
+    assert indefinite_article("university") == "a"
+    assert indefinite_article("european") == "a"
+
+
+def test_indefinite_article_is_case_insensitive():
+    assert indefinite_article("Elephant") == "an"
+    assert indefinite_article("Hour") == "an"

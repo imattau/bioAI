@@ -22,16 +22,39 @@ the same "[SUBJECT]"/"[OBJECT]" bracket convention frame templates already
 use so agreement applies uniformly to both, rather than needing two
 separate code paths.
 
+Phase 7 adds two more real generation improvements:
+
+- **Compound-clause merging**: two propositions about the same subject
+  but *different* relations used to always become two separate sentences
+  ("Wombats are marsupials. Wombats are in Australia."). Relations whose
+  template has "[SUBJECT]" in the true grammatical-subject position (the
+  same distinction `apply_subject_verb_agreement` already draws) now
+  merge into one compound clause ("Wombats are marsupials and are in
+  Australia."). Relations whose template doesn't start with "[SUBJECT]"
+  (e.g. "capital", whose real grammatical subject is "the capital") never
+  merge -- doing so would be grammatically wrong, not just unhelpful.
+- **Indefinite articles** ("a"/"an"), scoped to the "is"/"has" relations'
+  *objects* only, for a singular object (`is_plural_noun`, Phase 5).
+  `ConsolidationMemory._normalise` strips all casing before a Proposition
+  ever exists, so there is no signal left to tell a common noun
+  ("marsupial", needs "a") from a proper noun ("France", never takes
+  one) -- rather than guess, article insertion is scoped to relations
+  whose content is reliably common-noun in this curriculum ("is"
+  categories, "has" properties) and excluded from "in"/"capital"/
+  "capital_of", whose objects are reliably place/city/country names.
+  Not applied to subjects: this curriculum's subjects are always taught
+  as plural nouns (a real, disclosed scope limit, not an oversight).
+
 Every subject and object string still comes straight from a
 `Proposition`'s fields, so all factual content stays traceable to a
 source proposition regardless of which phrasing path rendered it -- only
-grammatical connectives are synthesized, drawn from a previously-observed
-frame, or re-inflected for agreement.
+grammatical connectives, learned frames, agreement, articles, and
+compound "and" joins are synthesized.
 """
 
 from __future__ import annotations
 
-from .morphology import apply_subject_verb_agreement
+from .morphology import apply_subject_verb_agreement, indefinite_article, is_plural_noun
 from .proposition_extractor import Proposition, UNCERTAINTY_RELATION
 
 _RELATION_TEMPLATES = {
@@ -41,6 +64,36 @@ _RELATION_TEMPLATES = {
     "capital": "The capital of [SUBJECT] is [OBJECT]",
     "capital_of": "[SUBJECT] is the capital of [OBJECT]",
 }
+
+# Relations whose object content is reliably a common noun in this
+# curriculum ("is" categories, "has" properties) -- see the module
+# docstring for why "in"/"capital"/"capital_of" are excluded rather than
+# guessed at.
+_ARTICLE_RELATIONS = frozenset({"is", "has"})
+
+# "capital_of"'s subject is always a city name -- grammatically singular
+# by definition, regardless of surface form. Found via real testing (not
+# hypothetical): `is_plural_noun("paris")` returns True, because
+# lemminflect's dictionary has no entry for the proper noun "Paris" and
+# falls back to treating a trailing "-s" as a regular plural suffix (it
+# infers a nonexistent singular "pari"). This is the same missing-
+# casing-signal problem `_ARTICLE_RELATIONS` above is scoped around, not
+# a new one -- rather than attempt general proper-noun detection, this
+# one relation is exempted from agreement entirely, since its subject's
+# number is already known from what the relation *means*, not from
+# surface morphology.
+_AGREEMENT_EXEMPT_RELATIONS = frozenset({"capital_of"})
+
+_SUBJECT_PLACEHOLDER = "[SUBJECT] "
+
+
+def _with_article(phrase: str) -> str:
+    if is_plural_noun(phrase):
+        return phrase
+    words = phrase.split()
+    if not words:
+        return phrase
+    return f"{indefinite_article(words[0])} {phrase}"
 
 
 class PropositionRealiser:
@@ -61,14 +114,29 @@ class PropositionRealiser:
             if prop.object not in groups[key]:
                 groups[key].append(prop.object)
 
-        clauses = []
+        # Clauses are built into `parts`, preserving `order`'s sequence.
+        # A relation whose template puts [SUBJECT] in the true
+        # grammatical-subject position doesn't get its own slot on repeat
+        # occurrences of the same subject -- its verb phrase is appended
+        # to that subject's existing compound slot instead (`None`
+        # placeholder, filled in once all propositions are processed).
+        parts: list[str | None] = []
+        slot_subject: dict[int, str] = {}
+        compound_slot_for_subject: dict[str, int] = {}
+        compound_phrases: dict[str, list[str]] = {}
+
         for subject, relation in order:
-            objects = " and ".join(groups[(subject, relation)])
+            objects_list = groups[(subject, relation)]
             if relation == UNCERTAINTY_RELATION:
-                clauses.append(
+                objects = " and ".join(objects_list)
+                parts.append(
                     f"there may be multiple possible answers for {subject}: {objects}"
                 )
                 continue
+            if relation in _ARTICLE_RELATIONS:
+                objects_list = [_with_article(obj) for obj in objects_list]
+            objects = " and ".join(objects_list)
+
             frame = (
                 frame_library.select_frame(relation)
                 if frame_library is not None else None
@@ -77,9 +145,31 @@ class PropositionRealiser:
                 frame.template if frame is not None
                 else _RELATION_TEMPLATES.get(relation, f"[SUBJECT] {relation} [OBJECT]")
             )
-            template = apply_subject_verb_agreement(template, subject)
-            clause = template.replace("[SUBJECT]", subject).replace("[OBJECT]", objects)
-            clauses.append(clause)
+            if relation not in _AGREEMENT_EXEMPT_RELATIONS:
+                template = apply_subject_verb_agreement(template, subject)
+
+            if template.startswith(_SUBJECT_PLACEHOLDER):
+                verb_phrase = template[len(_SUBJECT_PLACEHOLDER):].replace(
+                    "[OBJECT]", objects
+                )
+                if subject not in compound_slot_for_subject:
+                    index = len(parts)
+                    compound_slot_for_subject[subject] = index
+                    slot_subject[index] = subject
+                    compound_phrases[subject] = []
+                    parts.append(None)
+                compound_phrases[subject].append(verb_phrase)
+            else:
+                clause = template.replace("[SUBJECT]", subject).replace(
+                    "[OBJECT]", objects
+                )
+                parts.append(clause)
+
+        clauses = [
+            part if part is not None
+            else slot_subject[index] + " " + " and ".join(compound_phrases[slot_subject[index]])
+            for index, part in enumerate(parts)
+        ]
 
         clauses = [
             clause[:1].upper() + clause[1:] if clause else clause

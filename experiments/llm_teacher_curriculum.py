@@ -57,6 +57,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import re
 import time
 from collections import Counter
 from dataclasses import asdict, dataclass, field
@@ -72,6 +73,23 @@ from src.text.ecology import PropositionRealiser, Proposition, extract_propositi
 from ecology_benchmark import _as_plain_phrase, _extract_json
 
 _norm = ConsolidationMemory._normalise
+
+# Deliberately local to this benchmark's target-vs-recovered comparison,
+# NOT a change to ConsolidationMemory._normalise itself: that function is
+# also used for literal storage/display content elsewhere (e.g. "Pluto is
+# a planet" is correctly stored and shown AS "a planet", article
+# included -- tests/test_text/test_relational_agent.py depends on this).
+# The mismatch this strips is narrower and specific to Phase 7: taught
+# objects never have an article ("household item", per generate_lesson_content's
+# validation), but PropositionRealiser's article insertion (realiser.py)
+# adds one when rendering a singular is/has object, so re-extracting the
+# realised text captures "a household item" -- same fact, different
+# surface form, needs an article-tolerant comparison here specifically.
+_LEADING_ARTICLE_RE = re.compile(r"^(?:a|an|the)\s+")
+
+
+def _strip_article(text: str) -> str:
+    return _LEADING_ARTICLE_RE.sub("", text)
 
 _IS_TEMPLATES = (
     "{subject} is {object}.",
@@ -216,8 +234,12 @@ def evaluate_holdout(
         )
 
         recovered = extract_propositions([generated_text]) if generated_text else []
-        recovered_triples = {(p.subject, p.relation, p.object) for p in recovered}
-        target_triples = {(p.subject, p.relation, p.object) for p in targets}
+        recovered_triples = {
+            (p.subject, p.relation, _strip_article(p.object)) for p in recovered
+        }
+        target_triples = {
+            (p.subject, p.relation, _strip_article(p.object)) for p in targets
+        }
         matched = recovered_triples & target_triples
 
         results.append(HoldoutResult(

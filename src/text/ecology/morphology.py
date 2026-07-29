@@ -12,13 +12,12 @@ only need to *recognize* a handful of fixed suffixes, not correctly
 irregularity ("go"/"went", "is"/"are"/"was"/"were", "mouse"/"mice") that a
 small, well-tested dictionary was judged the better trade-off here.
 
-Scope: subject-verb agreement only. A frame learned from one subject's
-number should still read correctly when reused for a subject of the
-*opposite* number -- e.g. a frame learned from "Elephants was herbivores"
-should render "Elephants were herbivores" once its own subject is
-correctly identified as plural. Not attempted: tense selection, aspect,
-determiner agreement ("a"/"an"), or anything beyond number agreement on
-the verb immediately following a template's [SUBJECT] placeholder.
+Scope: subject-verb agreement, plus (Phase 7) indefinite-article ("a"/
+"an") selection. Phase 7 does NOT attempt proper-noun detection (see
+`indefinite_article`'s docstring and `realiser.py` for why article
+insertion is scoped to specific relations rather than applied generally),
+tense selection, aspect, or anything beyond number agreement on the verb
+immediately following a template's [SUBJECT] placeholder.
 """
 
 from __future__ import annotations
@@ -83,3 +82,30 @@ def apply_subject_verb_agreement(template: str, subject: str) -> str:
     verb, rest = parts[0], (parts[1] if len(parts) > 1 else "")
     agreed = agree_verb(verb, is_plural_noun(subject))
     return prefix + agreed + (" " + rest if rest else "")
+
+
+# Silent-h words take "an" despite starting with a consonant letter;
+# "you"-sound words take "a" despite starting with a vowel letter. Small,
+# hand-rolled, and deliberately not exhaustive -- this is a simple,
+# well-known phonetic rule, not an irregularity-heavy inflection problem
+# like verb conjugation was (Phase 5's reason for using a dictionary
+# library instead of hand-rolled rules there).
+_SILENT_H = frozenset({"hour", "honest", "honor", "honour", "heir"})
+_YOU_SOUND = frozenset({
+    "university", "universal", "unique", "unicorn", "uniform", "unit",
+    "european", "user",
+})
+
+
+def indefinite_article(word: str) -> str:
+    """"a" or "an" for *word* -- a phonetic rule (does the word's spoken
+    form start with a vowel sound), not a spelling rule, hence the
+    silent-h and "you"-sound exceptions. Operates on a single word, not a
+    phrase -- callers pass the head word the article actually attaches
+    to."""
+    lower = word.lower()
+    if lower in _SILENT_H:
+        return "an"
+    if lower in _YOU_SOUND:
+        return "a"
+    return "an" if lower[:1] in "aeiou" else "a"

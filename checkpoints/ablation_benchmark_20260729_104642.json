@@ -1,0 +1,27 @@
+{
+  "frame_library_ablation": {
+    "frame_library_enabled": {
+      "n": 7,
+      "generation_success_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "mean_propositions_recovered": 3.0,
+      "native_generation_proof_rate": 1.0,
+      "distinct_generated_texts": 7
+    },
+    "frame_library_disabled": {
+      "n": 7,
+      "generation_success_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "mean_propositions_recovered": 3.0,
+      "native_generation_proof_rate": 1.0,
+      "distinct_generated_texts": 7
+    }
+  },
+  "relational_recall_ablation": {
+    "n": 16,
+    "recall_frame_fidelity_rate": 0.4375,
+    "select_frame_fidelity_rate": 0.125
+  },
+  "consolidation_finding": "ConsolidationMemory is never called by learn_conversation -- confirmed by code inspection, not benchmarked, since there is nothing to ablate that was ever contributing to this pipeline.",
+  "synthesis_ablation_note": "enable_synthesis on/off (Phase 1 vs Phase 2) is already ablated in ecology_benchmark.py's ecosystem_selection_only vs ecosystem_full comparison (Phase 3) -- not re-run here."
+}
