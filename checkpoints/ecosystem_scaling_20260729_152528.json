@@ -1,0 +1,476 @@
+{
+  "config": {
+    "spec_path": "/tmp/small_holdout_spec.json",
+    "spec_lessons": 97,
+    "spec_holdout": 20,
+    "sizes": [
+      3,
+      10
+    ],
+    "max_rounds": 3
+  },
+  "summary": {
+    "3": {
+      "n": 20,
+      "mean_recall": 0.5,
+      "mean_supported_count": 1.5,
+      "mean_unsupported_rate": 0.09999999999999999,
+      "contradiction_rate": 0.3,
+      "provenance_correct_rate": 0.7,
+      "mean_ecosystem_rounds": 3,
+      "mean_latency_seconds": 0.0077179033658467235
+    },
+    "10": {
+      "n": 20,
+      "mean_recall": 0.13333333333333333,
+      "mean_supported_count": 0.4,
+      "mean_unsupported_rate": 0.7833333333333333,
+      "contradiction_rate": 0.65,
+      "provenance_correct_rate": 0.15,
+      "mean_ecosystem_rounds": 3,
+      "mean_latency_seconds": 0.09149797175778077
+    }
+  },
+  "results": [
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.12438427796587348
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.14408941008150578
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013364569749683142
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09008077206090093
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013323500752449036
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09528372390195727
+    },
+    {
+      "evidence_count": 3,
+      "recall": 1.0,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 3,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017354469746351242
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08336701313965023
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.001338951988145709
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09016389399766922
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017299221362918615
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09897410799749196
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0015031748916953802
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09293398703448474
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0019205000717192888
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.10139183816500008
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017103150021284819
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08264896715991199
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0014593990053981543
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08893106179311872
+    },
+    {
+      "evidence_count": 3,
+      "recall": 1.0,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 3,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017130000051110983
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09233289794065058
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017933160997927189
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.07669653301127255
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0019410860259085894
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.10343801183626056
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.00148213398642838
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09877112996764481
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.00198337878100574
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.07839019107632339
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0014110091142356396
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.6666666666666666,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08940271404571831
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013151210732758045
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09357634303160012
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013579651713371277
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.06721697491593659
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013086439575999975
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.07237284700386226
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0016016180161386728
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08989701699465513
+    }
+  ]
+}

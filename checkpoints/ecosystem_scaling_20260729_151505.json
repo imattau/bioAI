@@ -1,0 +1,377 @@
+{
+  "config": {
+    "spec_path": "/tmp/small_holdout_spec.json",
+    "spec_lessons": 97,
+    "spec_holdout": 10,
+    "sizes": [
+      3,
+      5,
+      10
+    ],
+    "max_rounds": 3
+  },
+  "summary": {
+    "3": {
+      "n": 10,
+      "mean_recall": 0.5,
+      "mean_supported_count": 1.5,
+      "mean_unsupported_rate": 0.09999999999999999,
+      "contradiction_rate": 0.3,
+      "provenance_correct_rate": 0.7,
+      "mean_ecosystem_rounds": 3,
+      "mean_latency_seconds": 0.013409732142463326
+    },
+    "5": {
+      "n": 10,
+      "mean_recall": 0.4333333333333333,
+      "mean_supported_count": 1.3,
+      "mean_unsupported_rate": 0.5833333333333334,
+      "contradiction_rate": 0.8,
+      "provenance_correct_rate": 0.1,
+      "mean_ecosystem_rounds": 3,
+      "mean_latency_seconds": 0.010587885417044163
+    },
+    "10": {
+      "n": 10,
+      "mean_recall": 0.2333333333333333,
+      "mean_supported_count": 0.7,
+      "mean_unsupported_rate": 0.6,
+      "contradiction_rate": 0.4,
+      "provenance_correct_rate": 0.3,
+      "mean_ecosystem_rounds": 3,
+      "mean_latency_seconds": 0.0862238910747692
+    }
+  },
+  "results": [
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.1203250358812511
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.05601338017731905
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08624466508626938
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013262429274618626
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.004963897867128253
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09792759781703353
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013142779935151339
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.004375323886051774
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.06124133383855224
+    },
+    {
+      "evidence_count": 3,
+      "recall": 1.0,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 3,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.00171848782338202
+    },
+    {
+      "evidence_count": 5,
+      "recall": 1.0,
+      "unsupported_rate": 0.25,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 3,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0063226050697267056
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.07537433714605868
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.001263381913304329
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0047166431322693825
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09565262915566564
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0017393750604242086
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.006594480015337467
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.11378835188224912
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0013596229255199432
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.5,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.004625734873116016
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0675814098212868
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0019439170137047768
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.6666666666666666,
+      "unsupported_rate": 0.3333333333333333,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 2,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.007152544101700187
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": false,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08886420098133385
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.001680872868746519
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.005979144014418125
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.0,
+      "unsupported_rate": 1.0,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 0,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.08002628199756145
+    },
+    {
+      "evidence_count": 3,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.0014261070173233747
+    },
+    {
+      "evidence_count": 5,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.75,
+      "contradiction": true,
+      "provenance_correct": false,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.005135101033374667
+    },
+    {
+      "evidence_count": 10,
+      "recall": 0.3333333333333333,
+      "unsupported_rate": 0.0,
+      "contradiction": false,
+      "provenance_correct": true,
+      "supported_count": 1,
+      "total_ground_truth": 3,
+      "ecosystem_rounds": 3,
+      "latency_seconds": 0.09553810302168131
+    }
+  ]
+}
