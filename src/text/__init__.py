@@ -27,6 +27,6 @@ __all__ = [
     "LearnedChunkComposer",
     "FixedSpliceCandidateGenerator", "SequenceCandidateScorer",
     "RecurrentVSASequenceEncoder", "SemanticChunkVSASequenceEncoder",
-    "VSASequenceRanker", "VSAEncoderScorer",
+    "VSASequenceRanker",
     "VSAEncoderV2", "EncoderScorer", "GoNoGoScorer",
 ]
