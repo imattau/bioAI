@@ -1,0 +1,1304 @@
+{
+  "lessons": [
+    {
+      "subject": "sawdust",
+      "category": "material",
+      "place": "tool shed",
+      "property": "powderlike substance"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "tree",
+      "property": "wings"
+    },
+    {
+      "subject": "whales",
+      "category": "sea mammals",
+      "place": "ocean",
+      "property": "baleen"
+    },
+    {
+      "subject": "books",
+      "category": "literature",
+      "place": "library",
+      "property": "bound"
+    },
+    {
+      "subject": "birds",
+      "category": "avian family",
+      "place": "forest",
+      "property": "long beaks"
+    },
+    {
+      "subject": "trees",
+      "category": "plant species",
+      "place": "forest",
+      "property": "twisty branches"
+    },
+    {
+      "subject": "cattle",
+      "category": "animal",
+      "place": "village",
+      "property": "milky"
+    },
+    {
+      "subject": "butterfly",
+      "category": "invertebrate animals",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "subject": "wax",
+      "category": "material",
+      "place": "craftroom",
+      "property": "smooth texture"
+    },
+    {
+      "subject": "dog",
+      "category": "pet",
+      "place": "yard",
+      "property": "tail"
+    },
+    {
+      "subject": "elephant",
+      "category": "animal kingdom",
+      "place": "Africa",
+      "property": "long trunk"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "mountain",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "baskets",
+      "category": "food",
+      "place": "market",
+      "property": "filled with fruit"
+    },
+    {
+      "subject": "baskets",
+      "category": "containers",
+      "place": "storefront",
+      "property": "hanging"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "underground cave system",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "garden",
+      "property": "wings"
+    },
+    {
+      "subject": "beaks",
+      "category": "birds",
+      "place": "oceans",
+      "property": "long"
+    },
+    {
+      "subject": "books",
+      "category": "literature",
+      "place": "library",
+      "property": "written"
+    },
+    {
+      "subject": "trees",
+      "category": "plant life",
+      "place": "forest",
+      "property": "large branches"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "nests",
+      "property": "wings"
+    },
+    {
+      "subject": "whales",
+      "category": "mammals",
+      "place": "ocean",
+      "property": "large"
+    },
+    {
+      "subject": "carpenter",
+      "category": "craftsman",
+      "place": "woodshop",
+      "property": "large tools"
+    },
+    {
+      "subject": "carnivorous mammals",
+      "category": "animal kingdom",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "fish",
+      "category": "aquatic animals",
+      "place": "ocean",
+      "property": "swimming ability"
+    },
+    {
+      "subject": "fish",
+      "category": "animals",
+      "place": "ocean",
+      "property": "tail"
+    },
+    {
+      "subject": "whales",
+      "category": "marine mammals",
+      "place": "oceanic waters",
+      "property": "long bodies"
+    },
+    {
+      "subject": "shampoo",
+      "category": "cosmetics",
+      "place": "beauty parlor",
+      "property": "soft hair"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "jungle",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "giraffes",
+      "category": "mammals",
+      "place": "safari park",
+      "property": "long neck"
+    },
+    {
+      "subject": "bison",
+      "category": "herbivores",
+      "place": "prairie",
+      "property": "stripes"
+    },
+    {
+      "subject": "piano",
+      "category": "musical instrument",
+      "place": "home",
+      "property": "stringed"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "southwestern United States",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "desert",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wheat",
+      "category": "plant",
+      "place": "field",
+      "property": "stalks"
+    },
+    {
+      "subject": "cactus",
+      "category": "plant",
+      "place": "desert",
+      "property": "spiny"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "forest",
+      "property": "wings"
+    },
+    {
+      "subject": "gears",
+      "category": "motors",
+      "place": "factory",
+      "property": "fast"
+    },
+    {
+      "subject": "apples",
+      "category": "fruit",
+      "place": "tree",
+      "property": "ripe"
+    },
+    {
+      "subject": "trees",
+      "category": "vegetation",
+      "place": "forest",
+      "property": "green"
+    },
+    {
+      "subject": "apple",
+      "category": "fruit",
+      "place": "garden",
+      "property": "sweet"
+    },
+    {
+      "subject": "puppies",
+      "category": "animals",
+      "place": "pet store",
+      "property": "clean paws"
+    },
+    {
+      "subject": "apples",
+      "category": "fruits",
+      "place": "tree",
+      "property": "round"
+    },
+    {
+      "subject": "fish",
+      "category": "aquarium animals",
+      "place": "public aquarium",
+      "property": "gills"
+    },
+    {
+      "subject": "chocolate chip cookies",
+      "category": "candy items",
+      "place": "house kitchen",
+      "property": "smooth texture"
+    },
+    {
+      "subject": "cattle",
+      "category": "herd",
+      "place": "pastureland",
+      "property": "curved horns"
+    },
+    {
+      "subject": "apples",
+      "category": "fruit",
+      "place": "garden",
+      "property": "sweetness"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "garden",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "books",
+      "category": "literature",
+      "place": "library",
+      "property": "binding"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insect",
+      "place": "forest",
+      "property": "dainty wings"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "trees",
+      "category": "forestry",
+      "place": "national park",
+      "property": "height"
+    },
+    {
+      "subject": "carrot",
+      "category": "vegetable",
+      "place": "field",
+      "property": "sweet"
+    },
+    {
+      "subject": "dog",
+      "category": "animal",
+      "place": "park",
+      "property": "long legs"
+    },
+    {
+      "subject": "elephants",
+      "category": "mammals",
+      "place": "forest",
+      "property": "long necks"
+    }
+  ],
+  "holdout": [
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "elephant",
+      "category": "mammal",
+      "place": "mountain",
+      "property": "long trunk"
+    },
+    {
+      "subject": "cows",
+      "category": "farm animals",
+      "place": "farmyard",
+      "property": "long horns"
+    },
+    {
+      "subject": "apple",
+      "category": "fruit",
+      "place": "forest",
+      "property": "sour"
+    },
+    {
+      "subject": "toothbrush",
+      "category": "household item",
+      "place": "home",
+      "property": "sharp edges"
+    },
+    {
+      "subject": "books",
+      "category": "reading materials",
+      "place": "library",
+      "property": "binding"
+    },
+    {
+      "subject": "penguins",
+      "category": "bird family",
+      "place": "antarctic seas",
+      "property": "webbed feet"
+    },
+    {
+      "subject": "wombats",
+      "category": "reptiles",
+      "place": "mountainous ranges",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "earth",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "cows",
+      "category": "herds of animals",
+      "place": "farmlands",
+      "property": "muscular bodies"
+    },
+    {
+      "subject": "giraffe",
+      "category": "herbivore mammal",
+      "place": "East Africa",
+      "property": "long neck"
+    },
+    {
+      "subject": "bacteria",
+      "category": "microorganisms",
+      "place": "cellular ecosystem",
+      "property": "proteinaceous"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "barn",
+      "category": "housing",
+      "place": "farm",
+      "property": "large"
+    },
+    {
+      "subject": "dolphin",
+      "category": "aquatic mammal",
+      "place": "ocean",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "desert",
+      "property": "long fur"
+    },
+    {
+      "subject": "bunnies",
+      "category": "mammals",
+      "place": "sandy beach",
+      "property": "long fur"
+    },
+    {
+      "subject": "bottles",
+      "category": "containers",
+      "place": "restaurant",
+      "property": "cold"
+    },
+    {
+      "subject": "penguin",
+      "category": "bird",
+      "place": "antarctica",
+      "property": "feathers"
+    },
+    {
+      "subject": "bottle",
+      "category": "drink",
+      "place": "house",
+      "property": "closed"
+    },
+    {
+      "subject": "trees",
+      "category": "plants",
+      "place": "forest",
+      "property": "green leaves"
+    },
+    {
+      "subject": "book",
+      "category": "written works",
+      "place": "library",
+      "property": "binding"
+    },
+    {
+      "subject": "mammal",
+      "category": "pet",
+      "place": "human home",
+      "property": "fur"
+    },
+    {
+      "subject": "honeybees",
+      "category": "bees",
+      "place": "hive",
+      "property": "pollen"
+    },
+    {
+      "subject": "car",
+      "category": "automobile",
+      "place": "factory",
+      "property": "wheel"
+    },
+    {
+      "subject": "cabbage",
+      "category": "vegetable",
+      "place": "farm",
+      "property": "taste"
+    },
+    {
+      "subject": "bees",
+      "category": "insects",
+      "place": "honeycomb",
+      "property": "pollen"
+    },
+    {
+      "subject": "pigeons",
+      "category": "birds",
+      "place": "cage",
+      "property": "feathers"
+    },
+    {
+      "subject": "wolves",
+      "category": "animals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower garden",
+      "property": "bright colors"
+    },
+    {
+      "subject": "bottles",
+      "category": "containers",
+      "place": "store",
+      "property": "liquid"
+    },
+    {
+      "subject": "wombat",
+      "category": "mammal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "bees",
+      "category": "insects",
+      "place": "honeycomb",
+      "property": "pollen"
+    },
+    {
+      "subject": "bacteria",
+      "category": "microorganisms",
+      "place": "body fluids",
+      "property": "acid"
+    },
+    {
+      "subject": "cattle",
+      "category": "herd",
+      "place": "ranch",
+      "property": "skin"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal species",
+      "place": "vocalizations in forests",
+      "property": "ultrasound"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wildlife refuge",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "book",
+      "category": "readable media",
+      "place": "library",
+      "property": "covers"
+    },
+    {
+      "subject": "bottles",
+      "category": "storage containers",
+      "place": "laboratory",
+      "property": "transparent"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "subject": "birds",
+      "category": "animals",
+      "place": "forests",
+      "property": "wings"
+    },
+    {
+      "subject": "dresses",
+      "category": "clothing items",
+      "place": "clothing stores",
+      "property": "sleeveless"
+    },
+    {
+      "subject": "pumpkins",
+      "category": "vegetable",
+      "place": "field",
+      "property": "round shape"
+    },
+    {
+      "subject": "coconut",
+      "category": "food",
+      "place": "sea",
+      "property": "rinsed"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "bees",
+      "category": "insects",
+      "place": "hive",
+      "property": "pollen"
+    },
+    {
+      "subject": "lions",
+      "category": "mammals",
+      "place": "Africa",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombat",
+      "category": "mammal",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "dolphins",
+      "category": "aquatic mammals",
+      "place": "ocean",
+      "property": "tail"
+    },
+    {
+      "subject": "lamb",
+      "category": "animal",
+      "place": "pasture",
+      "property": "long wool"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "great outdoors",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "Australia",
+      "property": "large ears"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "bushland",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "animal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "dove",
+      "category": "bird",
+      "place": "pond",
+      "property": "feathered"
+    },
+    {
+      "subject": "giraffes",
+      "category": "mammals",
+      "place": "tree tops",
+      "property": "long neck"
+    },
+    {
+      "subject": "pencil",
+      "category": "writing utensil",
+      "place": "school desk",
+      "property": "sharp"
+    },
+    {
+      "subject": "butterfly",
+      "category": "invertebrate animal",
+      "place": "forest",
+      "property": "yellow markings"
+    },
+    {
+      "subject": "hedgehog",
+      "category": "mammal",
+      "place": "cave",
+      "property": "soft fur"
+    },
+    {
+      "subject": "hedgehog",
+      "category": "invertebrates",
+      "place": "underground",
+      "property": "slow"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower pollination site",
+      "property": "liveness"
+    },
+    {
+      "subject": "dog",
+      "category": "animal",
+      "place": "park",
+      "property": "tail"
+    },
+    {
+      "subject": "wombats",
+      "category": "animal group",
+      "place": "cave system",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "fish",
+      "category": "aquatic life",
+      "place": "lake",
+      "property": "swim"
+    },
+    {
+      "subject": "crickets",
+      "category": "insects",
+      "place": "farmyard",
+      "property": "waxy exoskeleton"
+    },
+    {
+      "subject": "elephant",
+      "category": "mammal",
+      "place": "bilateral prism",
+      "property": "long trunk"
+    },
+    {
+      "subject": "sloth",
+      "category": "mammal",
+      "place": "tree",
+      "property": "slow movement"
+    },
+    {
+      "subject": "bacteria",
+      "category": "microorganisms",
+      "place": "laboratory",
+      "property": "acid-resistant"
+    },
+    {
+      "subject": "honeybees",
+      "category": "insects",
+      "place": "hive",
+      "property": "pollen"
+    },
+    {
+      "subject": "dog",
+      "category": "animal",
+      "place": "park",
+      "property": "tail"
+    },
+    {
+      "subject": "whales",
+      "category": "aquatic mammals",
+      "place": "oceanic ecosystem",
+      "property": "blunt teeth"
+    },
+    {
+      "subject": "dinosaur",
+      "category": "vertebrate animal",
+      "place": "ancient world",
+      "property": "spine"
+    },
+    {
+      "subject": "puppies",
+      "category": "dog breed",
+      "place": "park",
+      "property": "furry"
+    },
+    {
+      "subject": "hedgehog",
+      "category": "mammal",
+      "place": "forest",
+      "property": "smooth fur"
+    },
+    {
+      "subject": "cows",
+      "category": "animal kingdom",
+      "place": "farm",
+      "property": "milk"
+    },
+    {
+      "subject": "pigeons",
+      "category": "bird",
+      "place": "sky",
+      "property": "wings"
+    },
+    {
+      "subject": "crayons",
+      "category": "stationery items",
+      "place": "school",
+      "property": "waxy surface"
+    },
+    {
+      "subject": "horses",
+      "category": "animal",
+      "place": "park",
+      "property": "long hooves"
+    },
+    {
+      "subject": "toaster",
+      "category": "cooking appliance",
+      "place": "kitchen",
+      "property": "mechanical"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "nature reserve",
+      "property": "wings"
+    },
+    {
+      "subject": "panda",
+      "category": "mammal",
+      "place": "southeastern Asia",
+      "property": "long fur"
+    },
+    {
+      "subject": "wombat",
+      "category": "mammal",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "fish",
+      "category": "sea creatures",
+      "place": "ocean",
+      "property": "gills"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal group",
+      "place": "cave",
+      "property": "sharp claws"
+    },
+    {
+      "subject": "book",
+      "category": "text",
+      "place": "library",
+      "property": "page"
+    },
+    {
+      "subject": "candy cane",
+      "category": "dessert item",
+      "place": "sugar production facility",
+      "property": "taste"
+    },
+    {
+      "subject": "giraffes",
+      "category": "mammals",
+      "place": "sub-Saharan Africa",
+      "property": "long necks"
+    },
+    {
+      "subject": "gears",
+      "category": "machine parts",
+      "place": "car manufacturing facility",
+      "property": "round shape"
+    },
+    {
+      "subject": "puppies",
+      "category": "canine companionship",
+      "place": "kennel",
+      "property": "soft fur"
+    },
+    {
+      "subject": "wombats",
+      "category": "reptiles",
+      "place": "underground",
+      "property": "sharp claws"
+    },
+    {
+      "subject": "wolves",
+      "category": "mammals",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "garden",
+      "property": "long tails"
+    },
+    {
+      "subject": "tulip",
+      "category": "flower",
+      "place": "garden",
+      "property": "fragrant"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal species",
+      "place": "central Africa",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "oasis",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "whales",
+      "category": "mammals",
+      "place": "ocean",
+      "property": "blown bubbles"
+    },
+    {
+      "subject": "chicken",
+      "category": "bird",
+      "place": "farmland",
+      "property": "feathers"
+    },
+    {
+      "subject": "crab",
+      "category": "invertebrate",
+      "place": "ocean",
+      "property": "large claws"
+    },
+    {
+      "subject": "hedgehog",
+      "category": "pet",
+      "place": "forest",
+      "property": "long tail"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "forests",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "honeybees",
+      "category": "animal kingdom",
+      "place": "farm",
+      "property": "swarm"
+    },
+    {
+      "subject": "giraffes",
+      "category": "animals",
+      "place": "central African savannas",
+      "property": "long necks"
+    },
+    {
+      "subject": "birds",
+      "category": "bird species",
+      "place": "forest",
+      "property": "feathers"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "desert",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "squirrel",
+      "category": "mammal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "mouse",
+      "category": "pet",
+      "place": "lab",
+      "property": "gray fur"
+    },
+    {
+      "subject": "fish",
+      "category": "aquatic life",
+      "place": "sea floor",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "nature preserve",
+      "property": "flight"
+    },
+    {
+      "subject": "sushi roll",
+      "category": "food item",
+      "place": "restaurant",
+      "property": "delicious"
+    },
+    {
+      "subject": "wombats",
+      "category": "reptiles",
+      "place": "desert",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "giant spider",
+      "category": "insects",
+      "place": "forest",
+      "property": "wiry legs"
+    },
+    {
+      "subject": "garden",
+      "category": "landscape",
+      "place": "central park",
+      "property": "plants"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "nephrite cave",
+      "property": "soft touch"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "australasia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "beasts",
+      "category": "wild animals",
+      "place": "mesopotamia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "fish",
+      "category": "animals",
+      "place": "sea",
+      "property": "swim"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "nature",
+      "property": "wings"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "the world",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "forest",
+      "property": "wings"
+    },
+    {
+      "subject": "horses",
+      "category": "animal kingdom",
+      "place": "meadow",
+      "property": "long neck"
+    },
+    {
+      "subject": "dirt",
+      "category": "material",
+      "place": "ground",
+      "property": "smooth"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "nursery",
+      "property": "chubby"
+    },
+    {
+      "subject": "honeybees",
+      "category": "insect kingdom",
+      "place": "beehive",
+      "property": "pollen-rich"
+    },
+    {
+      "subject": "dogs",
+      "category": "pet animals",
+      "place": "park",
+      "property": "short fur"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "forests",
+      "property": "wings"
+    },
+    {
+      "subject": "broom",
+      "category": "tool",
+      "place": "schoolroom",
+      "property": "wet"
+    },
+    {
+      "subject": "chicken",
+      "category": "bird",
+      "place": "yard",
+      "property": "wings"
+    },
+    {
+      "subject": "birds",
+      "category": "bird species",
+      "place": "the sky",
+      "property": "wings"
+    },
+    {
+      "subject": "carrot",
+      "category": "vegetable",
+      "place": "farm field",
+      "property": "sweet"
+    },
+    {
+      "subject": "crayons",
+      "category": "art supplies",
+      "place": "schoolroom",
+      "property": "bright colors"
+    },
+    {
+      "subject": "dog",
+      "category": "pet",
+      "place": "park",
+      "property": "long ears"
+    },
+    {
+      "subject": "trees",
+      "category": "vegetation",
+      "place": "forest",
+      "property": "twigs"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wilderness",
+      "property": "long necks"
+    },
+    {
+      "subject": "penguins",
+      "category": "insects",
+      "place": "ocean",
+      "property": "long legs"
+    },
+    {
+      "subject": "mouse",
+      "category": "vertebrates",
+      "place": "mouse box",
+      "property": "soft fur"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "forest",
+      "property": "wings"
+    },
+    {
+      "subject": "cactus",
+      "category": "plant",
+      "place": "garden",
+      "property": "spines"
+    },
+    {
+      "subject": "car",
+      "category": "automobiles",
+      "place": "urban environment",
+      "property": "steady driving"
+    },
+    {
+      "subject": "mouse",
+      "category": "animal",
+      "place": "house",
+      "property": "big"
+    },
+    {
+      "subject": "butterfly",
+      "category": "invertebrates",
+      "place": "forest",
+      "property": "pale yellow wings"
+    },
+    {
+      "subject": "crabs",
+      "category": "shellfish",
+      "place": "ocean",
+      "property": "sharp claws"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "bees",
+      "category": "insects",
+      "place": "farmyard",
+      "property": "silk"
+    },
+    {
+      "subject": "trees",
+      "category": "plant life",
+      "place": "forest",
+      "property": "branch"
+    },
+    {
+      "subject": "bottles",
+      "category": "containers",
+      "place": "store",
+      "property": "clear"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "giraffa habitat",
+      "property": "long necks"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal family",
+      "place": "desert environment",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "chicken",
+      "category": "bird",
+      "place": "farm",
+      "property": "warm blooded"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "Australia",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "turtles",
+      "category": "fish",
+      "place": "ocean",
+      "property": "soft shell"
+    },
+    {
+      "subject": "pigs",
+      "category": "mammals",
+      "place": "farm",
+      "property": "grassy"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wax",
+      "category": "material",
+      "place": "warehouse",
+      "property": "soft"
+    },
+    {
+      "subject": "butterfly",
+      "category": "invertebrates",
+      "place": "meadow",
+      "property": "wings"
+    },
+    {
+      "subject": "butterflies",
+      "category": "insects",
+      "place": "forest",
+      "property": "large wings"
+    },
+    {
+      "subject": "pencil",
+      "category": "writing tool",
+      "place": "school desk",
+      "property": "sharp edges"
+    },
+    {
+      "subject": "chimney",
+      "category": "home appliance",
+      "place": "building",
+      "property": "flat surface"
+    }
+  ],
+  "adversarial_a": [],
+  "adversarial_b": []
+}

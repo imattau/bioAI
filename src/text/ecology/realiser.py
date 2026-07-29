@@ -37,6 +37,7 @@ from .proposition_extractor import Proposition, UNCERTAINTY_RELATION
 _RELATION_TEMPLATES = {
     "is": "[SUBJECT] is [OBJECT]",
     "in": "[SUBJECT] is in [OBJECT]",
+    "has": "[SUBJECT] has [OBJECT]",
     "capital": "The capital of [SUBJECT] is [OBJECT]",
     "capital_of": "[SUBJECT] is the capital of [OBJECT]",
 }

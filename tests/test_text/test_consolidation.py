@@ -6,6 +6,45 @@ import torch
 from src.text import BioAIDialogueAgent, ConsolidationMemory, TokenLibrary
 
 
+def test_extract_relations_recognizes_plural_verb_forms_for_in():
+    """Regression test for a real bug found via Phase 6 testing: Phase 5's
+    subject-verb agreement correctly re-inflects "lies within"/"sits in"
+    to "lie within"/"sit in" for a plural subject, but the original
+    pattern only recognized the singular verb form -- a grammatically
+    agreed sentence could no longer be re-extracted by this same
+    extractor. Both forms must work."""
+    assert ConsolidationMemory.extract_relations("The cat lies within the box.") == [
+        ("the cat", "in", "the box")
+    ]
+    assert ConsolidationMemory.extract_relations("Cats lie within the box.") == [
+        ("cats", "in", "the box")
+    ]
+    assert ConsolidationMemory.extract_relations("The cat sits in the box.") == [
+        ("the cat", "in", "the box")
+    ]
+    assert ConsolidationMemory.extract_relations("Cats sit in the box.") == [
+        ("cats", "in", "the box")
+    ]
+
+
+def test_extract_relations_capital_of_accepts_is_and_are():
+    assert ConsolidationMemory.extract_relations(
+        "Paris is the capital of France."
+    ) == [("paris", "capital_of", "france")]
+    assert ConsolidationMemory.extract_relations(
+        "Netherlands are the capital of somewhere."
+    ) == [("netherlands", "capital_of", "somewhere")]
+
+
+def test_extract_relations_recognizes_has_and_have():
+    assert ConsolidationMemory.extract_relations("The fox has sharp teeth.") == [
+        ("the fox", "has", "sharp teeth")
+    ]
+    assert ConsolidationMemory.extract_relations("Foxes have sharp teeth.") == [
+        ("foxes", "has", "sharp teeth")
+    ]
+
+
 def test_concept_requires_repeated_evidence_and_queries_sources():
     memory = ConsolidationMemory(promotion_threshold=3)
     vectors = [

@@ -1,0 +1,38 @@
+{
+  "spec_path": "checkpoints/llm_teacher_spec_v1.json",
+  "results": [
+    {
+      "size": 5,
+      "native_generation_proof_rate": 1.0,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "frames_learned": 11,
+      "acquisition_latency_seconds": 0.43684992589987814,
+      "holdout_latency_seconds": 0.2446136479265988,
+      "relational_retrieval_accuracy": 0.8
+    },
+    {
+      "size": 10,
+      "native_generation_proof_rate": 1.0,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "frames_learned": 11,
+      "acquisition_latency_seconds": 0.8305478629190475,
+      "holdout_latency_seconds": 0.007881588069722056,
+      "relational_retrieval_accuracy": 0.7
+    },
+    {
+      "size": 19,
+      "native_generation_proof_rate": 1.0,
+      "generation_success_rate": 1.0,
+      "no_library_overlap_rate": 1.0,
+      "propositions_match_rate": 1.0,
+      "frames_learned": 11,
+      "acquisition_latency_seconds": 1.5491985199041665,
+      "holdout_latency_seconds": 0.001204304862767458,
+      "relational_retrieval_accuracy": 0.3684210526315789
+    }
+  ]
+}

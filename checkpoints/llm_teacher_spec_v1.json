@@ -1,0 +1,262 @@
+{
+  "lessons": [
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "subject": "whales",
+      "category": "mammals",
+      "place": "ocean",
+      "property": "long tails"
+    },
+    {
+      "subject": "crayons",
+      "category": "art supplies",
+      "place": "school",
+      "property": "colorful"
+    },
+    {
+      "subject": "squirrel",
+      "category": "mammal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "giraffe",
+      "category": "mammal",
+      "place": "arctic circle",
+      "property": "long neck"
+    },
+    {
+      "subject": "bacteria",
+      "category": "microorganism",
+      "place": "lab",
+      "property": "size"
+    },
+    {
+      "subject": "fish",
+      "category": "aquatic life",
+      "place": "the ocean",
+      "property": "gills"
+    },
+    {
+      "subject": "bottle",
+      "category": "container",
+      "place": "household",
+      "property": "lid"
+    },
+    {
+      "subject": "toothbrush",
+      "category": "handheld item",
+      "place": "home",
+      "property": "sharp edges"
+    },
+    {
+      "subject": "carrots",
+      "category": "vegetables",
+      "place": "garden",
+      "property": "sweet"
+    },
+    {
+      "subject": "dinosaur",
+      "category": "prehistoric creature",
+      "place": "giant continent",
+      "property": "steely claws"
+    },
+    {
+      "subject": "whales",
+      "category": "ocean life",
+      "place": "the deep sea",
+      "property": "bluish fur"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "garden",
+      "property": "claws"
+    },
+    {
+      "subject": "coconut",
+      "category": "fruit",
+      "place": "tree",
+      "property": "juicy"
+    },
+    {
+      "subject": "giraffes",
+      "category": "big animals",
+      "place": "south africa",
+      "property": "long necks"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "wilderness",
+      "property": "large eyes"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "wilderness",
+      "property": "long hair"
+    },
+    {
+      "subject": "magnets",
+      "category": "electrical components",
+      "place": "household appliance",
+      "property": "strong magnetic attraction"
+    },
+    {
+      "subject": "bubbles",
+      "category": "bubble bath",
+      "place": "cuddle corner",
+      "property": "soft"
+    }
+  ],
+  "holdout": [
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "giraffes",
+      "category": "animal kingdom",
+      "place": "savanna",
+      "property": "long neck"
+    },
+    {
+      "subject": "wombats",
+      "category": "animals",
+      "place": "wilderness",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "flower garden",
+      "property": "wings"
+    },
+    {
+      "subject": "laptop",
+      "category": "electronic device",
+      "place": "home",
+      "property": "keyboard"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammals",
+      "place": "desert",
+      "property": "long ears"
+    },
+    {
+      "subject": "sunset",
+      "category": "sky",
+      "place": "ocean",
+      "property": "pale orange"
+    },
+    {
+      "subject": "beetle",
+      "category": "insect",
+      "place": "forest",
+      "property": "hard shell"
+    },
+    {
+      "subject": "puppies",
+      "category": "dog family",
+      "place": "park",
+      "property": "fur"
+    },
+    {
+      "subject": "butterfly",
+      "category": "insect",
+      "place": "forest",
+      "property": "silk"
+    },
+    {
+      "subject": "puppies",
+      "category": "dogs",
+      "place": "park",
+      "property": "short fur"
+    },
+    {
+      "subject": "mice",
+      "category": "small mammal",
+      "place": "mouse hole",
+      "property": "fur"
+    },
+    {
+      "subject": "car",
+      "category": "automotive",
+      "place": "roadside parking lot",
+      "property": "sunroof"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "arctic",
+      "property": "long fur"
+    }
+  ],
+  "adversarial_a": [
+    {
+      "subject": "puppies",
+      "category": "dog",
+      "place": "park",
+      "property": "soft fur"
+    },
+    {
+      "subject": "birds",
+      "category": "animal",
+      "place": "ocean",
+      "property": "webbed feet"
+    },
+    {
+      "subject": "wombats",
+      "category": "mammal",
+      "place": "wildlife preserve",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "wolves",
+      "category": "animal",
+      "place": "forest",
+      "property": "sharp teeth"
+    },
+    {
+      "subject": "crates",
+      "category": "container",
+      "place": "storage area",
+      "property": "closed"
+    }
+  ],
+  "adversarial_b": [
+    {
+      "subject": "fish",
+      "category": "animal",
+      "place": "sea",
+      "property": "swimming"
+    },
+    {
+      "subject": "bears",
+      "category": "wild animals",
+      "place": "forest",
+      "property": "sharp claws"
+    },
+    {
+      "subject": "turtles",
+      "category": "reptiles",
+      "place": "seaside",
+      "property": "long necks"
+    },
+    {
+      "subject": "candles",
+      "category": "lit fixtures",
+      "place": "home",
+      "property": "flame"
+    }
+  ]
+}

@@ -39,9 +39,26 @@ class ConsolidationMemory:
     # label) for frame learning. Do not fork a second copy of this tuple.
     _RELATION_PATTERNS = (
         (r"^(?:the\s+)?capital\s+of\s+(.+?)\s+is\s+(.+)$", "capital"),
-        (r"^(.+?)\s+is\s+the\s+capital\s+of\s+(.+)$", "capital_of"),
+        # "is|are": "capital_of"'s template starts with [SUBJECT] (unlike
+        # "capital"'s, which starts with "the capital of" and is never
+        # touched by agreement), so it's in principle reachable by
+        # subject-verb agreement if a city name ever looked plural --
+        # hardened the same way as "in"/"has" even though real city names
+        # essentially never trigger it.
+        (r"^(.+?)\s+(?:is|are)\s+the\s+capital\s+of\s+(.+)$", "capital_of"),
         (r"^(.+?)\s+(?:is|are)\s+(?:located\s+)?in\s+(.+)$", "in"),
-        (r"^(.+?)\s+(?:lies|sits)\s+(?:within|in)\s+(.+)$", "in"),
+        # Both singular ("lies"/"sits") and plural ("lie"/"sit") verb
+        # forms -- a real bug found via Phase 6 testing: Phase 5's
+        # subject-verb agreement correctly re-inflects "lies within" to
+        # "lie within" for a plural subject, but the original pattern
+        # only recognized the singular form, so a grammatically-corrected
+        # sentence could no longer be re-extracted by this same extractor.
+        (r"^(.+?)\s+(?:lies|sits|lie|sit)\s+(?:within|in)\s+(.+)$", "in"),
+        # "has"/"have" is a genuinely irregular present-tense pair (not a
+        # simple -s suffix), unlike most of the fixed set above -- added
+        # specifically so Phase 6's morphology tests have a non-"be" verb
+        # to exercise subject-verb agreement on.
+        (r"^(.+?)\s+(?:has|have)\s+(.+)$", "has"),
         (r"^(.+?)\s+(?:is|are|was|were)\s+(.+)$", "is"),
     )
 

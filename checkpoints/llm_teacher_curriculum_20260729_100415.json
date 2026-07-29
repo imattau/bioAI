@@ -1,0 +1,309 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "lessons": 19,
+    "holdout": 14
+  },
+  "lessons_taught": 19,
+  "acquisition_latency_seconds": 0.097956103971228,
+  "holdout_latency_seconds": 0.20272037689574063,
+  "frames_learned": 11,
+  "distinct_frames_by_relation": {
+    "is": 4,
+    "in": 5,
+    "has": 2,
+    "capital": 0,
+    "capital_of": 0
+  },
+  "holdout_evaluated": 7,
+  "generation_success_rate": 1.0,
+  "no_library_overlap_rate": 1.0,
+  "propositions_match_rate": 1.0,
+  "mean_propositions_recovered": 3.0,
+  "native_generation_proof_rate": 1.0,
+  "acquisition_records": [
+    {
+      "index": 0,
+      "subject": "butterfly",
+      "sentences": [
+        "Butterfly is insect.",
+        "Butterfly are in flower garden.",
+        "Butterfly has wings."
+      ]
+    },
+    {
+      "index": 1,
+      "subject": "whales",
+      "sentences": [
+        "Whales are mammals.",
+        "Whales is located in ocean.",
+        "Whales have long tails."
+      ]
+    },
+    {
+      "index": 2,
+      "subject": "crayons",
+      "sentences": [
+        "Crayons was art supplies.",
+        "Crayons lies within school.",
+        "Crayons has colorful."
+      ]
+    },
+    {
+      "index": 3,
+      "subject": "squirrel",
+      "sentences": [
+        "Squirrel were mammal.",
+        "Squirrel sits in forest.",
+        "Squirrel have sharp teeth."
+      ]
+    },
+    {
+      "index": 4,
+      "subject": "giraffe",
+      "sentences": [
+        "Giraffe is mammal.",
+        "Giraffe is in arctic circle.",
+        "Giraffe has long neck."
+      ]
+    },
+    {
+      "index": 5,
+      "subject": "bacteria",
+      "sentences": [
+        "Bacteria are microorganism.",
+        "Bacteria are in lab.",
+        "Bacteria have size."
+      ]
+    },
+    {
+      "index": 6,
+      "subject": "fish",
+      "sentences": [
+        "Fish was aquatic life.",
+        "Fish is located in the ocean.",
+        "Fish has gills."
+      ]
+    },
+    {
+      "index": 7,
+      "subject": "bottle",
+      "sentences": [
+        "Bottle were container.",
+        "Bottle lies within household.",
+        "Bottle have lid."
+      ]
+    },
+    {
+      "index": 8,
+      "subject": "toothbrush",
+      "sentences": [
+        "Toothbrush is handheld item.",
+        "Toothbrush sits in home.",
+        "Toothbrush has sharp edges."
+      ]
+    },
+    {
+      "index": 9,
+      "subject": "carrots",
+      "sentences": [
+        "Carrots are vegetables.",
+        "Carrots is in garden.",
+        "Carrots have sweet."
+      ]
+    },
+    {
+      "index": 10,
+      "subject": "dinosaur",
+      "sentences": [
+        "Dinosaur was prehistoric creature.",
+        "Dinosaur are in giant continent.",
+        "Dinosaur has steely claws."
+      ]
+    },
+    {
+      "index": 11,
+      "subject": "whales",
+      "sentences": [
+        "Whales were ocean life.",
+        "Whales is located in the deep sea.",
+        "Whales have bluish fur."
+      ]
+    },
+    {
+      "index": 12,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats is mammals.",
+        "Wombats lies within garden.",
+        "Wombats has claws."
+      ]
+    },
+    {
+      "index": 13,
+      "subject": "coconut",
+      "sentences": [
+        "Coconut are fruit.",
+        "Coconut sits in tree.",
+        "Coconut have juicy."
+      ]
+    },
+    {
+      "index": 14,
+      "subject": "giraffes",
+      "sentences": [
+        "Giraffes was big animals.",
+        "Giraffes is in south africa.",
+        "Giraffes has long necks."
+      ]
+    },
+    {
+      "index": 15,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats were mammals.",
+        "Wombats are in wilderness.",
+        "Wombats have large eyes."
+      ]
+    },
+    {
+      "index": 16,
+      "subject": "wombats",
+      "sentences": [
+        "Wombats is mammal.",
+        "Wombats is located in wilderness.",
+        "Wombats has long hair."
+      ]
+    },
+    {
+      "index": 17,
+      "subject": "magnets",
+      "sentences": [
+        "Magnets are electrical components.",
+        "Magnets lies within household appliance.",
+        "Magnets have strong magnetic attraction."
+      ]
+    },
+    {
+      "index": 18,
+      "subject": "bubbles",
+      "sentences": [
+        "Bubbles was bubble bath.",
+        "Bubbles sits in cuddle corner.",
+        "Bubbles has soft."
+      ]
+    }
+  ],
+  "holdout_records": [
+    {
+      "index": 4,
+      "subject": "laptop",
+      "generated_text": "Laptop is electronic device. Laptop lies within home. Laptop has keyboard.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 6,
+      "subject": "sunset",
+      "generated_text": "Sunset was sky. Sunset is in ocean. Sunset has pale orange.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 7,
+      "subject": "beetle",
+      "generated_text": "Beetle was insect. Beetle lies within forest. Beetle has hard shell.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 8,
+      "subject": "puppies",
+      "generated_text": "Puppies are dog family. Puppies lie within park. Puppies have fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 10,
+      "subject": "puppies",
+      "generated_text": "Puppies were dogs. Puppies are in park. Puppies have short fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 11,
+      "subject": "mice",
+      "generated_text": "Mice are small mammal. Mice are located in mouse hole. Mice have fur.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    },
+    {
+      "index": 12,
+      "subject": "car",
+      "generated_text": "Car is automotive. Car is in roadside parking lot. Car has sunroof.",
+      "generation_success": true,
+      "no_library_overlap": true,
+      "propositions_match": true,
+      "propositions_recovered": 3
+    }
+  ],
+  "paraphrase_diversity": {
+    "relation": "in",
+    "samples": 100,
+    "distinct_outputs": 5,
+    "distribution": {
+      "butterfly lies within flower garden": 30,
+      "butterfly is in flower garden": 24,
+      "butterfly sits in flower garden": 19,
+      "butterfly is located in flower garden": 17,
+      "butterfly are in flower garden": 10
+    }
+  },
+  "adversarial_results": [
+    {
+      "subject_a": "puppies",
+      "subject_b": "fish",
+      "property_a": "soft fur",
+      "property_b": "swimming",
+      "generated_text": "Puppies have soft fur.",
+      "cross_contaminated": false
+    },
+    {
+      "subject_a": "birds",
+      "subject_b": "bears",
+      "property_a": "webbed feet",
+      "property_b": "sharp claws",
+      "generated_text": "Birds have webbed feet.",
+      "cross_contaminated": false
+    },
+    {
+      "subject_a": "wombats",
+      "subject_b": "turtles",
+      "property_a": "sharp teeth",
+      "property_b": "long necks",
+      "generated_text": "Wombats have sharp teeth.",
+      "cross_contaminated": false
+    },
+    {
+      "subject_a": "wolves",
+      "subject_b": "candles",
+      "property_a": "sharp teeth",
+      "property_b": "flame",
+      "generated_text": "Wolves have sharp teeth.",
+      "cross_contaminated": false
+    }
+  ],
+  "adversarial_contamination_rate": 0.0
+}
