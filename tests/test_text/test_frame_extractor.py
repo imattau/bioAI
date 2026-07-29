@@ -197,3 +197,42 @@ def test_parse_unifies_frames_learned_via_observe_and_observe_labelled():
     assert library.parse("Koalas belong to the marsupial family.") == [
         ("koalas", "is", "marsupial")
     ]
+
+
+# ── Phase 10: structural parse-candidate features ───────────────────────
+
+def test_parse_candidates_reports_anchor_coverage_and_specificity():
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    candidates = library.parse_candidates("Koalas belong to the marsupial family.")
+    assert len(candidates) == 1
+    candidate = candidates[0]
+    assert candidate.source == "learned_frame"
+    assert candidate.frame_template == "[SUBJECT] belong to the [OBJECT] family"
+    assert candidate.frame_evidence == 1
+    assert 0.0 < candidate.anchor_coverage < 1.0
+    assert 0.0 < candidate.specificity <= 1.0
+    assert candidate.score == 0.0  # FrameLibrary reports features, not a score
+
+
+def test_parse_candidates_specificity_rewards_more_literal_wording():
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    library.observe("The capital of France is Paris.")
+    bare = next(c for c in library.parse_candidates(
+        "The capital of Italy is Rome."
+    ) if c.frame_template == "The capital of [SUBJECT] is [OBJECT]")
+    verbose = next(c for c in library.parse_candidates(
+        "Koalas belong to the marsupial family."
+    ) if c.frame_template == "[SUBJECT] belong to the [OBJECT] family")
+    assert bare.specificity > 0.0
+    assert verbose.specificity > 0.0
+
+
+def test_parse_candidates_returns_empty_for_no_matching_frame():
+    library = FrameLibrary()
+    assert library.parse_candidates("Marsupials carry their young in a pouch.") == []

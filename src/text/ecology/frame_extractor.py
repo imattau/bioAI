@@ -27,6 +27,22 @@ template back into a regex is the literal inverse of `_templatize`, so a
 frame is a bidirectional linguistic rule, not just a realisation
 template -- see `src/text/ecology/proposition_extractor.py`'s
 `allow_learned_frames` for where `parse` plugs into extraction.
+
+Phase 10 diagnosed *why* `parse`'s 30% exact-match/11%-precision result
+happens: it returns every matching frame with no way to prefer one over
+another, and naively preferring `ConsolidationMemory`'s fixed patterns
+first (Phase 9's hybrid) is actively worse, since the fixed catch-all
+pattern confidently returns a *wrong* triple instead of abstaining.
+`parse_candidates` is the structural half of the fix: for each matching
+frame, report `anchor_coverage` (how much of the sentence its literal
+text explains, computed from the actual match spans) and `specificity`
+(how much fixed wording the template itself has) alongside
+`frame_evidence`, as a `ParseCandidate` -- but assigns no `score`.
+Weighting/combining those features, merging candidates, and deciding
+accept/abstain/ambiguous is `PropositionParser`'s job
+(`src/text/ecology/proposition_parser.py`), not this class's -- keeping
+`FrameLibrary` ignorant of response generation, relational memory, or
+discourse, exactly like it already is.
 """
 
 from __future__ import annotations
@@ -39,6 +55,7 @@ import lemminflect
 
 from src.text.consolidation import ConsolidationMemory
 from .morphology import is_plural_noun
+from .proposition_extractor import Proposition
 
 _PLACEHOLDER_SUBJECT = "[SUBJECT]"
 _PLACEHOLDER_OBJECT = "[OBJECT]"
@@ -49,6 +66,45 @@ class LinguisticFrame:
     template: str  # e.g. "[SUBJECT] is the capital of [OBJECT]"
     relation: str  # canonical label, same taxonomy as Proposition.relation
     evidence_count: int = 1
+
+
+@dataclass(frozen=True)
+class ParseCandidate:
+    """One candidate (subject, relation, object) reading of a sentence,
+    from either a learned frame or a fixed `ConsolidationMemory` pattern
+    -- structural features only, no opinion on how to weigh them or
+    combine several candidates into a decision. See
+    `src/text/ecology/proposition_parser.py`'s `PropositionParser` for
+    that (Phase 10)."""
+    proposition: Proposition
+    source: str  # "learned_frame", "fixed_specific", "fixed_catchall"
+    frame_template: str | None
+    frame_evidence: int
+    anchor_coverage: float
+    specificity: float
+    score: float = 0.0  # filled in by PropositionParser, not here
+
+
+def _anchor_coverage(sentence_len: int, subject_text: str, object_text: str) -> float:
+    if sentence_len <= 0:
+        return 0.0
+    captured = len(subject_text) + len(object_text)
+    return max(0.0, (sentence_len - captured) / sentence_len)
+
+
+# Saturates at 6+ literal (non-placeholder) words -- a frozen, disclosed
+# constant, not a principled derivation. A frame with more fixed wording
+# around its placeholders ("The capital of [SUBJECT] is [OBJECT]") is
+# treated as more specific than a bare one ("[SUBJECT] is [OBJECT]"),
+# matching the same intuition Phase 10's fixed-pattern specificity table
+# (proposition_parser.py) hand-assigns for ConsolidationMemory's patterns.
+_SPECIFICITY_SATURATION_WORDS = 6
+
+
+def _template_specificity(template: str) -> float:
+    literal = template.replace(_PLACEHOLDER_SUBJECT, "").replace(_PLACEHOLDER_OBJECT, "")
+    word_count = len(literal.split())
+    return min(1.0, word_count / _SPECIFICITY_SATURATION_WORDS)
 
 
 def _templatize(sentence: str, match: re.Match) -> str:
@@ -232,6 +288,36 @@ class FrameLibrary:
             if subject and obj:
                 matches.append((subject, frame.relation, obj))
         return matches
+
+    def parse_candidates(self, sentence: str) -> list[ParseCandidate]:
+        """Like `parse`, but reports the structural features
+        (`anchor_coverage`, `specificity`, `frame_evidence`) a caller
+        needs to prefer one matching frame over another, instead of
+        returning bare triples with no way to rank them -- the diagnosed
+        cause of `parse`'s low precision (Phase 10)."""
+        stripped = sentence.strip().rstrip(".!?")
+        candidates = []
+        for template, frame in self.frames.items():
+            match = self._compiled_pattern(template).match(stripped)
+            if not match:
+                continue
+            subject_text, object_text = match.group("subject"), match.group("object")
+            subject = ConsolidationMemory._normalise(subject_text)
+            obj = ConsolidationMemory._normalise(object_text)
+            if not subject or not obj:
+                continue
+            candidates.append(ParseCandidate(
+                proposition=Proposition(
+                    subject=subject, relation=frame.relation, object=obj,
+                    source_id=-1, source_text=sentence,
+                ),
+                source="learned_frame",
+                frame_template=template,
+                frame_evidence=frame.evidence_count,
+                anchor_coverage=_anchor_coverage(len(stripped), subject_text, object_text),
+                specificity=_template_specificity(template),
+            ))
+        return candidates
 
     def frames_for_relation(self, relation: str) -> list[LinguisticFrame]:
         return [

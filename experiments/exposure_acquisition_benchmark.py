@@ -39,6 +39,27 @@ generate-and-retry rather than post-hoc filtering.
 `capital_of` stays out of scope, consistent with every prior phase's
 finding that it's untested-in-practice in this curriculum.
 
+Phase 10 diagnosed *why* parsing was weak (`FrameLibrary.parse` had no
+way to prefer a correct candidate over an incorrect one, and Phase 9's
+naive fixed-first hybrid was actively worse, since the fixed catch-all
+pattern confidently returns wrong triples instead of abstaining) and
+built `PropositionParser.parse_best` to fix it via structural candidate
+scoring and calibrated abstention. Every run now also evaluates two
+more parsing conditions alongside Phase 9's original three -- passing
+`--load-spec` on an already-frozen Phase 9 spec re-evaluates all five
+against the same content with zero new LLM calls (the same content, a
+different, better parser), which is how this phase's own results were
+produced: `learned_scored`
+(`PropositionParser.parse_best(include_fixed=False)`), and
+`candidate_union` (`include_fixed=True, include_learned=True` --
+replacing Phase 9's broken "hybrid"). Acceptance/margin thresholds are
+`PropositionParser.parse_best`'s own frozen defaults (`0.5`/`0.1`,
+exercised against synthetic examples in
+`tests/test_text/test_proposition_parser.py`, not fit to this script's
+own 40-item holdout) -- the risk-coverage sweep below reports how other
+threshold choices would have performed, for diagnostic purposes, without
+changing which single point is reported as the headline result.
+
 Usage:
     python experiments/exposure_acquisition_benchmark.py --acquisition 60 --holdout 40 --model qwen2.5-coder:1.5b
     python experiments/exposure_acquisition_benchmark.py --acquisition 60 --holdout 40 --save-spec checkpoints/spec.json
@@ -61,6 +82,7 @@ import ollama
 from src.text.consolidation import ConsolidationMemory
 from src.text.ecology import Proposition, PropositionRealiser, extract_propositions
 from src.text.ecology.frame_extractor import FrameLibrary
+from src.text.ecology.proposition_parser import PropositionParser
 
 from ecology_benchmark import _as_plain_phrase, _extract_json
 
@@ -289,6 +311,117 @@ def summarize_parsing(parsing_results: list[dict]) -> dict:
     return summaries
 
 
+# ── Phase 10: scored parsing (PropositionParser) ────────────────────────
+
+_SCORED_MODES = {
+    "learned_scored": dict(include_fixed=False, include_learned=True),
+    "candidate_union": dict(include_fixed=True, include_learned=True),
+}
+_DEFAULT_ACCEPTANCE_THRESHOLD = 0.5
+_DEFAULT_MARGIN_THRESHOLD = 0.1
+_ABSTAIN_REASONS = frozenset({"no_match", "low_score"})
+
+
+def evaluate_scored_parsing(
+    holdout_examples: list[dict], frame_library: FrameLibrary,
+    acceptance_threshold: float = _DEFAULT_ACCEPTANCE_THRESHOLD,
+    margin_threshold: float = _DEFAULT_MARGIN_THRESHOLD,
+) -> list[dict]:
+    results = []
+    for example in holdout_examples:
+        target = (
+            example["subject"], example["relation"],
+            _canonical_object(example["object"]),
+        )
+        for mode, kwargs in _SCORED_MODES.items():
+            decision = PropositionParser.parse_best(
+                example["sentence"], frame_library=frame_library,
+                acceptance_threshold=acceptance_threshold,
+                margin_threshold=margin_threshold, **kwargs,
+            )
+            candidate_triples = [
+                (c.proposition.subject, c.proposition.relation,
+                 _canonical_object(c.proposition.object))
+                for c in decision.candidates
+            ]
+            selected_triple = (
+                (decision.proposition.subject, decision.proposition.relation,
+                 _canonical_object(decision.proposition.object))
+                if decision.proposition is not None else None
+            )
+            exact_match = decision.accepted and selected_triple == target
+            results.append({
+                "mode": mode, "relation": example["relation"], "subject": example["subject"],
+                "target": target, "accepted": decision.accepted, "ambiguous": decision.ambiguous,
+                "reason": decision.reason, "selected_triple": selected_triple,
+                "exact_match": exact_match,
+                "confidently_wrong": decision.accepted and not exact_match,
+                "candidate_count": len(decision.candidates),
+                "correct_candidate_present": target in candidate_triples,
+            })
+    return results
+
+
+def summarize_scored_parsing(scored_results: list[dict]) -> dict:
+    summaries = {}
+    for mode in _SCORED_MODES:
+        items = [r for r in scored_results if r["mode"] == mode]
+        total = len(items)
+        accepted = [r for r in items if r["accepted"]]
+        exact = sum(1 for r in items if r["exact_match"])
+        summaries[mode] = {
+            "exact_match_rate": exact / total if total else 0.0,
+            "recall": exact / total if total else 0.0,
+            "precision": exact / len(accepted) if accepted else 0.0,
+            "conditional_accuracy_when_accepted": exact / len(accepted) if accepted else 0.0,
+            "abstention_rate": (
+                sum(1 for r in items if r["reason"] in _ABSTAIN_REASONS) / total
+                if total else 0.0
+            ),
+            "ambiguity_rate": sum(1 for r in items if r["ambiguous"]) / total if total else 0.0,
+            "confidently_wrong_rate": (
+                sum(1 for r in items if r["confidently_wrong"]) / total if total else 0.0
+            ),
+            "correct_candidate_present_rate": (
+                sum(1 for r in items if r["correct_candidate_present"]) / total if total else 0.0
+            ),
+            "correct_candidate_selected_rate": exact / total if total else 0.0,
+            "mean_candidate_count": (
+                sum(r["candidate_count"] for r in items) / total if total else 0.0
+            ),
+        }
+    return summaries
+
+
+def risk_coverage_sweep(
+    holdout_examples: list[dict], frame_library: FrameLibrary,
+    acceptance_thresholds: tuple[float, ...] = (0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+    margin_thresholds: tuple[float, ...] = (0.0, 0.05, 0.1, 0.2),
+) -> list[dict]:
+    """Reports precision/coverage at other threshold choices for
+    diagnostic purposes -- the headline `candidate_union` number above
+    always uses the frozen defaults, never one picked from this sweep."""
+    points = []
+    for acceptance_threshold in acceptance_thresholds:
+        for margin_threshold in margin_thresholds:
+            results = evaluate_scored_parsing(
+                holdout_examples, frame_library,
+                acceptance_threshold=acceptance_threshold,
+                margin_threshold=margin_threshold,
+            )
+            union_items = [r for r in results if r["mode"] == "candidate_union"]
+            accepted = [r for r in union_items if r["accepted"]]
+            exact = sum(1 for r in union_items if r["exact_match"])
+            total = len(union_items)
+            points.append({
+                "acceptance_threshold": acceptance_threshold,
+                "margin_threshold": margin_threshold,
+                "coverage": len(accepted) / total if total else 0.0,
+                "precision": exact / len(accepted) if accepted else 0.0,
+            })
+    return points
+
+
 def _mask_entity_tokens(text: str, subject: str, obj: str) -> list[str]:
     entity_tokens = set(subject.lower().split()) | set(obj.lower().split())
     tokens = text.lower().replace(".", "").split()
@@ -380,6 +513,11 @@ def run(
     parsing_results = evaluate_parsing(holdout_examples, frame_library)
     parsing_latency = time.perf_counter() - start
 
+    start = time.perf_counter()
+    scored_parsing_results = evaluate_scored_parsing(holdout_examples, frame_library)
+    scored_parsing_latency = time.perf_counter() - start
+    risk_coverage_points = risk_coverage_sweep(holdout_examples, frame_library)
+
     taught_sentences = [example["sentence"] for example in acquisition_examples]
     start = time.perf_counter()
     generation_results = evaluate_generation(holdout_examples, frame_library, taught_sentences)
@@ -403,7 +541,10 @@ def run(
         "distinct_frames_by_relation": {
             r: len(frame_library.frames_for_relation(r)) for r in _RELATIONS
         },
+        "scored_parsing_latency_seconds": scored_parsing_latency,
         "parsing_conditions": summarize_parsing(parsing_results),
+        "scored_parsing_conditions": summarize_scored_parsing(scored_parsing_results),
+        "risk_coverage_curve": risk_coverage_points,
         "generation_success_rate": (
             len(generation_successes) / len(generation_results) if generation_results else 0.0
         ),
@@ -412,6 +553,7 @@ def run(
             (r["masked_max_shared_ngram"] for r in generation_results), default=0,
         ),
         "parsing_records": parsing_results,
+        "scored_parsing_records": scored_parsing_results,
         "generation_records": generation_results,
     }
     if spec is None:
