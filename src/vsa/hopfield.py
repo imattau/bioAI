@@ -5,7 +5,7 @@ from src.vsa.primitives import pack_bipolar, unpack_to_float, packed_similarity_
 
 
 class HopfieldNet(nn.Module):
-    def __init__(self, dim: int, max_patterns: int = 100,
+    def __init__(self, dim: int, max_patterns: int = 1000,
                  retrieval_mode: str = "modern",
                  modern_beta: float = 50.0,
                  packed: bool = True):
@@ -13,15 +13,23 @@ class HopfieldNet(nn.Module):
         if retrieval_mode not in {"classical", "modern"}:
             raise ValueError("retrieval_mode must be 'classical' or 'modern'")
         self.dim = dim
+        self.max_patterns = max_patterns
         self.retrieval_mode = retrieval_mode
         self.modern_beta = modern_beta
         self.packed = packed
-        self.patterns: list[torch.Tensor] = []  # float32 for weighted sum
-        self.packed_patterns: list[torch.Tensor] = []  # uint8 for similarity
+        self.patterns: list[torch.Tensor] = []
+        self.packed_patterns: list[torch.Tensor] = []
         self.weights: torch.Tensor | None = None
 
     def store(self, pattern: torch.Tensor):
         p = pattern.detach().clone().flatten()
+        if self.max_patterns and len(self.patterns) >= self.max_patterns:
+            oldest = self.patterns.pop(0)
+            if self.packed and self.packed_patterns:
+                self.packed_patterns.pop(0)
+            if self.weights is not None:
+                self.weights -= torch.outer(oldest, oldest)
+                self.weights.fill_diagonal_(0)
         self.patterns.append(p)
         if self.packed:
             self.packed_patterns.append(pack_bipolar(p))
@@ -68,6 +76,7 @@ class HopfieldNet(nn.Module):
             "patterns": self.patterns,
             "retrieval_mode": self.retrieval_mode,
             "modern_beta": self.modern_beta,
+            "max_patterns": self.max_patterns,
         }
 
     def set_state(self, patterns: list[torch.Tensor]):

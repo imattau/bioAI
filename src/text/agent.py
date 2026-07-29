@@ -1,5 +1,6 @@
 import torch
 import re
+from collections import OrderedDict
 from pathlib import Path
 
 from src.vsa import VSA, VSAHashStore, HopfieldNet, RelationalEncoder, RelationalMemory
@@ -42,8 +43,8 @@ class BioAIDialogueAgent:
         self.encoder = VSAEncoder(vsa=self.vsa)
         self.decoder = VSADecoder(vsa=self.vsa, store_capacity=200,
                                   encoder=self.encoder)
-        self.hash_store = VSAHashStore(self.vsa)
-        self.hopfield = HopfieldNet(dim=vsa_dim)
+        self.hash_store = VSAHashStore(self.vsa, max_items=2000)
+        self.hopfield = HopfieldNet(dim=vsa_dim, max_patterns=2000)
         self.monitor = SelfMonitor(self.hopfield, energy_threshold=3.0)
         self.clonal = ClonalPool(input_dim=vsa_dim, max_modules=50)
         self.gonogo = GoNoGoActorCritic(input_dim=vsa_dim, n_actions=4)
@@ -88,6 +89,8 @@ class BioAIDialogueAgent:
         self._monitor_calibrated = False
         self.turn_count = 0
         self._text_index: dict[bytes, str] = {}
+        self._warm_vsa_cache: OrderedDict[bytes, torch.Tensor] = OrderedDict()
+        self._warm_cache_capacity = 5000
         self._last_query_vec: torch.Tensor | None = None
         self._cached_context: str = ""
         self._ctx_cache_threshold: float = 0.7
@@ -109,7 +112,6 @@ class BioAIDialogueAgent:
         # metadata, never something a query should be conditioned on or a
         # decode should ever return.
         self._relational_sources: dict[tuple[str, str, str], list[int]] = {}
-        self._hot_memory_capacity = 200
         self._history_capacity = 1000
         self.semantic_encoder: SemanticVSAEncoder | None = None
         self.semantic_model: str | None = None
@@ -248,14 +250,14 @@ class BioAIDialogueAgent:
                         initial_vectors=[vector for _, vector in evidence],
                         initial_source_ids=[source for source, _ in evidence],
                     )
-        if len(self.hash_store) < self._hot_memory_capacity:
-            self.hash_store.insert(user_vec, user_vec)
-        if len(self.hopfield) < self._hot_memory_capacity:
-            self.hopfield.store(user_vec)
-        if len(self.decoder) < self._hot_memory_capacity:
-            self.decoder.ingest(user_text)
+        self.hash_store.insert(user_vec, user_vec)
+        self.hopfield.store(user_vec)
+        self.decoder.ingest(user_text)
         key = user_vec.cpu().numpy().tobytes()
         self._text_index[key] = user_text
+        self._warm_vsa_cache[key] = user_vec.clone()
+        while len(self._warm_vsa_cache) > self._warm_cache_capacity:
+            self._warm_vsa_cache.popitem(last=False)
 
     def _detect_novelty(self, user_vec: torch.Tensor) -> dict:
         recall = self.hopfield.recall(user_vec, steps=5)
@@ -960,6 +962,11 @@ class BioAIDialogueAgent:
             return self._text_index[key]
         stored = self.hash_store.lookup(qv)
         if stored is None:
+            # Fall back to warm VSA cache before giving up
+            if key in self._warm_vsa_cache:
+                cached = self._warm_vsa_cache[key]
+                results = self.decoder.decode(cached, k=1)
+                return results[0][0] if results else ""
             return ""
         key = stored.cpu().numpy().tobytes()
         if key in self._text_index:
@@ -989,13 +996,15 @@ class BioAIDialogueAgent:
             "gonogo_epsilon": self._gonogo_epsilon,
             "decoder": self.decoder.get_state(),
             "history": history,
+            "warm_cache_keys": list(self._warm_vsa_cache.keys()),
+            "warm_cache_values": [v.to(torch.float16) for v in self._warm_vsa_cache.values()],
+            "warm_cache_capacity": self._warm_cache_capacity,
             "text_index_keys": list(self._text_index.keys()),
             "text_index_values": list(self._text_index.values()),
             "token_library": self.library.get_state(),
             "consolidation": self.consolidation.get_state(),
             "relational": self.relational.get_state(),
             "relational_sources": list(self._relational_sources.items()),
-            "hot_memory_capacity": self._hot_memory_capacity,
             "history_capacity": self._history_capacity,
             "semantic_model": self.semantic_model,
             "semantic_encoder": (
@@ -1063,6 +1072,12 @@ class BioAIDialogueAgent:
         agent.history = state["history"]
         agent._text_index = dict(zip(state["text_index_keys"],
                                       state["text_index_values"]))
+        warm_keys = state.get("warm_cache_keys", [])
+        warm_vals = state.get("warm_cache_values", [])
+        agent._warm_vsa_cache = OrderedDict(
+            zip(warm_keys, [v.to(torch.float32) for v in warm_vals])
+        )
+        agent._warm_cache_capacity = state.get("warm_cache_capacity", 5000)
         agent._monitor_calibrated = state["_monitor_calibrated"]
         agent.turn_count = state["turn_count"]
         agent._last_query_vec = None
@@ -1088,7 +1103,6 @@ class BioAIDialogueAgent:
         agent._relational_sources = {
             tuple(key): ids for key, ids in state.get("relational_sources", [])
         }
-        agent._hot_memory_capacity = state.get("hot_memory_capacity", 200)
         agent._history_capacity = state.get("history_capacity", 1000)
         agent.semantic_model = state.get("semantic_model")
         semantic_state = state.get("semantic_encoder")
