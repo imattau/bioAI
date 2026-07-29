@@ -187,8 +187,8 @@ def extract_frame(text: str) -> LinguisticFrame | None:
     for pattern, relation in ConsolidationMemory._RELATION_PATTERNS:
         match = re.match(pattern, sentence, flags=re.IGNORECASE)
         if match:
-            subject = ConsolidationMemory._normalise(match.group(1))
-            obj = ConsolidationMemory._normalise(match.group(2))
+            subject = ConsolidationMemory.normalise(match.group(1))
+            obj = ConsolidationMemory.normalise(match.group(2))
             if not subject or not obj:
                 continue
             template = _templatize(sentence, match)
@@ -283,8 +283,8 @@ class FrameLibrary:
             match = self._compiled_pattern(template).match(stripped)
             if not match:
                 continue
-            subject = ConsolidationMemory._normalise(match.group("subject"))
-            obj = ConsolidationMemory._normalise(match.group("object"))
+            subject = ConsolidationMemory.normalise(match.group("subject"))
+            obj = ConsolidationMemory.normalise(match.group("object"))
             if subject and obj:
                 matches.append((subject, frame.relation, obj))
         return matches
@@ -302,8 +302,8 @@ class FrameLibrary:
             if not match:
                 continue
             subject_text, object_text = match.group("subject"), match.group("object")
-            subject = ConsolidationMemory._normalise(subject_text)
-            obj = ConsolidationMemory._normalise(object_text)
+            subject = ConsolidationMemory.normalise(subject_text)
+            obj = ConsolidationMemory.normalise(object_text)
             if not subject or not obj:
                 continue
             candidates.append(ParseCandidate(

@@ -30,7 +30,7 @@ class ConsolidationMemory:
         self._prototype_index_dirty = True
 
     @staticmethod
-    def _normalise(value: str) -> str:
+    def normalise(value: str) -> str:
         return " ".join(re.findall(r"[a-z0-9]+", value.lower())).strip()
 
     # Single source of truth for the subject/object extraction patterns --
@@ -68,8 +68,8 @@ class ConsolidationMemory:
         for pattern, relation in cls._RELATION_PATTERNS:
             match = re.match(pattern, sentence, flags=re.IGNORECASE)
             if match:
-                subject = cls._normalise(match.group(1))
-                obj = cls._normalise(match.group(2))
+                subject = cls.normalise(match.group(1))
+                obj = cls.normalise(match.group(2))
                 if subject and obj:
                     return [(subject, relation, obj)]
         return []
@@ -219,7 +219,7 @@ class ConsolidationMemory:
 
     def relation_claims(self, subject: str, relation: str = "is") -> list[dict]:
         alternatives = self.relations.get(
-            (self._normalise(subject), self._normalise(relation)), {}
+            (self.normalise(subject), self.normalise(relation)), {}
         )
         return sorted(
             (
@@ -241,7 +241,7 @@ class ConsolidationMemory:
         for pattern, relation in patterns:
             match = re.match(pattern, query, flags=re.IGNORECASE)
             if match:
-                subject = cls._normalise(match.group(1))
+                subject = cls.normalise(match.group(1))
                 if subject:
                     return subject, relation
         return None
@@ -273,7 +273,7 @@ class ConsolidationMemory:
         for pattern in patterns:
             match = re.match(pattern, query, flags=re.IGNORECASE)
             if match:
-                return cls._normalise(match.group(1))
+                return cls.normalise(match.group(1))
         return None
 
     @staticmethod

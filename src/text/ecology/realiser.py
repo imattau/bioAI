@@ -35,7 +35,7 @@ Phase 7 adds two more real generation improvements:
   merge -- doing so would be grammatically wrong, not just unhelpful.
 - **Indefinite articles** ("a"/"an"), scoped to the "is"/"has" relations'
   *objects* only, for a singular object (`is_plural_noun`, Phase 5).
-  `ConsolidationMemory._normalise` strips all casing before a Proposition
+  `ConsolidationMemory.normalise` strips all casing before a Proposition
   ever exists, so there is no signal left to tell a common noun
   ("marsupial", needs "a") from a proper noun ("France", never takes
   one) -- rather than guess, article insertion is scoped to relations

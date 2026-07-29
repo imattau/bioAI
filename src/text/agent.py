@@ -2,8 +2,7 @@ import torch
 import re
 from pathlib import Path
 
-from src.vsa import VSA, VSAHashStore, HopfieldNet
-from src.vsa.relational import RelationalEncoder, RelationalMemory
+from src.vsa import VSA, VSAHashStore, HopfieldNet, RelationalEncoder, RelationalMemory
 from src.clonal import ClonalPool
 from src.immune import SelfMonitor
 from src.basal import GoNoGoActorCritic
@@ -306,7 +305,7 @@ class BioAIDialogueAgent:
         """True/False for a short confirmation/correction utterance, None
         if `text` isn't feedback-shaped at all (the common case -- an
         ordinary new statement or question)."""
-        words = ConsolidationMemory._normalise(text).split()
+        words = ConsolidationMemory.normalise(text).split()
         if not words or len(words) > cls._MAX_FEEDBACK_WORDS:
             return None
         if words[0] in cls._POSITIVE_FEEDBACK_STARTS:
@@ -506,7 +505,7 @@ class BioAIDialogueAgent:
         if not match:
             return None
         pieces = re.split(r"\s+and\s+(?:is\s+)?", match.group(1))
-        pieces = [ConsolidationMemory._normalise(piece) for piece in pieces]
+        pieces = [ConsolidationMemory.normalise(piece) for piece in pieces]
         pieces = [piece for piece in pieces if piece]
         if not pieces:
             return None

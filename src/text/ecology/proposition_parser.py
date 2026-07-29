@@ -113,8 +113,8 @@ def _fixed_pattern_candidates(sentence: str) -> list[ParseCandidate]:
         if not match:
             continue
         subject_text, object_text = match.group(1), match.group(2)
-        subject = ConsolidationMemory._normalise(subject_text)
-        obj = ConsolidationMemory._normalise(object_text)
+        subject = ConsolidationMemory.normalise(subject_text)
+        obj = ConsolidationMemory.normalise(object_text)
         if not subject or not obj:
             continue
         is_catchall = index == _CATCHALL_PATTERN_INDEX
