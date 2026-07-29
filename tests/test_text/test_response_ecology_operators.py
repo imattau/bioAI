@@ -103,6 +103,71 @@ def test_extract_propositions_does_not_split_legitimate_and_joined_object():
     ]
 
 
+# ── Phase 9: pluggable extraction sources (fixed / learned / hybrid) ────
+
+def test_extract_propositions_default_flags_match_original_behavior():
+    """allow_fixed_patterns=True, allow_learned_frames=False is the
+    default -- every pre-Phase-9 call site is unaffected."""
+    memories = ["Wombats are marsupials."]
+    assert extract_propositions(memories) == extract_propositions(
+        memories, frame_library=FrameLibrary(),
+        allow_fixed_patterns=True, allow_learned_frames=False,
+    )
+
+
+def test_extract_propositions_fixed_only_ignores_unparseable_construction():
+    memories = ["Wombats belong to the marsupial family."]
+    assert extract_propositions(memories) == []
+
+
+def test_extract_propositions_learned_frames_recover_unparseable_construction():
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Koalas belong to the eucalyptus family.", "koalas", "is", "eucalyptus",
+    )
+    memories = ["Wombats belong to the marsupial family."]
+    props = extract_propositions(
+        memories, frame_library=library,
+        allow_fixed_patterns=False, allow_learned_frames=True,
+    )
+    assert [(p.subject, p.relation, p.object) for p in props] == [
+        ("wombats", "is", "marsupial")
+    ]
+
+
+def test_extract_propositions_hybrid_prefers_fixed_pattern_when_both_match():
+    """Hybrid tries the fixed regex first per sentence, falling back to
+    learned frames only when the fixed pass finds nothing -- confirmed by
+    a sentence both sources could plausibly claim."""
+    library = FrameLibrary()
+    library.observe_labelled("Wombats are marsupials.", "wombats", "is", "marsupials")
+    memories = ["Wombats are marsupials."]
+    props = extract_propositions(
+        memories, frame_library=library,
+        allow_fixed_patterns=True, allow_learned_frames=True,
+    )
+    # Exactly one triple -- not duplicated by also matching via the
+    # learned frame, since the fixed pass already found something.
+    assert [(p.subject, p.relation, p.object) for p in props] == [
+        ("wombats", "is", "marsupials")
+    ]
+
+
+def test_extract_propositions_hybrid_falls_back_to_learned_frame():
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Koalas belong to the eucalyptus family.", "koalas", "is", "eucalyptus",
+    )
+    memories = ["Wombats belong to the marsupial family."]
+    props = extract_propositions(
+        memories, frame_library=library,
+        allow_fixed_patterns=True, allow_learned_frames=True,
+    )
+    assert [(p.subject, p.relation, p.object) for p in props] == [
+        ("wombats", "is", "marsupial")
+    ]
+
+
 # ── realiser ─────────────────────────────────────────────────────────────
 
 def test_realiser_only_introduces_traceable_content():
@@ -549,6 +614,52 @@ def test_realiser_falls_back_to_fixed_template_when_library_has_nothing():
     ) == PropositionRealiser.realise(props)
 
 
+def test_realiser_require_frame_returns_empty_when_no_frame_available():
+    library = FrameLibrary()  # empty -- nothing observed for "in"
+    props = (Proposition("wombats", "in", "australia", 0, "x"),)
+    assert PropositionRealiser.realise(
+        props, frame_library=library, require_frame=True
+    ) == ""
+
+
+def test_realiser_require_frame_returns_empty_with_no_frame_library_at_all():
+    props = (Proposition("wombats", "in", "australia", 0, "x"),)
+    assert PropositionRealiser.realise(props, require_frame=True) == ""
+
+
+def test_realiser_require_frame_succeeds_when_every_relation_has_a_frame():
+    library = FrameLibrary()
+    library.observe("The cat sits within the box.")
+    props = (Proposition("wombats", "in", "australia", 0, "x"),)
+    text = PropositionRealiser.realise(
+        props, frame_library=library, require_frame=True
+    )
+    assert text != ""
+    assert "sit within" in text.lower()
+
+
+def test_realiser_require_frame_does_not_block_possessive_pronoun_branch():
+    """The capital-possessive branch doesn't consult frame_library at all
+    -- require_frame must not treat it as a missing-frame failure."""
+    library = FrameLibrary()  # empty
+    props = (
+        Proposition("france", "is", "country", 0, "x"),
+        Proposition("france", "capital", "paris", 1, "y"),
+    )
+    text = PropositionRealiser.realise(
+        props, frame_library=library, require_frame=True
+    )
+    assert text == ""  # "is" has no frame either -- whole call fails
+    # But once "is" has a frame too, the possessive branch must not be
+    # the reason for failure.
+    library.observe("Spain is a country.")
+    text2 = PropositionRealiser.realise(
+        props, frame_library=library, require_frame=True
+    )
+    assert text2 != ""
+    assert "its capital is paris" in text2.lower()
+
+
 def test_ecosystem_frame_library_influences_realised_output():
     library = FrameLibrary()
     library.observe("The cat sits within the box.")
@@ -563,6 +674,30 @@ def test_ecosystem_frame_library_influences_realised_output():
     # gets produced and survives into the population somewhere.
     all_text = " ".join(o.text.lower() for o in result.niche_winners.values())
     assert "within" in all_text
+
+
+def test_ecosystem_evidence_propositions_bypasses_text_extraction():
+    """Phase 9: evidence_propositions lets a caller hand the ecosystem
+    structured facts directly, even when the evidence TEXT is unparseable
+    gibberish -- isolating generation quality from extraction accuracy."""
+    eco = ResponseEcosystem(max_rounds=4)
+    prompt = "What do you know about wombats?"
+    gibberish_evidence = ["wombat marsupial australia claws xyzzy plugh"]
+    propositions = [
+        Proposition("wombats", "is", "marsupials", 0, gibberish_evidence[0]),
+        Proposition("wombats", "in", "australia", 0, gibberish_evidence[0]),
+    ]
+    result = eco.generate(
+        prompt, gibberish_evidence, evidence_propositions=propositions,
+    )
+    # The final winner (picked by supported-proposition-count, Phase 3) is
+    # a composed organism built from the supplied propositions -- not the
+    # raw gibberish text, which still seeds a "direct" niche candidate
+    # (unrelated to evidence_propositions, that's plain Phase 1 behavior)
+    # but never wins the overall comparison since it asserts nothing.
+    assert result.winner is not None
+    assert "marsupials" in result.winner.text.lower()
+    assert "australia" in result.winner.text.lower()
 
 
 def test_agent_learn_conversation_populates_frame_library():

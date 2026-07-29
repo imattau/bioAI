@@ -82,11 +82,34 @@ def _extract_compound(sentence: str) -> list[tuple[str, str, str]]:
     return triples if len(triples) > 1 else []
 
 
-def extract_propositions(memories: list[str]) -> list[Proposition]:
+def extract_propositions(
+    memories: list[str],
+    frame_library=None,
+    allow_fixed_patterns: bool = True,
+    allow_learned_frames: bool = False,
+) -> list[Proposition]:
+    """Defaults (`allow_fixed_patterns=True, allow_learned_frames=False`)
+    reproduce exactly the original fixed-regex-only behavior -- every
+    existing call site is unaffected. Phase 9 adds the other two axes,
+    for `experiments/exposure_acquisition_benchmark.py`'s fixed/learned/
+    hybrid comparison: `allow_learned_frames=True` (with a populated
+    `frame_library`) tries `frame_library.parse` -- which can recognize
+    constructions the fixed regex never could, since it was learned via
+    `FrameLibrary.observe_labelled` from teacher-supplied labels, not
+    derived from the fixed patterns itself -- per sentence, only when the
+    fixed-pattern pass (if enabled) found nothing, i.e. "hybrid" prefers
+    the more precise, already-validated fixed patterns and falls back to
+    learned frames rather than the other way round. Setting
+    `allow_fixed_patterns=False` isolates the learned-frame parser
+    entirely, for the "learned frames only" condition."""
     propositions: list[Proposition] = []
     for source_id, memory in enumerate(memories):
         for sentence in FixedSpliceCandidateGenerator._sentences(memory):
-            triples = _extract_compound(sentence) or ConsolidationMemory.extract_relations(sentence)
+            triples = []
+            if allow_fixed_patterns:
+                triples = _extract_compound(sentence) or ConsolidationMemory.extract_relations(sentence)
+            if not triples and allow_learned_frames and frame_library is not None:
+                triples = frame_library.parse(sentence)
             for subject, relation, obj in triples:
                 propositions.append(Proposition(
                     subject=subject, relation=relation, object=obj,

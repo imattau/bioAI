@@ -14,6 +14,12 @@ runs succession rounds: select survivors per niche, reproduce via
 mutation/recombination, apply predation, deduplicate, repeat until the
 per-niche winners are stable for 2 rounds or `max_rounds` is reached. See
 the response-ecosystem plan for the full design and its success criterion.
+
+Phase 9's `evidence_propositions` parameter lets a caller supply
+propositions directly, bypassing `extract_propositions(evidence)` --
+isolating generation quality from extraction accuracy, which every
+earlier phase's evaluation conflated by always deriving propositions
+from evidence text via the same regex extractor under test elsewhere.
 """
 
 from __future__ import annotations
@@ -156,11 +162,22 @@ class ResponseEcosystem:
         relational_memory=None,
         frame_library=None,
         fallback: str = "",
+        evidence_propositions: list | None = None,
     ) -> EcosystemResult:
         candidates = self.candidate_generator.generate(prompt, evidence, composer)
-        propositions = (
-            extract_propositions(evidence) if self.enable_synthesis else []
-        )
+        if evidence_propositions is not None:
+            # Phase 9: bypass extract_propositions(evidence) entirely when
+            # the caller already has structured propositions (e.g. a
+            # teacher's frozen labels) -- isolates "can this compose
+            # fluent text from known facts" from "can it parse them out
+            # of free text first," which every earlier proof in this plan
+            # conflated by always re-deriving propositions from evidence
+            # text via the same regex extractor being tested elsewhere.
+            propositions = evidence_propositions if self.enable_synthesis else []
+        else:
+            propositions = (
+                extract_propositions(evidence) if self.enable_synthesis else []
+            )
 
         population = seed_population(
             prompt, candidates, evidence, self.scorer, sequence_ranker

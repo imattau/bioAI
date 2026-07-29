@@ -1,0 +1,606 @@
+{
+  "acquisition": [
+    {
+      "relation": "is",
+      "subject": "birds",
+      "object": "bird species",
+      "sentence": "All birds belong to the broader category of bird species."
+    },
+    {
+      "relation": "in",
+      "subject": "chickens",
+      "object": "farmland",
+      "sentence": "Chickens are found on farmland."
+    },
+    {
+      "relation": "has",
+      "subject": "dog",
+      "object": "tail",
+      "sentence": "The fluffy dog has a long tail that helps them balance on their paws."
+    },
+    {
+      "relation": "capital",
+      "subject": "canada",
+      "object": "ottawa",
+      "sentence": "Canada's capital is Ottawa."
+    },
+    {
+      "relation": "is",
+      "subject": "kittens",
+      "object": "felines",
+      "sentence": "The adorable kittens belong to playful felines."
+    },
+    {
+      "relation": "in",
+      "subject": "rabbit",
+      "object": "meadow",
+      "sentence": "Rabbits love to roam across meadows."
+    },
+    {
+      "relation": "has",
+      "subject": "bison",
+      "object": "horns",
+      "sentence": "Bison have strong horns for defense."
+    },
+    {
+      "relation": "capital",
+      "subject": "russia",
+      "object": "moscow",
+      "sentence": "Russia's capital is Moscow."
+    },
+    {
+      "relation": "is",
+      "subject": "fish",
+      "object": "wildlife",
+      "sentence": "These fish belong to the broader category of wildlife."
+    },
+    {
+      "relation": "in",
+      "subject": "squirrel",
+      "object": "forest",
+      "sentence": "The squirrel is found in the forest."
+    },
+    {
+      "relation": "has",
+      "subject": "cat",
+      "object": "four legs",
+      "sentence": "A fluffy tabby cat with soft fur and a tuft of fur on its head is known for having four legs."
+    },
+    {
+      "relation": "capital",
+      "subject": "denmark",
+      "object": "copenhagen",
+      "sentence": "Denmark's capital is Copenhagen."
+    },
+    {
+      "relation": "is",
+      "subject": "penguin",
+      "object": "bird",
+      "sentence": "The penguin belongs to the larger group of birds called flightless animals."
+    },
+    {
+      "relation": "in",
+      "subject": "whales",
+      "object": "ocean",
+      "sentence": "Whales are found in oceans worldwide."
+    },
+    {
+      "relation": "has",
+      "subject": "tiger",
+      "object": "wide stripes",
+      "sentence": "The tiger's wide stripes serve as camouflage in its natural habitat."
+    },
+    {
+      "relation": "capital",
+      "subject": "australia",
+      "object": "canberra",
+      "sentence": "The capital city of Australia is Canberra."
+    },
+    {
+      "relation": "is",
+      "subject": "puppies",
+      "object": "dogs",
+      "sentence": "Puppies are a type of dogs."
+    },
+    {
+      "relation": "in",
+      "subject": "bear",
+      "object": "alaska",
+      "sentence": "The bear lives in Alaska."
+    },
+    {
+      "relation": "has",
+      "subject": "apple",
+      "object": "ripe",
+      "sentence": "The apple is ripe."
+    },
+    {
+      "relation": "capital",
+      "subject": "belarus",
+      "object": "minsk",
+      "sentence": "The capital of Belarus is Minsk."
+    },
+    {
+      "relation": "is",
+      "subject": "penguins",
+      "object": "bird",
+      "sentence": "Penguins belong to the broader category of birds."
+    },
+    {
+      "relation": "in",
+      "subject": "octopus",
+      "object": "galapagos islands",
+      "sentence": "The octopuses are native to the Galapagos Islands."
+    },
+    {
+      "relation": "has",
+      "subject": "elephant",
+      "object": "trunk",
+      "sentence": "The elephant's trunk is an elongated organ used for grasping and carrying objects."
+    },
+    {
+      "relation": "capital",
+      "subject": "germany",
+      "object": "berlin",
+      "sentence": "The capital of Germany is Berlin."
+    },
+    {
+      "relation": "is",
+      "subject": "squirrels",
+      "object": "small mammals",
+      "sentence": "Squirrels are small mammals with pointed ears and bushy tails."
+    },
+    {
+      "relation": "in",
+      "subject": "deer",
+      "object": "forest",
+      "sentence": "The deer lives in the forest."
+    },
+    {
+      "relation": "has",
+      "subject": "lamb",
+      "object": "has spots",
+      "sentence": "Lamb has spots."
+    },
+    {
+      "relation": "capital",
+      "subject": "france",
+      "object": "paris",
+      "sentence": "The capital of France is Paris."
+    },
+    {
+      "relation": "is",
+      "subject": "dalmatian",
+      "object": "animal",
+      "sentence": "The dalmatian is a breed of dog that belongs to the category of animal."
+    },
+    {
+      "relation": "in",
+      "subject": "puppy",
+      "object": "kennel",
+      "sentence": "The puppy lives in a cozy kennel"
+    },
+    {
+      "relation": "has",
+      "subject": "giraffe",
+      "object": "long neck",
+      "sentence": "The giraffe is known for its long neck that allows it to reach the highest branches in tall trees."
+    },
+    {
+      "relation": "capital",
+      "subject": "cuba",
+      "object": "havana",
+      "sentence": "Cuba's capital is Havana."
+    },
+    {
+      "relation": "is",
+      "subject": "bees",
+      "object": "insects",
+      "sentence": "Bees belong to insects and are known for their pollination capabilities."
+    },
+    {
+      "relation": "in",
+      "subject": "monkey",
+      "object": "forest",
+      "sentence": "Monkeys live in the forests and roams across them."
+    },
+    {
+      "relation": "has",
+      "subject": "human",
+      "object": "hair",
+      "sentence": "Humans are known for possessing long hair."
+    },
+    {
+      "relation": "capital",
+      "subject": "belgium",
+      "object": "brussels",
+      "sentence": "Belgium's capital is Brussels."
+    },
+    {
+      "relation": "is",
+      "subject": "chicken",
+      "object": "bird",
+      "sentence": "The chickens are a type of bird."
+    },
+    {
+      "relation": "in",
+      "subject": "polar bear",
+      "object": "arctic",
+      "sentence": "The polar bear is native to the Arctic and roams across this vast wilderness."
+    },
+    {
+      "relation": "has",
+      "subject": "snake",
+      "object": "has fangs",
+      "sentence": "The snake has fangs that are used to hunt and capture prey."
+    },
+    {
+      "relation": "capital",
+      "subject": "united kingdom",
+      "object": "london",
+      "sentence": "The capital of the United Kingdom is London."
+    },
+    {
+      "relation": "is",
+      "subject": "butterfly",
+      "object": "insects",
+      "sentence": "Butterflies are insects."
+    },
+    {
+      "relation": "in",
+      "subject": "dolphin",
+      "object": "the ocean",
+      "sentence": "The dolphins are found in the ocean."
+    },
+    {
+      "relation": "has",
+      "subject": "bunny",
+      "object": "tail",
+      "sentence": "The fluffy bunny possesses a soft and pliable tail that helps it balance and move gracefully through the forest."
+    },
+    {
+      "relation": "capital",
+      "subject": "japan",
+      "object": "tokyo",
+      "sentence": "Japan's capital is Tokyo."
+    },
+    {
+      "relation": "is",
+      "subject": "bicycle",
+      "object": "cycle",
+      "sentence": "A bicycle belongs to the category of cycle."
+    },
+    {
+      "relation": "in",
+      "subject": "sheep",
+      "object": "grasslands",
+      "sentence": "Sheep roam across the grasslands."
+    },
+    {
+      "relation": "has",
+      "subject": "robot",
+      "object": "has four legs",
+      "sentence": "This robot has four legs."
+    },
+    {
+      "relation": "capital",
+      "subject": "italy",
+      "object": "rome",
+      "sentence": "The capital city of Italy is Rome."
+    },
+    {
+      "relation": "is",
+      "subject": "bird",
+      "object": "avian creature",
+      "sentence": "The large white bird with feathers and wings is an avian creature."
+    },
+    {
+      "relation": "in",
+      "subject": "foxes",
+      "object": "the forest",
+      "sentence": "The foxes roam across the forest and catch mice."
+    },
+    {
+      "relation": "has",
+      "subject": "mouse",
+      "object": "has fur",
+      "sentence": "The mouse has fur."
+    },
+    {
+      "relation": "capital",
+      "subject": "spain",
+      "object": "madrid",
+      "sentence": "The capital of Spain is Madrid."
+    },
+    {
+      "relation": "is",
+      "subject": "sloth",
+      "object": "mammal",
+      "sentence": "The sloth belongs to the mammal class."
+    },
+    {
+      "relation": "in",
+      "subject": "bush",
+      "object": "texas",
+      "sentence": "The beautiful orange flowers of the Bush bloom bright yellow along the sprawling Texas countryside."
+    },
+    {
+      "relation": "has",
+      "subject": "giant salamander",
+      "object": "huge scales",
+      "sentence": "The giant salamander has a massive series of huge scales that protect its skin and hide from predators."
+    },
+    {
+      "relation": "capital",
+      "subject": "india",
+      "object": "new delhi",
+      "sentence": "India's capital is New Delhi."
+    },
+    {
+      "relation": "is",
+      "subject": "bats",
+      "object": "mammals",
+      "sentence": "Bats belong to mammals."
+    },
+    {
+      "relation": "in",
+      "subject": "fox",
+      "object": "forest",
+      "sentence": "The fox is found in the forest."
+    },
+    {
+      "relation": "has",
+      "subject": "tulip",
+      "object": "petals",
+      "sentence": "The tulip has large, colorful petals that make it a popular decoration for weddings and floral arrangements."
+    },
+    {
+      "relation": "capital",
+      "subject": "mexico",
+      "object": "mexico city",
+      "sentence": "Mexico's capital is Mexico City."
+    }
+  ],
+  "holdout": [
+    {
+      "relation": "is",
+      "subject": "panda",
+      "object": "animal",
+      "sentence": "The panda is a type of animal known for its fuzzy coat and adorable facial features."
+    },
+    {
+      "relation": "in",
+      "subject": "wolf",
+      "object": "griffen national park",
+      "sentence": "The majestic wolf roamed across the vastness of Griffen National Park."
+    },
+    {
+      "relation": "has",
+      "subject": "turtle",
+      "object": "shell",
+      "sentence": "The green turtle has a white shell with intricate patterns."
+    },
+    {
+      "relation": "capital",
+      "subject": "netherlands",
+      "object": "amsterdam",
+      "sentence": "The capital of the Netherlands is Amsterdam."
+    },
+    {
+      "relation": "is",
+      "subject": "turtles",
+      "object": "reptiles",
+      "sentence": "Turtles are an aquatic reptile."
+    },
+    {
+      "relation": "in",
+      "subject": "parakeet",
+      "object": "forest",
+      "sentence": "The friendly parakeet lives in a dense forest."
+    },
+    {
+      "relation": "has",
+      "subject": "lion",
+      "object": "tiger stripes",
+      "sentence": "The lion has thick tiger stripes on its coat."
+    },
+    {
+      "relation": "capital",
+      "subject": "sweden",
+      "object": "stockholm",
+      "sentence": "Sweden's capital is Stockholm."
+    },
+    {
+      "relation": "is",
+      "subject": "giraffes",
+      "object": "vertebrates",
+      "sentence": "Giraffes belong to the broader class of vertebrates."
+    },
+    {
+      "relation": "in",
+      "subject": "chimpanzee",
+      "object": "mountainous forest",
+      "sentence": "The chimpanzees are native to the dense mountainous forests of Central Africa."
+    },
+    {
+      "relation": "has",
+      "subject": "tuna",
+      "object": "fin",
+      "sentence": "The tuna has a sharp, elongated fin."
+    },
+    {
+      "relation": "capital",
+      "subject": "croatia",
+      "object": "zagreb",
+      "sentence": "Croatia's capital is Zagreb."
+    },
+    {
+      "relation": "is",
+      "subject": "canoe",
+      "object": "watercraft",
+      "sentence": "Canoes belong to watercraft, used for transport on bodies of water."
+    },
+    {
+      "relation": "in",
+      "subject": "lions",
+      "object": "the african savannah",
+      "sentence": "Lions are native to the African savannah."
+    },
+    {
+      "relation": "has",
+      "subject": "car",
+      "object": "sunroof",
+      "sentence": "The car has a sunroof."
+    },
+    {
+      "relation": "capital",
+      "subject": "south korea",
+      "object": "seoul",
+      "sentence": "The capital of South Korea is Seoul."
+    },
+    {
+      "relation": "is",
+      "subject": "dogs",
+      "object": "canines",
+      "sentence": "Dogs are canines."
+    },
+    {
+      "relation": "in",
+      "subject": "whale",
+      "object": "ocean",
+      "sentence": "Whales are native to the vast oceans."
+    },
+    {
+      "relation": "has",
+      "subject": "cactus",
+      "object": "spiny needles",
+      "sentence": "The cactus has spiny needles that provide protection against predators."
+    },
+    {
+      "relation": "capital",
+      "subject": "china",
+      "object": "beijing",
+      "sentence": "The capital of China is Beijing."
+    },
+    {
+      "relation": "is",
+      "subject": "cherry",
+      "object": "fruit",
+      "sentence": "The cherry is a type of fruit."
+    },
+    {
+      "relation": "in",
+      "subject": "cabbage",
+      "object": "garden",
+      "sentence": "The cabbage was found in the garden."
+    },
+    {
+      "relation": "has",
+      "subject": "pigeon",
+      "object": "feathers",
+      "sentence": "The pigeon has delicate feathers."
+    },
+    {
+      "relation": "capital",
+      "subject": "finland",
+      "object": "helsinki",
+      "sentence": "Finland's capital is Helsinki."
+    },
+    {
+      "relation": "is",
+      "subject": "crocodylidae",
+      "object": "reptile family",
+      "sentence": "Crocodylidae, commonly known as alligators, belong to the reptile family and are a type of warm-blooded vertebrate species native to Africa and South America."
+    },
+    {
+      "relation": "in",
+      "subject": "lizards",
+      "object": "central park",
+      "sentence": "Lizards are found in Central Park."
+    },
+    {
+      "relation": "has",
+      "subject": "laptop",
+      "object": "display",
+      "sentence": "The laptop has a sleek and modern display that provides exceptional visual clarity and a wide range of colors."
+    },
+    {
+      "relation": "capital",
+      "subject": "nepal",
+      "object": "kathmandu",
+      "sentence": "The capital of Nepal is Kathmandu."
+    },
+    {
+      "relation": "is",
+      "subject": "cows",
+      "object": "animals",
+      "sentence": "Cows are animals that give birth to young calves."
+    },
+    {
+      "relation": "in",
+      "subject": "dove",
+      "object": "forest",
+      "sentence": "The dove is native to the forest."
+    },
+    {
+      "relation": "has",
+      "subject": "giant squid",
+      "object": "large eyes",
+      "sentence": "The giant squid is known for its large eyes that allow it to see the prey from far away."
+    },
+    {
+      "relation": "capital",
+      "subject": "switzerland",
+      "object": "bern",
+      "sentence": "The capital of Switzerland is Bern."
+    },
+    {
+      "relation": "is",
+      "subject": "sponges",
+      "object": "animal kingdom",
+      "sentence": "Sponges belong to the animal kingdom."
+    },
+    {
+      "relation": "in",
+      "subject": "capybara",
+      "object": "central america",
+      "sentence": "The capybara, found in Central America, is native to South and Central America."
+    },
+    {
+      "relation": "has",
+      "subject": "book",
+      "object": "hard cover",
+      "sentence": "The book with hard cover is used to store information for reference."
+    },
+    {
+      "relation": "capital",
+      "subject": "england",
+      "object": "london",
+      "sentence": "The capital city of England is London."
+    },
+    {
+      "relation": "is",
+      "subject": "crab",
+      "object": "insect",
+      "sentence": "Crabs belong to the broader category of insects."
+    },
+    {
+      "relation": "in",
+      "subject": "frog",
+      "object": "ponds",
+      "sentence": "Frogs are found primarily in ponds across various habitats."
+    },
+    {
+      "relation": "has",
+      "subject": "tree",
+      "object": "branch",
+      "sentence": "The tall tree has strong branches that support the heavy canopy."
+    },
+    {
+      "relation": "capital",
+      "subject": "portugal",
+      "object": "lisbon",
+      "sentence": "Portugal's capital is Lisbon."
+    }
+  ]
+}

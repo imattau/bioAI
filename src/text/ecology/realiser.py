@@ -65,6 +65,13 @@ Every subject and object string still comes straight from a
 source proposition regardless of which phrasing path rendered it -- only
 grammatical connectives, learned frames, agreement, articles, pronouns,
 and compound "and" joins are synthesized.
+
+Phase 9 adds `require_frame`: when `True`, a relation with no available
+frame makes the whole call return `""` instead of falling back to
+`_RELATION_TEMPLATES` -- so a generation "success" can never be produced
+by this file's own hand-authored scaffolding, only by a genuinely
+acquired frame. Does not affect the possessive-pronoun or uncertainty-
+qualifier branches, which aren't `_RELATION_TEMPLATES` fallbacks.
 """
 
 from __future__ import annotations
@@ -121,6 +128,7 @@ class PropositionRealiser:
     def realise(
         propositions: tuple[Proposition, ...],
         frame_library=None,
+        require_frame: bool = False,
     ) -> str:
         if not propositions:
             return ""
@@ -173,10 +181,16 @@ class PropositionRealiser:
                     frame_library.select_frame(relation)
                     if frame_library is not None else None
                 )
-                template = (
-                    frame.template if frame is not None
-                    else _RELATION_TEMPLATES.get(relation, f"[SUBJECT] {relation} [OBJECT]")
-                )
+                if frame is not None:
+                    template = frame.template
+                elif require_frame:
+                    # Phase 9: a "success" must never be produced by
+                    # hand-authored scaffolding -- no frame available for
+                    # this relation means the whole realisation is
+                    # honestly impossible, not a reason to fall back.
+                    return ""
+                else:
+                    template = _RELATION_TEMPLATES.get(relation, f"[SUBJECT] {relation} [OBJECT]")
             if relation not in _AGREEMENT_EXEMPT_RELATIONS:
                 template = apply_subject_verb_agreement(template, subject)
 

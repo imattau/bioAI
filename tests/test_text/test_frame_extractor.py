@@ -113,3 +113,87 @@ def test_frame_library_state_round_trip():
     library.observe("The capital of Spain is Madrid.")
     restored = FrameLibrary.from_state(library.get_state())
     assert restored.frames == library.frames
+
+
+# ── Phase 9: bidirectional (labelled) frame learning ────────────────────
+
+def test_observe_labelled_aligns_teacher_triple_to_free_form_sentence():
+    library = FrameLibrary()
+    frame = library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    assert frame == LinguisticFrame(
+        template="[SUBJECT] belong to the [OBJECT] family",
+        relation="is",
+        evidence_count=1,
+    )
+
+
+def test_parse_recovers_triple_from_its_own_labelled_sentence():
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    assert library.parse("Wombats belong to the marsupial family.") == [
+        ("wombats", "is", "marsupial")
+    ]
+
+
+def test_bidirectional_round_trip_generalizes_to_a_new_filler():
+    """The real bidirectional guarantee: a frame learned from one
+    (subject, object) pair must parse back correctly when PropositionRealiser
+    uses it to realise a DIFFERENT filler -- slot generalization at the
+    unit level, no LLM involved."""
+    from src.text.ecology import Proposition, PropositionRealiser
+
+    library = FrameLibrary()
+    library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    text = PropositionRealiser.realise(
+        (Proposition("cats", "is", "dogs", 0, "x"),), frame_library=library,
+    )
+    assert library.parse(text) == [("cats", "is", "dogs")]
+
+
+def test_observe_labelled_falls_back_to_opposite_number_form():
+    """Teacher label "marsupials" (plural) vs. sentence surface form
+    "marsupial" (singular) -- observe_labelled must still align via the
+    lemminflect-derived opposite-number form, not just an exact match."""
+    library = FrameLibrary()
+    frame = library.observe_labelled(
+        "The wombat belongs to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    assert frame is not None
+    assert frame.template == "The [SUBJECT] belongs to the [OBJECT] family"
+
+
+def test_observe_labelled_returns_none_when_label_unlocatable():
+    library = FrameLibrary()
+    frame = library.observe_labelled(
+        "Wombats are diggers.", "wombats", "is", "nonexistentthing",
+    )
+    assert frame is None
+    assert library.frames == {}
+
+
+def test_observe_labelled_returns_none_when_object_precedes_subject():
+    library = FrameLibrary()
+    frame = library.observe_labelled(
+        "Marsupials include wombats.", "wombats", "is", "marsupials",
+    )
+    assert frame is None
+
+
+def test_parse_unifies_frames_learned_via_observe_and_observe_labelled():
+    library = FrameLibrary()
+    library.observe("The capital of France is Paris.")
+    library.observe_labelled(
+        "Wombats belong to the marsupial family.", "wombats", "is", "marsupials",
+    )
+    assert library.parse("The capital of Italy is Rome.") == [
+        ("italy", "capital", "rome")
+    ]
+    assert library.parse("Koalas belong to the marsupial family.") == [
+        ("koalas", "is", "marsupial")
+    ]

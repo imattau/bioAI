@@ -1,0 +1,3213 @@
+{
+  "config": {
+    "model": "qwen2.5-coder:1.5b",
+    "acquisition": 60,
+    "holdout": 40
+  },
+  "acquisition_latency_seconds": 0.005742779932916164,
+  "parsing_latency_seconds": 0.010534578002989292,
+  "generation_latency_seconds": 0.015839457977563143,
+  "frames_learned": 48,
+  "distinct_frames_by_relation": {
+    "is": 15,
+    "in": 14,
+    "has": 15,
+    "capital": 4
+  },
+  "parsing_conditions": {
+    "fixed": {
+      "exact_match_rate": 0.125,
+      "recall": 0.125,
+      "precision": 0.14705882352941177,
+      "abstention_rate": 0.15
+    },
+    "learned": {
+      "exact_match_rate": 0.3,
+      "recall": 0.3,
+      "precision": 0.11428571428571428,
+      "abstention_rate": 0.0
+    },
+    "hybrid": {
+      "exact_match_rate": 0.15,
+      "recall": 0.15,
+      "precision": 0.125,
+      "abstention_rate": 0.0
+    }
+  },
+  "generation_success_rate": 1.0,
+  "generation_grounded_rate": 1.0,
+  "generation_max_masked_overlap": 11,
+  "parsing_records": [
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "panda",
+      "target": [
+        "panda",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "the panda",
+          "is",
+          "type of animal known for its fuzzy coat and adorable facial feature"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "panda",
+      "target": [
+        "panda",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "panda",
+          "has",
+          "type of animal known for its fuzzy coat and adorable facial feature"
+        ],
+        [
+          "the",
+          "has",
+          "panda is a type of animal known for its fuzzy coat and adorable facial feature"
+        ],
+        [
+          "panda",
+          "has",
+          "is a type of animal known for its fuzzy coat and adorable facial feature"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "panda",
+      "target": [
+        "panda",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "the panda",
+          "is",
+          "type of animal known for its fuzzy coat and adorable facial feature"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "wolf",
+      "target": [
+        "wolf",
+        "in",
+        "griffen national park"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "wolf",
+      "target": [
+        "wolf",
+        "in",
+        "griffen national park"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "majestic wolf roamed across the vastness of griffen national park"
+        ],
+        [
+          "majestic",
+          "has",
+          "wolf roamed across the vastness of griffen national park"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "wolf",
+      "target": [
+        "wolf",
+        "in",
+        "griffen national park"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "majestic wolf roamed across the vastness of griffen national park"
+        ],
+        [
+          "majestic",
+          "has",
+          "wolf roamed across the vastness of griffen national park"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "turtle",
+      "target": [
+        "turtle",
+        "has",
+        "shell"
+      ],
+      "recovered": [
+        [
+          "the green turtle",
+          "has",
+          "white shell with intricate pattern"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "turtle",
+      "target": [
+        "turtle",
+        "has",
+        "shell"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "green turtle has a white shell with intricate pattern"
+        ],
+        [
+          "green",
+          "has",
+          "turtle has a white shell with intricate pattern"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "turtle",
+      "target": [
+        "turtle",
+        "has",
+        "shell"
+      ],
+      "recovered": [
+        [
+          "the green turtle",
+          "has",
+          "white shell with intricate pattern"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "netherlands",
+      "target": [
+        "netherlands",
+        "capital",
+        "amsterdam"
+      ],
+      "recovered": [
+        [
+          "the netherlands",
+          "capital",
+          "amsterdam"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "netherlands",
+      "target": [
+        "netherlands",
+        "capital",
+        "amsterdam"
+      ],
+      "recovered": [
+        [
+          "capital of the netherlands",
+          "has",
+          "amsterdam"
+        ],
+        [
+          "the netherlands",
+          "capital",
+          "amsterdam"
+        ],
+        [
+          "the",
+          "has",
+          "capital of the netherlands is amsterdam"
+        ],
+        [
+          "netherlands",
+          "capital",
+          "amsterdam"
+        ],
+        [
+          "capital",
+          "has",
+          "of the netherlands is amsterdam"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "netherlands",
+      "target": [
+        "netherlands",
+        "capital",
+        "amsterdam"
+      ],
+      "recovered": [
+        [
+          "the netherlands",
+          "capital",
+          "amsterdam"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "turtles",
+      "target": [
+        "turtles",
+        "is",
+        "reptile"
+      ],
+      "recovered": [
+        [
+          "turtles",
+          "is",
+          "aquatic reptile"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "turtles",
+      "target": [
+        "turtles",
+        "is",
+        "reptile"
+      ],
+      "recovered": [
+        [
+          "turtles",
+          "has",
+          "are an aquatic reptile"
+        ],
+        [
+          "turtles",
+          "is",
+          "aquatic reptile"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "turtles",
+      "target": [
+        "turtles",
+        "is",
+        "reptile"
+      ],
+      "recovered": [
+        [
+          "turtles",
+          "is",
+          "aquatic reptile"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "parakeet",
+      "target": [
+        "parakeet",
+        "in",
+        "forest"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "parakeet",
+      "target": [
+        "parakeet",
+        "in",
+        "forest"
+      ],
+      "recovered": [
+        [
+          "friendly parakeet",
+          "in",
+          "dense forest"
+        ],
+        [
+          "the",
+          "has",
+          "friendly parakeet lives in a dense forest"
+        ],
+        [
+          "friendly",
+          "has",
+          "parakeet lives in a dense forest"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "parakeet",
+      "target": [
+        "parakeet",
+        "in",
+        "forest"
+      ],
+      "recovered": [
+        [
+          "friendly parakeet",
+          "in",
+          "dense forest"
+        ],
+        [
+          "the",
+          "has",
+          "friendly parakeet lives in a dense forest"
+        ],
+        [
+          "friendly",
+          "has",
+          "parakeet lives in a dense forest"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "lion",
+      "target": [
+        "lion",
+        "has",
+        "tiger stripe"
+      ],
+      "recovered": [
+        [
+          "the lion",
+          "has",
+          "thick tiger stripes on its coat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "lion",
+      "target": [
+        "lion",
+        "has",
+        "tiger stripe"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "lion has thick tiger stripes on its coat"
+        ],
+        [
+          "lion",
+          "has",
+          "has thick tiger stripes on its coat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "lion",
+      "target": [
+        "lion",
+        "has",
+        "tiger stripe"
+      ],
+      "recovered": [
+        [
+          "the lion",
+          "has",
+          "thick tiger stripes on its coat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "sweden",
+      "target": [
+        "sweden",
+        "capital",
+        "stockholm"
+      ],
+      "recovered": [
+        [
+          "sweden s capital",
+          "is",
+          "stockholm"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "sweden",
+      "target": [
+        "sweden",
+        "capital",
+        "stockholm"
+      ],
+      "recovered": [
+        [
+          "sweden",
+          "capital",
+          "stockholm"
+        ],
+        [
+          "sweden s",
+          "has",
+          "capital is stockholm"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "sweden",
+      "target": [
+        "sweden",
+        "capital",
+        "stockholm"
+      ],
+      "recovered": [
+        [
+          "sweden s capital",
+          "is",
+          "stockholm"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "giraffes",
+      "target": [
+        "giraffes",
+        "is",
+        "vertebrate"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "giraffes",
+      "target": [
+        "giraffes",
+        "is",
+        "vertebrate"
+      ],
+      "recovered": [
+        [
+          "giraffes",
+          "has",
+          "belong to the broader class of vertebrate"
+        ],
+        [
+          "giraffes",
+          "is",
+          "broader class of vertebrate"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "giraffes",
+      "target": [
+        "giraffes",
+        "is",
+        "vertebrate"
+      ],
+      "recovered": [
+        [
+          "giraffes",
+          "has",
+          "belong to the broader class of vertebrate"
+        ],
+        [
+          "giraffes",
+          "is",
+          "broader class of vertebrate"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "chimpanzee",
+      "target": [
+        "chimpanzee",
+        "in",
+        "mountainous forest"
+      ],
+      "recovered": [
+        [
+          "the chimpanzees",
+          "is",
+          "native to the dense mountainous forests of central africa"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "chimpanzee",
+      "target": [
+        "chimpanzee",
+        "in",
+        "mountainous forest"
+      ],
+      "recovered": [
+        [
+          "chimpanzees",
+          "in",
+          "dense mountainous forests of central africa"
+        ],
+        [
+          "the",
+          "has",
+          "chimpanzees are native to the dense mountainous forests of central africa"
+        ],
+        [
+          "the chimpanzees",
+          "is",
+          "native to the dense mountainous forests of central africa"
+        ],
+        [
+          "chimpanzees",
+          "has",
+          "are native to the dense mountainous forests of central africa"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "chimpanzee",
+      "target": [
+        "chimpanzee",
+        "in",
+        "mountainous forest"
+      ],
+      "recovered": [
+        [
+          "the chimpanzees",
+          "is",
+          "native to the dense mountainous forests of central africa"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "tuna",
+      "target": [
+        "tuna",
+        "has",
+        "fin"
+      ],
+      "recovered": [
+        [
+          "the tuna",
+          "has",
+          "sharp elongated fin"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "tuna",
+      "target": [
+        "tuna",
+        "has",
+        "fin"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "tuna has a sharp elongated fin"
+        ],
+        [
+          "tuna",
+          "has",
+          "has a sharp elongated fin"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "tuna",
+      "target": [
+        "tuna",
+        "has",
+        "fin"
+      ],
+      "recovered": [
+        [
+          "the tuna",
+          "has",
+          "sharp elongated fin"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "croatia",
+      "target": [
+        "croatia",
+        "capital",
+        "zagreb"
+      ],
+      "recovered": [
+        [
+          "croatia s capital",
+          "is",
+          "zagreb"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "croatia",
+      "target": [
+        "croatia",
+        "capital",
+        "zagreb"
+      ],
+      "recovered": [
+        [
+          "croatia",
+          "capital",
+          "zagreb"
+        ],
+        [
+          "croatia s",
+          "has",
+          "capital is zagreb"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "croatia",
+      "target": [
+        "croatia",
+        "capital",
+        "zagreb"
+      ],
+      "recovered": [
+        [
+          "croatia s capital",
+          "is",
+          "zagreb"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "canoe",
+      "target": [
+        "canoe",
+        "is",
+        "watercraft"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "canoe",
+      "target": [
+        "canoe",
+        "is",
+        "watercraft"
+      ],
+      "recovered": [
+        [
+          "canoes",
+          "has",
+          "belong to watercraft used for transport on bodies of water"
+        ],
+        [
+          "canoes",
+          "is",
+          "watercraft used for transport on bodies of water"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "canoe",
+      "target": [
+        "canoe",
+        "is",
+        "watercraft"
+      ],
+      "recovered": [
+        [
+          "canoes",
+          "has",
+          "belong to watercraft used for transport on bodies of water"
+        ],
+        [
+          "canoes",
+          "is",
+          "watercraft used for transport on bodies of water"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "lions",
+      "target": [
+        "lions",
+        "in",
+        "african savannah"
+      ],
+      "recovered": [
+        [
+          "lions",
+          "is",
+          "native to the african savannah"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "lions",
+      "target": [
+        "lions",
+        "in",
+        "african savannah"
+      ],
+      "recovered": [
+        [
+          "lions",
+          "has",
+          "are native to the african savannah"
+        ],
+        [
+          "lions",
+          "is",
+          "native to the african savannah"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "lions",
+      "target": [
+        "lions",
+        "in",
+        "african savannah"
+      ],
+      "recovered": [
+        [
+          "lions",
+          "is",
+          "native to the african savannah"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "car",
+      "target": [
+        "car",
+        "has",
+        "sunroof"
+      ],
+      "recovered": [
+        [
+          "the car",
+          "has",
+          "sunroof"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "car",
+      "target": [
+        "car",
+        "has",
+        "sunroof"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "car has a sunroof"
+        ],
+        [
+          "car",
+          "has",
+          "has a sunroof"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "car",
+      "target": [
+        "car",
+        "has",
+        "sunroof"
+      ],
+      "recovered": [
+        [
+          "the car",
+          "has",
+          "sunroof"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "south korea",
+      "target": [
+        "south korea",
+        "capital",
+        "seoul"
+      ],
+      "recovered": [
+        [
+          "south korea",
+          "capital",
+          "seoul"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "south korea",
+      "target": [
+        "south korea",
+        "capital",
+        "seoul"
+      ],
+      "recovered": [
+        [
+          "capital of south korea",
+          "has",
+          "seoul"
+        ],
+        [
+          "south korea",
+          "capital",
+          "seoul"
+        ],
+        [
+          "the",
+          "has",
+          "capital of south korea is seoul"
+        ],
+        [
+          "capital",
+          "has",
+          "of south korea is seoul"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "south korea",
+      "target": [
+        "south korea",
+        "capital",
+        "seoul"
+      ],
+      "recovered": [
+        [
+          "south korea",
+          "capital",
+          "seoul"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "dogs",
+      "target": [
+        "dogs",
+        "is",
+        "canine"
+      ],
+      "recovered": [
+        [
+          "dogs",
+          "is",
+          "canine"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "dogs",
+      "target": [
+        "dogs",
+        "is",
+        "canine"
+      ],
+      "recovered": [
+        [
+          "dogs",
+          "has",
+          "are canine"
+        ],
+        [
+          "dogs",
+          "is",
+          "canine"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "dogs",
+      "target": [
+        "dogs",
+        "is",
+        "canine"
+      ],
+      "recovered": [
+        [
+          "dogs",
+          "is",
+          "canine"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "whale",
+      "target": [
+        "whale",
+        "in",
+        "ocean"
+      ],
+      "recovered": [
+        [
+          "whales",
+          "is",
+          "native to the vast ocean"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "whale",
+      "target": [
+        "whale",
+        "in",
+        "ocean"
+      ],
+      "recovered": [
+        [
+          "whales",
+          "has",
+          "are native to the vast ocean"
+        ],
+        [
+          "whales",
+          "is",
+          "native to the vast ocean"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "whale",
+      "target": [
+        "whale",
+        "in",
+        "ocean"
+      ],
+      "recovered": [
+        [
+          "whales",
+          "is",
+          "native to the vast ocean"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "cactus",
+      "target": [
+        "cactus",
+        "has",
+        "spiny needle"
+      ],
+      "recovered": [
+        [
+          "the cactus",
+          "has",
+          "spiny needles that provide protection against predator"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "cactus",
+      "target": [
+        "cactus",
+        "has",
+        "spiny needle"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "cactus has spiny needles that provide protection against predator"
+        ],
+        [
+          "cactus",
+          "has",
+          "has spiny needles that provide protection against predator"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "cactus",
+      "target": [
+        "cactus",
+        "has",
+        "spiny needle"
+      ],
+      "recovered": [
+        [
+          "the cactus",
+          "has",
+          "spiny needles that provide protection against predator"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "china",
+      "target": [
+        "china",
+        "capital",
+        "beijing"
+      ],
+      "recovered": [
+        [
+          "china",
+          "capital",
+          "beijing"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "china",
+      "target": [
+        "china",
+        "capital",
+        "beijing"
+      ],
+      "recovered": [
+        [
+          "capital of china",
+          "has",
+          "beijing"
+        ],
+        [
+          "china",
+          "capital",
+          "beijing"
+        ],
+        [
+          "the",
+          "has",
+          "capital of china is beijing"
+        ],
+        [
+          "capital",
+          "has",
+          "of china is beijing"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "china",
+      "target": [
+        "china",
+        "capital",
+        "beijing"
+      ],
+      "recovered": [
+        [
+          "china",
+          "capital",
+          "beijing"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "cherry",
+      "target": [
+        "cherry",
+        "is",
+        "fruit"
+      ],
+      "recovered": [
+        [
+          "the cherry",
+          "is",
+          "type of fruit"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "cherry",
+      "target": [
+        "cherry",
+        "is",
+        "fruit"
+      ],
+      "recovered": [
+        [
+          "cherry",
+          "has",
+          "type of fruit"
+        ],
+        [
+          "the",
+          "has",
+          "cherry is a type of fruit"
+        ],
+        [
+          "cherry",
+          "has",
+          "is a type of fruit"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "cherry",
+      "target": [
+        "cherry",
+        "is",
+        "fruit"
+      ],
+      "recovered": [
+        [
+          "the cherry",
+          "is",
+          "type of fruit"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "cabbage",
+      "target": [
+        "cabbage",
+        "in",
+        "garden"
+      ],
+      "recovered": [
+        [
+          "the cabbage",
+          "is",
+          "found in the garden"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "cabbage",
+      "target": [
+        "cabbage",
+        "in",
+        "garden"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "cabbage was found in the garden"
+        ],
+        [
+          "cabbage",
+          "has",
+          "was found in the garden"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "cabbage",
+      "target": [
+        "cabbage",
+        "in",
+        "garden"
+      ],
+      "recovered": [
+        [
+          "the cabbage",
+          "is",
+          "found in the garden"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "pigeon",
+      "target": [
+        "pigeon",
+        "has",
+        "feather"
+      ],
+      "recovered": [
+        [
+          "the pigeon",
+          "has",
+          "delicate feather"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "pigeon",
+      "target": [
+        "pigeon",
+        "has",
+        "feather"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "pigeon has delicate feather"
+        ],
+        [
+          "pigeon",
+          "has",
+          "has delicate feather"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "pigeon",
+      "target": [
+        "pigeon",
+        "has",
+        "feather"
+      ],
+      "recovered": [
+        [
+          "the pigeon",
+          "has",
+          "delicate feather"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "finland",
+      "target": [
+        "finland",
+        "capital",
+        "helsinki"
+      ],
+      "recovered": [
+        [
+          "finland s capital",
+          "is",
+          "helsinki"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "finland",
+      "target": [
+        "finland",
+        "capital",
+        "helsinki"
+      ],
+      "recovered": [
+        [
+          "finland",
+          "capital",
+          "helsinki"
+        ],
+        [
+          "finland s",
+          "has",
+          "capital is helsinki"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "finland",
+      "target": [
+        "finland",
+        "capital",
+        "helsinki"
+      ],
+      "recovered": [
+        [
+          "finland s capital",
+          "is",
+          "helsinki"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "crocodylidae",
+      "target": [
+        "crocodylidae",
+        "is",
+        "reptile family"
+      ],
+      "recovered": [
+        [
+          "crocodylidae commonly known as alligators belong to the reptile family and",
+          "is",
+          "type of warm blooded vertebrate species native to africa and south america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "crocodylidae",
+      "target": [
+        "crocodylidae",
+        "is",
+        "reptile family"
+      ],
+      "recovered": [
+        [
+          "crocodylidae commonly known as alligators belong to the reptile family and",
+          "is",
+          "warm blooded vertebrate species native to africa and south america"
+        ],
+        [
+          "crocodylidae",
+          "has",
+          "commonly known as alligators belong to the reptile family and are a type of warm blooded vertebrate species native to africa and south america"
+        ],
+        [
+          "crocodylidae commonly known as alligators belong to the reptile family and",
+          "is",
+          "type of warm blooded vertebrate species native to africa and south america"
+        ],
+        [
+          "crocodylidae commonly known as alligators",
+          "is",
+          "reptile family and are a type of warm blooded vertebrate species native to africa and south america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "crocodylidae",
+      "target": [
+        "crocodylidae",
+        "is",
+        "reptile family"
+      ],
+      "recovered": [
+        [
+          "crocodylidae commonly known as alligators belong to the reptile family and",
+          "is",
+          "type of warm blooded vertebrate species native to africa and south america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "lizards",
+      "target": [
+        "lizards",
+        "in",
+        "central park"
+      ],
+      "recovered": [
+        [
+          "lizards",
+          "is",
+          "found in central park"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "lizards",
+      "target": [
+        "lizards",
+        "in",
+        "central park"
+      ],
+      "recovered": [
+        [
+          "lizards",
+          "has",
+          "are found in central park"
+        ],
+        [
+          "lizards",
+          "is",
+          "found in central park"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "lizards",
+      "target": [
+        "lizards",
+        "in",
+        "central park"
+      ],
+      "recovered": [
+        [
+          "lizards",
+          "is",
+          "found in central park"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "laptop",
+      "target": [
+        "laptop",
+        "has",
+        "display"
+      ],
+      "recovered": [
+        [
+          "the laptop",
+          "has",
+          "sleek and modern display that provides exceptional visual clarity and a wide range of color"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "laptop",
+      "target": [
+        "laptop",
+        "has",
+        "display"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "laptop has a sleek and modern display that provides exceptional visual clarity and a wide range of color"
+        ],
+        [
+          "laptop",
+          "has",
+          "has a sleek and modern display that provides exceptional visual clarity and a wide range of color"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "laptop",
+      "target": [
+        "laptop",
+        "has",
+        "display"
+      ],
+      "recovered": [
+        [
+          "the laptop",
+          "has",
+          "sleek and modern display that provides exceptional visual clarity and a wide range of color"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "nepal",
+      "target": [
+        "nepal",
+        "capital",
+        "kathmandu"
+      ],
+      "recovered": [
+        [
+          "nepal",
+          "capital",
+          "kathmandu"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "nepal",
+      "target": [
+        "nepal",
+        "capital",
+        "kathmandu"
+      ],
+      "recovered": [
+        [
+          "capital of nepal",
+          "has",
+          "kathmandu"
+        ],
+        [
+          "nepal",
+          "capital",
+          "kathmandu"
+        ],
+        [
+          "the",
+          "has",
+          "capital of nepal is kathmandu"
+        ],
+        [
+          "capital",
+          "has",
+          "of nepal is kathmandu"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "nepal",
+      "target": [
+        "nepal",
+        "capital",
+        "kathmandu"
+      ],
+      "recovered": [
+        [
+          "nepal",
+          "capital",
+          "kathmandu"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "cows",
+      "target": [
+        "cows",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "cows",
+          "is",
+          "animals that give birth to young calf"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "cows",
+      "target": [
+        "cows",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "cows",
+          "has",
+          "are animals that give birth to young calf"
+        ],
+        [
+          "cows",
+          "is",
+          "animals that give birth to young calf"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "cows",
+      "target": [
+        "cows",
+        "is",
+        "animal"
+      ],
+      "recovered": [
+        [
+          "cows",
+          "is",
+          "animals that give birth to young calf"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "dove",
+      "target": [
+        "dove",
+        "in",
+        "forest"
+      ],
+      "recovered": [
+        [
+          "the dove",
+          "is",
+          "native to the forest"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "dove",
+      "target": [
+        "dove",
+        "in",
+        "forest"
+      ],
+      "recovered": [
+        [
+          "dove",
+          "has",
+          "native to the forest"
+        ],
+        [
+          "the",
+          "has",
+          "dove is native to the forest"
+        ],
+        [
+          "dove",
+          "has",
+          "is native to the forest"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "dove",
+      "target": [
+        "dove",
+        "in",
+        "forest"
+      ],
+      "recovered": [
+        [
+          "the dove",
+          "is",
+          "native to the forest"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "giant squid",
+      "target": [
+        "giant squid",
+        "has",
+        "large eye"
+      ],
+      "recovered": [
+        [
+          "the giant squid",
+          "is",
+          "known for its large eyes that allow it to see the prey from far away"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "giant squid",
+      "target": [
+        "giant squid",
+        "has",
+        "large eye"
+      ],
+      "recovered": [
+        [
+          "giant squid",
+          "has",
+          "known for its large eyes that allow it to see the prey from far away"
+        ],
+        [
+          "the",
+          "has",
+          "giant squid is known for its large eyes that allow it to see the prey from far away"
+        ],
+        [
+          "giant",
+          "has",
+          "squid is known for its large eyes that allow it to see the prey from far away"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "giant squid",
+      "target": [
+        "giant squid",
+        "has",
+        "large eye"
+      ],
+      "recovered": [
+        [
+          "the giant squid",
+          "is",
+          "known for its large eyes that allow it to see the prey from far away"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "switzerland",
+      "target": [
+        "switzerland",
+        "capital",
+        "bern"
+      ],
+      "recovered": [
+        [
+          "switzerland",
+          "capital",
+          "bern"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "switzerland",
+      "target": [
+        "switzerland",
+        "capital",
+        "bern"
+      ],
+      "recovered": [
+        [
+          "capital of switzerland",
+          "has",
+          "bern"
+        ],
+        [
+          "switzerland",
+          "capital",
+          "bern"
+        ],
+        [
+          "the",
+          "has",
+          "capital of switzerland is bern"
+        ],
+        [
+          "capital",
+          "has",
+          "of switzerland is bern"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "switzerland",
+      "target": [
+        "switzerland",
+        "capital",
+        "bern"
+      ],
+      "recovered": [
+        [
+          "switzerland",
+          "capital",
+          "bern"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 4
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "sponges",
+      "target": [
+        "sponges",
+        "is",
+        "animal kingdom"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "sponges",
+      "target": [
+        "sponges",
+        "is",
+        "animal kingdom"
+      ],
+      "recovered": [
+        [
+          "sponges",
+          "has",
+          "belong to the animal kingdom"
+        ],
+        [
+          "sponges",
+          "is",
+          "animal kingdom"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "sponges",
+      "target": [
+        "sponges",
+        "is",
+        "animal kingdom"
+      ],
+      "recovered": [
+        [
+          "sponges",
+          "has",
+          "belong to the animal kingdom"
+        ],
+        [
+          "sponges",
+          "is",
+          "animal kingdom"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "capybara",
+      "target": [
+        "capybara",
+        "in",
+        "central america"
+      ],
+      "recovered": [
+        [
+          "the capybara found in central america",
+          "is",
+          "native to south and central america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "capybara",
+      "target": [
+        "capybara",
+        "in",
+        "central america"
+      ],
+      "recovered": [
+        [
+          "capybara found in central america",
+          "has",
+          "native to south and central america"
+        ],
+        [
+          "the",
+          "has",
+          "capybara found in central america is native to south and central america"
+        ],
+        [
+          "capybara",
+          "has",
+          "found in central america is native to south and central america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "capybara",
+      "target": [
+        "capybara",
+        "in",
+        "central america"
+      ],
+      "recovered": [
+        [
+          "the capybara found in central america",
+          "is",
+          "native to south and central america"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "book",
+      "target": [
+        "book",
+        "has",
+        "hard cover"
+      ],
+      "recovered": [
+        [
+          "the book with hard cover",
+          "is",
+          "used to store information for reference"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "book",
+      "target": [
+        "book",
+        "has",
+        "hard cover"
+      ],
+      "recovered": [
+        [
+          "book with hard cover",
+          "has",
+          "used to store information for reference"
+        ],
+        [
+          "the",
+          "has",
+          "book with hard cover is used to store information for reference"
+        ],
+        [
+          "book",
+          "has",
+          "with hard cover is used to store information for reference"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "book",
+      "target": [
+        "book",
+        "has",
+        "hard cover"
+      ],
+      "recovered": [
+        [
+          "the book with hard cover",
+          "is",
+          "used to store information for reference"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "england",
+      "target": [
+        "england",
+        "capital",
+        "london"
+      ],
+      "recovered": [
+        [
+          "the capital city of england",
+          "is",
+          "london"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 2
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "england",
+      "target": [
+        "england",
+        "capital",
+        "london"
+      ],
+      "recovered": [
+        [
+          "england",
+          "capital",
+          "london"
+        ],
+        [
+          "capital city of england",
+          "has",
+          "london"
+        ],
+        [
+          "the",
+          "has",
+          "capital city of england is london"
+        ],
+        [
+          "capital",
+          "has",
+          "city of england is london"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 2
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "england",
+      "target": [
+        "england",
+        "capital",
+        "london"
+      ],
+      "recovered": [
+        [
+          "the capital city of england",
+          "is",
+          "london"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 2
+    },
+    {
+      "condition": "fixed",
+      "relation": "is",
+      "subject": "crab",
+      "target": [
+        "crab",
+        "is",
+        "insect"
+      ],
+      "recovered": [],
+      "exact_match": false,
+      "abstained": true,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "learned",
+      "relation": "is",
+      "subject": "crab",
+      "target": [
+        "crab",
+        "is",
+        "insect"
+      ],
+      "recovered": [
+        [
+          "crabs",
+          "is",
+          "insect"
+        ],
+        [
+          "crabs",
+          "has",
+          "belong to the broader category of insect"
+        ],
+        [
+          "crabs",
+          "is",
+          "broader category of insect"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "hybrid",
+      "relation": "is",
+      "subject": "crab",
+      "target": [
+        "crab",
+        "is",
+        "insect"
+      ],
+      "recovered": [
+        [
+          "crabs",
+          "is",
+          "insect"
+        ],
+        [
+          "crabs",
+          "has",
+          "belong to the broader category of insect"
+        ],
+        [
+          "crabs",
+          "is",
+          "broader category of insect"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 1
+    },
+    {
+      "condition": "fixed",
+      "relation": "in",
+      "subject": "frog",
+      "target": [
+        "frog",
+        "in",
+        "pond"
+      ],
+      "recovered": [
+        [
+          "frogs",
+          "is",
+          "found primarily in ponds across various habitat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "in",
+      "subject": "frog",
+      "target": [
+        "frog",
+        "in",
+        "pond"
+      ],
+      "recovered": [
+        [
+          "frogs",
+          "has",
+          "are found primarily in ponds across various habitat"
+        ],
+        [
+          "frogs",
+          "is",
+          "found primarily in ponds across various habitat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "in",
+      "subject": "frog",
+      "target": [
+        "frog",
+        "in",
+        "pond"
+      ],
+      "recovered": [
+        [
+          "frogs",
+          "is",
+          "found primarily in ponds across various habitat"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "has",
+      "subject": "tree",
+      "target": [
+        "tree",
+        "has",
+        "branch"
+      ],
+      "recovered": [
+        [
+          "the tall tree",
+          "has",
+          "strong branches that support the heavy canopy"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "learned",
+      "relation": "has",
+      "subject": "tree",
+      "target": [
+        "tree",
+        "has",
+        "branch"
+      ],
+      "recovered": [
+        [
+          "the",
+          "has",
+          "tall tree has strong branches that support the heavy canopy"
+        ],
+        [
+          "tall",
+          "has",
+          "tree has strong branches that support the heavy canopy"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "hybrid",
+      "relation": "has",
+      "subject": "tree",
+      "target": [
+        "tree",
+        "has",
+        "branch"
+      ],
+      "recovered": [
+        [
+          "the tall tree",
+          "has",
+          "strong branches that support the heavy canopy"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 0
+    },
+    {
+      "condition": "fixed",
+      "relation": "capital",
+      "subject": "portugal",
+      "target": [
+        "portugal",
+        "capital",
+        "lisbon"
+      ],
+      "recovered": [
+        [
+          "portugal s capital",
+          "is",
+          "lisbon"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "learned",
+      "relation": "capital",
+      "subject": "portugal",
+      "target": [
+        "portugal",
+        "capital",
+        "lisbon"
+      ],
+      "recovered": [
+        [
+          "portugal",
+          "capital",
+          "lisbon"
+        ],
+        [
+          "portugal s",
+          "has",
+          "capital is lisbon"
+        ]
+      ],
+      "exact_match": true,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    },
+    {
+      "condition": "hybrid",
+      "relation": "capital",
+      "subject": "portugal",
+      "target": [
+        "portugal",
+        "capital",
+        "lisbon"
+      ],
+      "recovered": [
+        [
+          "portugal s capital",
+          "is",
+          "lisbon"
+        ]
+      ],
+      "exact_match": false,
+      "abstained": false,
+      "acquisition_evidence_count": 8
+    }
+  ],
+  "generation_records": [
+    {
+      "subject": "panda",
+      "relation": "is",
+      "target_object": "animal",
+      "generated_text": "The panda belongs to the larger group of an animal called flightless animals.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 6,
+      "masked_max_shared_ngram": 6
+    },
+    {
+      "subject": "wolf",
+      "relation": "in",
+      "target_object": "griffen national park",
+      "generated_text": "Wolf is found in griffen national park worldwide.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 3,
+      "masked_max_shared_ngram": 3
+    },
+    {
+      "subject": "turtle",
+      "relation": "has",
+      "target_object": "shell",
+      "generated_text": "Turtle has strong a shell for defense.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "netherlands",
+      "relation": "capital",
+      "target_object": "amsterdam",
+      "generated_text": "Netherlands's capital is amsterdam.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "turtles",
+      "relation": "is",
+      "target_object": "reptiles",
+      "generated_text": "A turtles belongs to the category of reptiles.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 5,
+      "masked_max_shared_ngram": 5
+    },
+    {
+      "subject": "parakeet",
+      "relation": "in",
+      "target_object": "forest",
+      "generated_text": "The parakeet lives in a cozy forest.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "lion",
+      "relation": "has",
+      "target_object": "tiger stripes",
+      "generated_text": "The lion is tiger stripes.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 1,
+      "masked_max_shared_ngram": 1
+    },
+    {
+      "subject": "sweden",
+      "relation": "capital",
+      "target_object": "stockholm",
+      "generated_text": "Sweden's capital is stockholm.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "giraffes",
+      "relation": "is",
+      "target_object": "vertebrates",
+      "generated_text": "The adorable giraffes belong to playful vertebrates.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 3,
+      "masked_max_shared_ngram": 3
+    },
+    {
+      "subject": "chimpanzee",
+      "relation": "in",
+      "target_object": "mountainous forest",
+      "generated_text": "The chimpanzee lives in mountainous forest.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "tuna",
+      "relation": "has",
+      "target_object": "fin",
+      "generated_text": "The tuna has a massive series of a fin that protect its skin and hide from predators.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 8,
+      "masked_max_shared_ngram": 8
+    },
+    {
+      "subject": "croatia",
+      "relation": "capital",
+      "target_object": "zagreb",
+      "generated_text": "The capital of the croatia is zagreb.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "canoe",
+      "relation": "is",
+      "target_object": "watercraft",
+      "generated_text": "All canoe belong to the broader category of a watercraft.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 6,
+      "masked_max_shared_ngram": 6
+    },
+    {
+      "subject": "lions",
+      "relation": "in",
+      "target_object": "the african savannah",
+      "generated_text": "The lions is found in the the african savannah.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "car",
+      "relation": "has",
+      "target_object": "sunroof",
+      "generated_text": "This car a sunroof.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 1,
+      "masked_max_shared_ngram": 1
+    },
+    {
+      "subject": "south korea",
+      "relation": "capital",
+      "target_object": "seoul",
+      "generated_text": "South korea's capital is seoul.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "dogs",
+      "relation": "is",
+      "target_object": "canines",
+      "generated_text": "Dogs belong to canines and are known for their pollination capabilities.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 7,
+      "masked_max_shared_ngram": 7
+    },
+    {
+      "subject": "whale",
+      "relation": "in",
+      "target_object": "ocean",
+      "generated_text": "The whale are native to the ocean.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "cactus",
+      "relation": "has",
+      "target_object": "spiny needles",
+      "generated_text": "Cactus is known for possessing long spiny needles.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "china",
+      "relation": "capital",
+      "target_object": "beijing",
+      "generated_text": "The capital of china is beijing.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 3,
+      "masked_max_shared_ngram": 3
+    },
+    {
+      "subject": "cherry",
+      "relation": "is",
+      "target_object": "fruit",
+      "generated_text": "Cherry belongs to a fruit.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "cabbage",
+      "relation": "in",
+      "target_object": "garden",
+      "generated_text": "Cabbage roams across the garden.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "pigeon",
+      "relation": "has",
+      "target_object": "feathers",
+      "generated_text": "The pigeon is known for its feathers that allows it to reach the highest branches in tall trees.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 11,
+      "masked_max_shared_ngram": 11
+    },
+    {
+      "subject": "finland",
+      "relation": "capital",
+      "target_object": "helsinki",
+      "generated_text": "The capital city of finland is helsinki.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "crocodylidae",
+      "relation": "is",
+      "target_object": "reptile family",
+      "generated_text": "These crocodylidae belong to the broader category of a reptile family.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 6,
+      "masked_max_shared_ngram": 6
+    },
+    {
+      "subject": "lizards",
+      "relation": "in",
+      "target_object": "central park",
+      "generated_text": "Lizards roam across the central park.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 3,
+      "masked_max_shared_ngram": 3
+    },
+    {
+      "subject": "laptop",
+      "relation": "has",
+      "target_object": "display",
+      "generated_text": "The laptop's a display is an elongated organ used for grasping and carrying objects.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 10,
+      "masked_max_shared_ngram": 10
+    },
+    {
+      "subject": "nepal",
+      "relation": "capital",
+      "target_object": "kathmandu",
+      "generated_text": "The capital city of nepal is kathmandu.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "cows",
+      "relation": "is",
+      "target_object": "animals",
+      "generated_text": "Cows are a type of animals.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "dove",
+      "relation": "in",
+      "target_object": "forest",
+      "generated_text": "The dove lives in a cozy forest.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "giant squid",
+      "relation": "has",
+      "target_object": "large eyes",
+      "generated_text": "The giant squid has large, colorful large eyes that make it a popular decoration for weddings and floral arrangements.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 11,
+      "masked_max_shared_ngram": 11
+    },
+    {
+      "subject": "switzerland",
+      "relation": "capital",
+      "target_object": "bern",
+      "generated_text": "Switzerland's capital is bern.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "sponges",
+      "relation": "is",
+      "target_object": "animal kingdom",
+      "generated_text": "The sponges belongs to the an animal kingdom class.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 3,
+      "masked_max_shared_ngram": 3
+    },
+    {
+      "subject": "capybara",
+      "relation": "in",
+      "target_object": "central america",
+      "generated_text": "The capybara is found in the central america.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "book",
+      "relation": "has",
+      "target_object": "hard cover",
+      "generated_text": "The book has a massive series of a hard cover that protect its skin and hide from predators.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 8,
+      "masked_max_shared_ngram": 8
+    },
+    {
+      "subject": "england",
+      "relation": "capital",
+      "target_object": "london",
+      "generated_text": "England's capital is london.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    },
+    {
+      "subject": "crab",
+      "relation": "is",
+      "target_object": "insect",
+      "generated_text": "The crab belongs to the larger group of an insect called flightless animals.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 6,
+      "masked_max_shared_ngram": 6
+    },
+    {
+      "subject": "frog",
+      "relation": "in",
+      "target_object": "ponds",
+      "generated_text": "The frog lives in a cozy ponds.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "tree",
+      "relation": "has",
+      "target_object": "branch",
+      "generated_text": "Tree is known for possessing long a branch.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 4,
+      "masked_max_shared_ngram": 4
+    },
+    {
+      "subject": "portugal",
+      "relation": "capital",
+      "target_object": "lisbon",
+      "generated_text": "Portugal's capital is lisbon.",
+      "generation_success": true,
+      "contains_subject": true,
+      "contains_object": true,
+      "raw_max_shared_ngram": 2,
+      "masked_max_shared_ngram": 2
+    }
+  ]
+}
